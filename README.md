@@ -9,3 +9,6 @@ Outlook plugin for @channels
  2. odd number is development build
  1. even number is customer build
 4. build number - this increments each time we publish a build
+
+### Build/Deployment Process
+
