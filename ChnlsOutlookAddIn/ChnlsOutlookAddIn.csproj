@@ -7,7 +7,7 @@
     <ProjectGuid>{C60F94F5-2DB7-4224-92B6-C585B3AA8ECA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChnlsOutlookAddIn</RootNamespace>
+    <RootNamespace>chnls</RootNamespace>
     <AssemblyName>ChnlsOutlookAddIn</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <StartupObject>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,42 +33,207 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>fav.ico</ApplicationIcon>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="AddinExpress.OL.2005, Version=7.4.4067.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="AddinExpress.MSO.2005" >
+    <Reference Include="AddinExpress.MSO.2005">
       <HintPath>C:\Program Files\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.MSO.2005.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Vbe.Interop.dll" >
+    <Reference Include="Microsoft.Vbe.Interop.dll">
       <HintPath>Interops\Microsoft.Vbe.Interop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-	<Reference Include="Office.dll" >
+    <Reference Include="Office.dll">
       <HintPath>Interops\Office.dll</HintPath>
       <Private>True</Private>
     </Reference>
-	<Reference Include="Microsoft.Office.Interop.Outlook.dll" >
+    <Reference Include="Microsoft.Office.Interop.Outlook.dll">
       <HintPath>Interops\Microsoft.Office.Interop.Outlook.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Connection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Navigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ClosingWebBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Splash.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WebPopupWindowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebPopupWindowForm.Designer.cs">
+      <DependentUpon>WebPopupWindowForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AuthorizeUrlRequest.cs" />
+    <Compile Include="Model\AuthorizeUrlResponse.cs" />
+    <Compile Include="Model\CreateChannelRequest.cs" />
+    <Compile Include="Model\CreateChannelResponse.cs" />
+    <Compile Include="Model\MessageEnvelope.cs" />
+    <Compile Include="Model\MessageEnvelopeDataV1.cs" />
+    <Compile Include="Model\NameValuePair.cs" />
+    <Compile Include="Model\ReplyMessageInfo.cs" />
+    <Compile Include="Model\SendMessageEnvelopeRequest.cs" />
+    <Compile Include="Utils\Scheduler.cs" />
     <None Include="Loader\adxloader.dll.manifest" />
+    <None Include="packages.config" />
+    <Compile Include="Service\LoggingService.cs" />
+    <Compile Include="Service\PropertiesService.Channels.cs" />
     <!--<None Include="ChnlsOutlookAddIn.snk" /> -->
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fav.ico" />
+    <Content Include="images\fav.png" />
+    <Content Include="images\square.png" />
+    <Content Include="images\square_dark.png" />
     <Content Include="Loader\adxloader.dll" />
     <Content Include="Loader\adxloader64.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddinModule.Chnls.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AddinModule.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ADXForms\ADXOlFormComposeSidebar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADXForms\ADXOlFormComposeSidebar.Designer.cs">
+      <DependentUpon>ADXOlFormComposeSidebar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADXForms\ADXOlFormExplorerSidebar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Designer.cs">
+      <DependentUpon>ADXOlFormExplorerSidebar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\DebugBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DebugBar.Designer.cs">
+      <DependentUpon>DebugBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlaceholderTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\StatusToast.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\StatusToast.Designer.cs">
+      <DependentUpon>StatusToast.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UpgradePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UpgradePanel.Designer.cs">
+      <DependentUpon>UpgradePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AboutChnlsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutChnlsForm.Designer.cs">
+      <DependentUpon>AboutChnlsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PropertiesForm.Designer.cs">
+      <DependentUpon>PropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ChannelGroupInfo.cs" />
+    <Compile Include="Model\ChannelInfo.cs" />
+    <Compile Include="Model\ChnlsProperties.cs" />
+    <Compile Include="Model\EmailAddress.cs" />
+    <Compile Include="Model\UserEntityAssociation.cs" />
+    <Compile Include="Model\UserProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service\PropertiesService.cs" />
+    <Compile Include="Service\PropertiesService.IO.cs" />
+    <Compile Include="Service\UpdateService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AddinModule.resx">
+      <DependentUpon>AddinModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADXForms\ADXOlFormExplorerSidebar.resx">
+      <DependentUpon>ADXOlFormExplorerSidebar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DebugBar.resx">
+      <DependentUpon>DebugBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\StatusToast.resx">
+      <DependentUpon>StatusToast.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UpgradePanel.resx">
+      <DependentUpon>UpgradePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutChnlsForm.resx">
+      <DependentUpon>AboutChnlsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PropertiesForm.resx">
+      <DependentUpon>PropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WebPopupWindowForm.resx">
+      <DependentUpon>WebPopupWindowForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 </Project>

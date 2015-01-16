@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace chnls.Controls
+{
+    public partial class UpgradePanel : UserControl
+    {
+        public UpgradePanel()
+        {
+            InitializeComponent();
+        }
+
+        private void btnUpgrade_Click(object sender, EventArgs e)
+        {
+            AddinModule.CurrentInstance.CheckForUpdates();
+        }
+    }
+}
