@@ -65,7 +65,10 @@ namespace chnls.Service
             {
                 if (null == Properties)
                 {
-                    Properties = new ChnlsProperties();
+                    lock (_propertiesLock)
+                    {
+                        Properties = new ChnlsProperties();
+                    }
                     PropertiesDirty();
                     LoggingService.Info("Missing properties, initializing to default");
                 }
@@ -78,9 +81,14 @@ namespace chnls.Service
                     case Constants.UrlChnlsProduction:
                         break;
                     default:
-                        Properties.BaseUrl = Constants.UrlChnlsProduction;
+                        lock (_propertiesLock)
+                        {
+                            Properties.BaseUrl = Constants.UrlChnlsProduction;
+                        }
+                        PropertiesDirty();
                         break;
                 }
+                UpdateCurrentUserProperties();
             }
         }
 

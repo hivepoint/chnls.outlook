@@ -1,4 +1,6 @@
-﻿namespace chnls.Model
+﻿using System;
+
+namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
 
@@ -27,6 +29,7 @@
         MUST_EXCLUDE
     }
 
+    [Serializable]
     internal class UserEntityAssociation
     {
         public string _id;

@@ -41,6 +41,7 @@ namespace chnls.ADXForms
         private void ADXOlFormExplorerSidebar_Load(object sender, EventArgs e)
         {
             InitializeConnection();
+            InitializeChnlsNavigation();
         }
 
 

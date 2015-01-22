@@ -15,6 +15,16 @@ using Newtonsoft.Json;
 
 namespace chnls.ADXForms
 {
+    internal enum ExtensionQueryType
+    {
+        // ReSharper disable InconsistentNaming
+        CHANNELS,
+        GROUPS,
+        REPLY_MESSAGE_INFO
+        // ReSharper restore InconsistentNaming
+    }
+
+    // ReSharper disable once InconsistentNaming
     partial class ADXOlFormExplorerSidebar
     {
         private const string ActionCreateChannel = "createChannel";
@@ -25,6 +35,20 @@ namespace chnls.ADXForms
             new Dictionary<int, Action<CreateChannelResponse>>();
 
         private readonly Dictionary<int, Action<bool>> sendMessageCallbacks = new Dictionary<int, Action<bool>>();
+
+        private HtmlDocument Document
+        {
+            get
+            {
+                Debug.Assert(webBrowserMain.Document != null, "webBrowserMain.Document != null");
+                return webBrowserMain.Document;
+            }
+        }
+
+        private void InitializeChnlsNavigation()
+        {
+            PropertiesService.Instance.BrowserObjectDelegate = new BrowserObjectDelegate { Broswer = this };
+        }
 
         private static bool IsHivePointUrl(Uri uri)
         {
@@ -61,6 +85,10 @@ namespace chnls.ADXForms
                     }
                     break;
                 case "channellistupdated":
+                    PropertiesService.Instance.ChannelListDirty();
+                    break;
+                case "channelgrouplistupdated":
+                    PropertiesService.Instance.ChannelGroupListDirty();
                     break;
                 case "actioncomplete":
                     var success = false;
@@ -76,10 +104,10 @@ namespace chnls.ADXForms
                     }
                     OnActionResponseInt(query["value"], query["action"], success, query["response"]);
                     break;
-                case "userSignedIn":
+                case "usersignedin":
                     PropertiesService.Instance.UserEmail = query["email"];
                     break;
-                case "userSignedOut":
+                case "usersignedout":
                     PropertiesService.Instance.UserEmail = null;
                     break;
             }
@@ -93,7 +121,7 @@ namespace chnls.ADXForms
             }
             var code = "window.googleOauth.__doFinish('" + hash + "');";
             object[] codeString = { code };
-            webBrowserMain.Document.InvokeScript("eval", codeString);
+            Document.InvokeScript("eval", codeString);
         }
 
         public void AuthorizeUrl(Uri url)
@@ -114,21 +142,12 @@ namespace chnls.ADXForms
             }
         }
 
-        private HtmlDocument Document
-        {
-            get
-            {
-                Debug.Assert(webBrowserMain.Document != null, "webBrowserMain.Document != null");
-                return webBrowserMain.Document;
-            }
-        }
-
         private void RegisterCallbacks()
         {
             webBrowserMain.ObjectForScripting = new ScriptManager(this);
 
-            HtmlElement head = Document.GetElementsByTagName("head")[0];
-            HtmlElement scriptEl = Document.CreateElement("script");
+            var head = Document.GetElementsByTagName("head")[0];
+            var scriptEl = Document.CreateElement("script");
             Debug.Assert(scriptEl != null, "scriptEl != null");
             var element = (IHTMLScriptElement)scriptEl.DomElement;
             element.text =
@@ -152,14 +171,14 @@ namespace chnls.ADXForms
 
         private void ReplyToMessageId(string messageId)
         {
-            var info = GetWebObject<ReplyMessageInfo>("REPLY_MESSAGE_INFO", messageId);
+            var info = GetWebObject<ReplyMessageInfo>(ExtensionQueryType.REPLY_MESSAGE_INFO, messageId);
             if (null != info)
             {
                 //ComposeService.Instance.ReplyTo(info);
             }
         }
 
-        private T GetWebObject<T>(string queryType, string key)
+        private T GetWebObject<T>(ExtensionQueryType queryType, string key)
         {
             if (!PropertiesService.Instance.Connected)
             {
@@ -169,6 +188,7 @@ namespace chnls.ADXForms
             if (webBrowserMain.Document == null) return default(T);
             var result = webBrowserMain.Document.InvokeScript("eval", codeString);
             var json = result as string;
+            LoggingService.Debug("json:\n" + json);
             return String.IsNullOrWhiteSpace(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
         }
 
@@ -246,6 +266,23 @@ namespace chnls.ADXForms
             var callback = sendMessageCallbacks[request.reqId];
             if (null == callback) return;
             callback(success);
+        }
+
+        private class BrowserObjectDelegate : IBrowserObjectDelegate
+        {
+            public ADXOlFormExplorerSidebar Broswer { private get; set; }
+
+            public List<ChannelInfo> Channels()
+            {
+                var channelList = Broswer.GetWebObject<ChannelList>(ExtensionQueryType.CHANNELS, "");
+                return null != channelList ? channelList.channels : null;
+            }
+
+            public List<ChannelGroupInfo> Groups()
+            {
+                var groupList = Broswer.GetWebObject<ChannelGroupList>(ExtensionQueryType.GROUPS, "");
+                return null != groupList ? groupList.groups : null;
+            }
         }
 
         [ComVisible(true)]

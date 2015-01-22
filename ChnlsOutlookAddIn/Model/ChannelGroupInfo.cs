@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 
 #endregion
@@ -16,7 +17,8 @@ namespace chnls.Model
         ACTIVE,
         DELETED
     }
-
+       
+    [Serializable]
     internal class ChannelGroupInfo
     {
         public string _id;

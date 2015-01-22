@@ -9,34 +9,126 @@ using chnls.Model;
 
 namespace chnls.Service
 {
+    internal interface IBrowserObjectDelegate
+    {
+        List<ChannelInfo> Channels();
+        List<ChannelGroupInfo> Groups();
+    }
+
     partial class PropertiesService
     {
+        private bool ChannelsDirty { get; set; }
+        private bool ChannelGroupsDirty { get; set; }
+        public IBrowserObjectDelegate BrowserObjectDelegate { set; private get; }
+
+
         public List<ChannelInfo> Channels
         {
             get
             {
-                lock (Properties)
+                lock (_propertiesLock)
                 {
-                    AssertSignedIn();
+                    if (!SignedIn)
+                    {
+                        return new List<ChannelInfo>();
+                    }
+                    if (!ChannelsDirty)
+                    {
+                        return new List<ChannelInfo>(CurrentUserProperties.Channels);
+                    }
+                }
+                var updateChannels = BrowserObjectDelegate.Channels();
+                lock (_propertiesLock)
+                {
+                    if (null != updateChannels)
+                    {
+                        UpdateChannels(updateChannels);
+                    }
                     return new List<ChannelInfo>(CurrentUserProperties.Channels);
                 }
             }
         }
 
-        // Channel and group properties
-        public void AddRecentComposeChannels(List<string> channelEmails)
+        public List<ChannelGroupInfo> Groups
         {
-            if (channelEmails.Count == 0)
+            get
+            {
+                lock (_propertiesLock)
+                {
+                    if (!SignedIn)
+                    {
+                        return new List<ChannelGroupInfo>();
+                    }
+                    if (!ChannelGroupsDirty)
+                    {
+                        return new List<ChannelGroupInfo>(CurrentUserProperties.Groups);
+                    }
+                }
+                var updateGroups = BrowserObjectDelegate.Groups();
+                lock (_propertiesLock)
+                {
+                    if (null != updateGroups)
+                    {
+                        UpdateGroups(updateGroups);
+                    }
+                    return new List<ChannelGroupInfo>(CurrentUserProperties.Groups);
+                }
+            }
+        }
+
+        public List<String> RecentComposeChannels
+        {
+            get
+            {
+                lock (_propertiesLock)
+                {
+                    return !SignedIn ? new List<string>() : new List<String>(CurrentUserProperties.RecentComposeChannels);
+                }
+            }
+        }
+
+        public List<String> RecentForwardChannels
+        {
+            get
+            {
+                lock (_propertiesLock)
+                {
+                    return !SignedIn ? new List<string>() : new List<String>(CurrentUserProperties.RecentForwardChannels);
+                }
+            }
+        }
+
+        public void ChannelListDirty()
+        {
+            lock (_propertiesLock)
+            {
+                ChannelsDirty = true;
+            }
+        }
+
+        public void ChannelGroupListDirty()
+        {
+            lock (_propertiesLock)
+            {
+                ChannelGroupsDirty = true;
+            }
+        }
+
+        // Channel and group properties
+        public void AddRecentComposeChannels(IEnumerable<string> channelEmails)
+        {
+            var list = channelEmails.ToList();
+            if (!list.Any())
             {
                 return;
             }
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 if (!SignedIn)
                 {
                     return;
                 }
-                var channels = GetChannelInfoForEmails(channelEmails);
+                var channels = GetChannelInfoForEmails(list);
                 CurrentUserProperties.RecentComposeChannels.RemoveAll(
                     e => channels.Any(channel => e.Equals(channel._id)));
                 CurrentUserProperties.RecentComposeChannels.InsertRange(0,
@@ -52,7 +144,7 @@ namespace chnls.Service
             {
                 return;
             }
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 if (!SignedIn)
                 {
@@ -69,21 +161,21 @@ namespace chnls.Service
 
         public ChannelInfo GetChannelInfoForEmail(string emailAddress)
         {
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 emailAddress = emailAddress.Trim();
                 return null == CurrentUserProperties
                     ? null
                     : CurrentUserProperties.Channels.FirstOrDefault(
                         channel =>
-                            channel.channelEmailAddress.Equals(emailAddress, StringComparison.InvariantCultureIgnoreCase));
+                            channel.channelEmailAddress.address.Equals(emailAddress, StringComparison.InvariantCultureIgnoreCase));
             }
         }
 
-        public List<ChannelInfo> GetChannelInfoForEmails(List<string> emailAddressList)
+        public List<ChannelInfo> GetChannelInfoForEmails(IEnumerable<string> emailAddressList)
         {
             var channels = new List<ChannelInfo>();
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 if (null == CurrentUserProperties) return channels;
                 channels.AddRange(emailAddressList.Select(GetChannelInfoForEmail).Where(channel => null != channel));
@@ -93,7 +185,7 @@ namespace chnls.Service
 
         public void UpdateChannels(List<ChannelInfo> channels)
         {
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 if (null == CurrentUserProperties)
                 {
@@ -101,6 +193,7 @@ namespace chnls.Service
                 }
                 CurrentUserProperties.Channels.Clear();
                 CurrentUserProperties.Channels.AddRange(channels);
+                ChannelsDirty = false;
             }
             PropertiesDirty();
             OnChannelListChanged();
@@ -108,7 +201,7 @@ namespace chnls.Service
 
         public void UpdateGroups(List<ChannelGroupInfo> groups)
         {
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 if (null == CurrentUserProperties)
                 {
@@ -116,6 +209,7 @@ namespace chnls.Service
                 }
                 CurrentUserProperties.Groups.Clear();
                 CurrentUserProperties.Groups.AddRange(groups);
+                ChannelGroupsDirty = false;
             }
             PropertiesDirty();
             OnGroupListChanged();

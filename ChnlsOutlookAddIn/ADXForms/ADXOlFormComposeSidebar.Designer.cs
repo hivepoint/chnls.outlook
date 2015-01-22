@@ -1,6 +1,8 @@
+using chnls.Utils;
+
 namespace chnls.ADXForms
 {
-    partial class ADXOlFormComposeSidebar
+    partial class ADXOlFormComposeSidebar : ComposeMonitor.IComposeMonitorCallback
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +32,65 @@ namespace chnls.ADXForms
         /// </summary>
         private void InitializeComponent()
         {
-            //
+            this.labelChannels = new System.Windows.Forms.Label();
+            this.channelTree = new chnls.Controls.ChannelTree();
+            this.membersTree = new chnls.Controls.MembersTree();
+            this.labelMembers = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // labelChannels
+            // 
+            this.labelChannels.Dock = System.Windows.Forms.DockStyle.Top;
+            this.labelChannels.Location = new System.Drawing.Point(0, 0);
+            this.labelChannels.Name = "labelChannels";
+            this.labelChannels.Size = new System.Drawing.Size(300, 18);
+            this.labelChannels.TabIndex = 1;
+            this.labelChannels.Text = "@Channels";
+            // 
+            // channelTree
+            // 
+            this.channelTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.channelTree.Location = new System.Drawing.Point(0, 18);
+            this.channelTree.Name = "channelTree";
+            this.channelTree.Size = new System.Drawing.Size(300, 66);
+            this.channelTree.TabIndex = 0;
+            this.channelTree.SelectionChanged += new System.EventHandler(this.channelTree_SelectionChanged);
+            // 
+            // membersTree
+            // 
+            this.membersTree.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.membersTree.Location = new System.Drawing.Point(0, 100);
+            this.membersTree.Name = "membersTree";
+            this.membersTree.Size = new System.Drawing.Size(300, 200);
+            this.membersTree.TabIndex = 2;
+            // 
+            // labelMembers
+            // 
+            this.labelMembers.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelMembers.Location = new System.Drawing.Point(0, 84);
+            this.labelMembers.Name = "labelMembers";
+            this.labelMembers.Size = new System.Drawing.Size(300, 16);
+            this.labelMembers.TabIndex = 3;
+            this.labelMembers.Text = "Members";
+            // 
             // ADXOlFormComposeSidebar
-            //
+            // 
             this.ClientSize = new System.Drawing.Size(300, 300);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Controls.Add(this.channelTree);
+            this.Controls.Add(this.labelMembers);
+            this.Controls.Add(this.membersTree);
+            this.Controls.Add(this.labelChannels);
+            this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ADXOlFormComposeSidebar";
             this.Text = "ADXOlFormComposeSidebar";
+            this.ResumeLayout(false);
+
         }
         #endregion
+
+        private Controls.ChannelTree channelTree;
+        private System.Windows.Forms.Label labelChannels;
+        private Controls.MembersTree membersTree;
+        private System.Windows.Forms.Label labelMembers;
     }
 }

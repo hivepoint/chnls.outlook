@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 
 #endregion
@@ -16,13 +17,14 @@ namespace chnls.Model
         ACTIVE,
         DELETED
     }
-
+    
+    [Serializable]
     internal class ChannelInfo
     {
         public string _id;
         public List<string> admins;
         public List<UserEntityAssociation> associations;
-        public string channelEmailAddress;
+        public EmailAddress channelEmailAddress;
         public string channelUrl;
         public long created;
         public string creator;
