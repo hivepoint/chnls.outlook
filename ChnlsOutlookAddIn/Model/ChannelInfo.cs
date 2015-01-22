@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
-
+    [Serializable]
     internal enum ChannelState
     {
         PROPOSED,
@@ -17,7 +17,7 @@ namespace chnls.Model
         ACTIVE,
         DELETED
     }
-    
+
     [Serializable]
     internal class ChannelInfo
     {

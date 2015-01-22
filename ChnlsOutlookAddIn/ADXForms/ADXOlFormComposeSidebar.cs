@@ -33,13 +33,13 @@ namespace chnls.ADXForms
         void channelTree_ChannelUnselected(object sender, Controls.ChannelTree.ChannelInfoEventArgs e)
         {
             if (null == _monitor) return;
-            _monitor.AddChannel(e.Channel);
+            _monitor.RemoveChannel(e.Channel);
         }
 
         void channelTree_ChannelSelected(object sender, Controls.ChannelTree.ChannelInfoEventArgs e)
         {
             if (null == _monitor) return;
-            _monitor.RemoveChannel(e.Channel);
+            _monitor.AddChannel(e.Channel);
         }
 
         private List<ChannelInfo> Channels { get; set; }

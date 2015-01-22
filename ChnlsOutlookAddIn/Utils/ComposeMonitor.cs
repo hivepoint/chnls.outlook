@@ -82,12 +82,17 @@ namespace chnls.Utils
             {
                 if (IsStale(channel)) continue;
 
-                var subscribers = new HashSet<string>(Channels.Select(e=>e.channelEmailAddress.address));
+                var subscribers =
+                    new HashSet<string>(
+                        channel.associations.Where(
+                            e =>
+                                EntityInterestLevel.INTERESTED == e.interestLevel &&
+                                EntityCollection.SUBSCRIPTIONS == e.collection).Select(e => e.userEmail));
                 var intersect = _participants.Intersect(subscribers);
                 var count = intersect.Count();
                 if (count > 0)
                 {
-                    holders.Add(new SuggestionHolder {ChannelInfo = channel, Score = count});
+                    holders.Add(new SuggestionHolder { ChannelInfo = channel, Score = count });
                 }
             }
             holders.Sort((s0, s1) => s0.Score.CompareTo(s1.Score));

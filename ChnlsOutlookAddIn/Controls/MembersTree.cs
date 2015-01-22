@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using chnls.Model;
@@ -20,6 +21,8 @@ namespace chnls.Controls
             InitializeComponent();
         }
 
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal List<ChannelInfo> SelectedChannels
         {
             set

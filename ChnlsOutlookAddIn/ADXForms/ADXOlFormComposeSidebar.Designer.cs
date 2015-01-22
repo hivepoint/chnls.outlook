@@ -33,9 +33,9 @@ namespace chnls.ADXForms
         private void InitializeComponent()
         {
             this.labelChannels = new System.Windows.Forms.Label();
+            this.labelMembers = new System.Windows.Forms.Label();
             this.channelTree = new chnls.Controls.ChannelTree();
             this.membersTree = new chnls.Controls.MembersTree();
-            this.labelMembers = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelChannels
@@ -46,6 +46,15 @@ namespace chnls.ADXForms
             this.labelChannels.Size = new System.Drawing.Size(300, 18);
             this.labelChannels.TabIndex = 1;
             this.labelChannels.Text = "@Channels";
+            // 
+            // labelMembers
+            // 
+            this.labelMembers.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelMembers.Location = new System.Drawing.Point(0, 84);
+            this.labelMembers.Name = "labelMembers";
+            this.labelMembers.Size = new System.Drawing.Size(300, 16);
+            this.labelMembers.TabIndex = 3;
+            this.labelMembers.Text = "Members ";
             // 
             // channelTree
             // 
@@ -64,15 +73,6 @@ namespace chnls.ADXForms
             this.membersTree.Size = new System.Drawing.Size(300, 200);
             this.membersTree.TabIndex = 2;
             // 
-            // labelMembers
-            // 
-            this.labelMembers.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelMembers.Location = new System.Drawing.Point(0, 84);
-            this.labelMembers.Name = "labelMembers";
-            this.labelMembers.Size = new System.Drawing.Size(300, 16);
-            this.labelMembers.TabIndex = 3;
-            this.labelMembers.Text = "Members";
-            // 
             // ADXOlFormComposeSidebar
             // 
             this.ClientSize = new System.Drawing.Size(300, 300);
@@ -83,6 +83,9 @@ namespace chnls.ADXForms
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ADXOlFormComposeSidebar";
             this.Text = "ADXOlFormComposeSidebar";
+            this.ADXBeforeFormShow += new AddinExpress.OL.ADXOlForm.BeforeFormShow_EventHandler(this.ADXOlComposeHelperForm_ADXBeforeFormShow);
+            this.ADXAfterFormHide += new AddinExpress.OL.ADXOlForm.ADXAfterFormHideEventHandler(this.ADXOlComposeHelperForm_ADXAfterFormHide);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ADXOlComposeHelperForm_FormClosing);
             this.ResumeLayout(false);
 
         }

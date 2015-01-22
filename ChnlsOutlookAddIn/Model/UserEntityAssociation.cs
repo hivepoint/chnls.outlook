@@ -4,6 +4,7 @@ namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
 
+    [Serializable]
     internal enum EntityType
     {
         CHANNEL_GROUP,
@@ -15,12 +16,14 @@ namespace chnls.Model
         COLLECTION
     }
 
+    [Serializable]
     internal enum EntityCollection
     {
         SUBSCRIPTIONS,
         FOLLOWING
     }
 
+    [Serializable]
     internal enum EntityInterestLevel
     {
         MUST_INCLUDE,

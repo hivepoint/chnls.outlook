@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using chnls.Model;
@@ -32,6 +33,8 @@ namespace chnls.Controls
             UpdateTree();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<string> SelectedChannelAddresses
         {
             get
@@ -50,15 +53,15 @@ namespace chnls.Controls
         }
 
         [Browsable(false)]
-        [ReadOnly(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<ChannelInfo> SelectedChannels
         {
             get { return Channels.Where(e => SelectedChannelIds.Contains(e._id)).ToList(); }
             set
             {
-                if (!SelectedChannelIds.Except(value.Select(e => e._id)).Any()) return;
-               
+                if (!SelectedChannelIds.Except(value.Select(e => e._id)).Any() &&
+                    value.All(e => _suggestedChannelIds.Contains(e._id))) return;
+
                 SelectedChannelIds.Clear();
                 foreach (var channel in value)
                 {
@@ -68,13 +71,14 @@ namespace chnls.Controls
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<String> SuggestedChannelIds
         {
             private get { return _suggestedChannelIds.ToList(); }
             set
             {
-                if (!_suggestedChannelIds.Except(value).Any()) return;
-               
+                if (!_suggestedChannelIds.Except(value).Any() && !value.Except(_suggestedChannelIds).Any()) return;
+
                 _suggestedChannelIds.Clear();
                 _suggestedChannelIds.AddRange(value);
                 UpdateTree();
@@ -102,6 +106,11 @@ namespace chnls.Controls
         }
 
         private HashSet<string> SelectedChannelIds { get; set; }
+
+        public void UpdateSelectedChannels(List<ChannelInfo> selectedChannels)
+        {
+            SelectedChannels = selectedChannels;
+        }
 
         public void SetState(List<ChannelInfo> channels, List<ChannelGroupInfo> groups)
         {
@@ -156,17 +165,23 @@ namespace chnls.Controls
                         AddChannel(selectedChannel, treeView.Nodes, SelectedChannelTag, true);
                     }
                 }
-                var recentChannels = SuggestedChannelIds.Where(e => !SelectedChannelIds.Contains(e)).ToList();
-                if (recentChannels.Any())
+                var suggestedChannels = SuggestedChannelIds.Where(e => !SelectedChannelIds.Contains(e)).ToList();
+                if (suggestedChannels.Any())
                 {
-                    var node = new TreeNode {Text = @"Suggestions"};
+                    var node = new TreeNode
+                    {
+                        Text = @"Suggestions",
+                        ImageKey = @"stack",
+                        ForeColor = SystemColors.GrayText
+                    };
+
                     treeView.Nodes.Add(node);
-                    foreach (var channelId in recentChannels)
+                    foreach (var channelId in suggestedChannels)
                     {
                         var recentChannel = Channels.FirstOrDefault(element => element._id.Equals(channelId));
                         if (null != recentChannel)
                         {
-                            AddChannel(recentChannel, node.Nodes, SelectedChannelTag, true);
+                            AddChannel(recentChannel, treeView.Nodes, ChannelTag, true);
                         }
                     }
                 }
@@ -199,7 +214,13 @@ namespace chnls.Controls
         {
             if (!channels.Any())
                 return false;
-            var node = new TreeNode {Text = group.name, Name = group._id, ImageKey = @"stack"};
+            var node = new TreeNode
+            {
+                Text = group.name,
+                Name = group._id,
+                ImageKey = @"stack",
+                ForeColor = SystemColors.GrayText
+            };
             nodes.Add(node);
             foreach (var channel in channels)
             {
