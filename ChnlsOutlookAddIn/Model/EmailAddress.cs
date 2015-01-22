@@ -1,6 +1,9 @@
-﻿namespace chnls.Model
+﻿using System;
+
+namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
+    [Serializable]
     internal class EmailAddress
     {
         public string address;

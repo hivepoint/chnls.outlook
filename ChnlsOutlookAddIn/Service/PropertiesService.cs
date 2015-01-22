@@ -10,13 +10,24 @@ namespace chnls.Service
     partial class PropertiesService
     {
         public static PropertiesService Instance = new PropertiesService();
-        public bool DebugPanelVisible { get; set; }
+
+
+        private bool _debugVisible = false;
+        private readonly object _propertiesLock = new object();
+
+        public bool DebugPanelVisible
+        {
+            get { return _debugVisible; }
+            set { _debugVisible = value; OnDebugVisibleChanged(); }
+        }
+
         public bool Connected { get; set; }
 
         private PropertiesService()
         {
             LoadProperties();
         }
+
     }
 
     partial class PropertiesService
@@ -29,7 +40,7 @@ namespace chnls.Service
         {
             get
             {
-                lock (Properties)
+                lock (_propertiesLock)
                 {
                     return !String.IsNullOrWhiteSpace(Properties.CurrentUser);
                 }
@@ -41,7 +52,7 @@ namespace chnls.Service
             get { return Properties.BaseUrl; }
             set
             {
-                lock (Properties)
+                lock (_propertiesLock)
                 {
                     if (String.Equals(Properties.BaseUrl, value))
                     {
@@ -68,45 +79,53 @@ namespace chnls.Service
         {
             get
             {
-                lock (Properties)
+                lock (_propertiesLock)
                 {
                     return SignedIn ? Properties.CurrentUser : null;
                 }
             }
             set
             {
-                lock (Properties)
+                lock (_propertiesLock)
                 {
                     if (String.Equals(value, Properties.CurrentUser, StringComparison.InvariantCultureIgnoreCase))
                         return;
                     value = value.ToLowerInvariant();
                     Properties.CurrentUser = value;
-                    if (Properties.UserProperties.ContainsKey(value))
-                    {
-                        CurrentUserProperties = new UserProperties { EmailAddress = value };
-                        Properties.UserProperties[value] = CurrentUserProperties;
-                    }
-                    else
-                    {
-                        CurrentUserProperties = Properties.UserProperties[value];
-                    }
+                    UpdateCurrentUserProperties();
                     PropertiesDirty();
                     OnUserChanged();
                 }
             }
         }
 
-        public void AssertSignedIn()
+        private void UpdateCurrentUserProperties()
         {
-            if (!SignedIn)
+            lock (_propertiesLock)
             {
-                throw new NotSignedInException();
-            }
+                if (String.IsNullOrWhiteSpace(Properties.CurrentUser))
+                {
+                    CurrentUserProperties = null;
+                }
+                else
+                {
+                    
+                if (!Properties.UserProperties.ContainsKey(Properties.CurrentUser))
+                {
+                    CurrentUserProperties = new UserProperties { EmailAddress = Properties.CurrentUser };
+                    Properties.UserProperties[Properties.CurrentUser] = CurrentUserProperties;
+                }
+                else
+                {
+                    CurrentUserProperties = Properties.UserProperties[Properties.CurrentUser];
+                }
+                }
+            } 
         }
 
         internal void ResetToDefaults()
         {
-            lock (Properties)
+            lock (_propertiesLock)
             {
                 Properties = new ChnlsProperties();
             }

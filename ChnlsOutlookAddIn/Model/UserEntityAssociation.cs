@@ -1,7 +1,10 @@
-﻿namespace chnls.Model
+﻿using System;
+
+namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
 
+    [Serializable]
     internal enum EntityType
     {
         CHANNEL_GROUP,
@@ -13,12 +16,14 @@
         COLLECTION
     }
 
+    [Serializable]
     internal enum EntityCollection
     {
         SUBSCRIPTIONS,
         FOLLOWING
     }
 
+    [Serializable]
     internal enum EntityInterestLevel
     {
         MUST_INCLUDE,
@@ -27,6 +32,7 @@
         MUST_EXCLUDE
     }
 
+    [Serializable]
     internal class UserEntityAssociation
     {
         public string _id;

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 
 #endregion
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
-
+    [Serializable]
     internal enum ChannelState
     {
         PROPOSED,
@@ -17,12 +18,13 @@ namespace chnls.Model
         DELETED
     }
 
+    [Serializable]
     internal class ChannelInfo
     {
         public string _id;
         public List<string> admins;
         public List<UserEntityAssociation> associations;
-        public string channelEmailAddress;
+        public EmailAddress channelEmailAddress;
         public string channelUrl;
         public long created;
         public string creator;

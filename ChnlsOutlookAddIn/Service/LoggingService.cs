@@ -37,10 +37,10 @@ namespace chnls.Service
 
         private static void Log(LogLevel level, string message, Exception ex)
         {
-            if (message.Length > 1000)
+            /*if (message.Length > 1000)
             {
                 message = message.Substring(0, 1000) + "...";
-            }
+            }*/
             System.Diagnostics.Debug.WriteLine(level + ": " + message + (ex != null ? "\n\t" + ex.Message : ""));
 
         }

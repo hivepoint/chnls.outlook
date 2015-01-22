@@ -179,7 +179,7 @@ namespace chnls.ADXForms
         private void webBrowserMain_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             statusToast.Detail = "Loading application";
-            string description = "DocumentCompleted: " + e.Url;
+            var description = "DocumentCompleted: " + e.Url;
             if (null != webBrowserMain.Document)
             {
                 description += "[" + webBrowserMain.Document.Cookie + "]";
@@ -191,7 +191,7 @@ namespace chnls.ADXForms
     // ReSharper disable once InconsistentNaming
     partial class ADXOlFormExplorerSidebar
     {
-        private void ClearLocalCookies()
+        internal void ClearLocalCookies()
         {
             webBrowserMain.Stop();
             webBrowserMain.Navigate(
@@ -218,7 +218,7 @@ namespace chnls.ADXForms
                     var reader = File.OpenText(cookie);
 
                     var text = "";
-                    string line = null;
+                    string line;
                     while ((line = reader.ReadLine()) != null)
                     {
                         text += line + "\r\n";

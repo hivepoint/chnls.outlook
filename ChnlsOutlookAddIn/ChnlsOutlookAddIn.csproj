@@ -75,8 +75,20 @@
     <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Navigation.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Controls\ChannelTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ChannelTree.Designer.cs">
+      <DependentUpon>ChannelTree.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ClosingWebBrowser.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\MembersTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MembersTree.Designer.cs">
+      <DependentUpon>MembersTree.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Splash.cs">
       <SubType>UserControl</SubType>
@@ -92,6 +104,8 @@
     </Compile>
     <Compile Include="Model\AuthorizeUrlRequest.cs" />
     <Compile Include="Model\AuthorizeUrlResponse.cs" />
+    <Compile Include="Model\ChannelGroupList.cs" />
+    <Compile Include="Model\ChannelList.cs" />
     <Compile Include="Model\CreateChannelRequest.cs" />
     <Compile Include="Model\CreateChannelResponse.cs" />
     <Compile Include="Model\MessageEnvelope.cs" />
@@ -99,6 +113,11 @@
     <Compile Include="Model\NameValuePair.cs" />
     <Compile Include="Model\ReplyMessageInfo.cs" />
     <Compile Include="Model\SendMessageEnvelopeRequest.cs" />
+    <Compile Include="Utils\ComposeHelper.cs" />
+    <Compile Include="Utils\ComposeMonitor.cs" />
+    <Compile Include="Utils\ComposeMonitor.Monitor.cs" />
+    <Compile Include="Utils\EmailHelper.cs" />
+    <Compile Include="Utils\OutlookEmailHeaderConst.cs" />
     <Compile Include="Utils\Scheduler.cs" />
     <None Include="Loader\adxloader.dll.manifest" />
     <None Include="packages.config" />
@@ -187,11 +206,20 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ADXForms\ADXOlFormComposeSidebar.resx">
+      <DependentUpon>ADXOlFormComposeSidebar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ADXForms\ADXOlFormExplorerSidebar.resx">
       <DependentUpon>ADXOlFormExplorerSidebar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ChannelTree.resx">
+      <DependentUpon>ChannelTree.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DebugBar.resx">
       <DependentUpon>DebugBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MembersTree.resx">
+      <DependentUpon>MembersTree.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
