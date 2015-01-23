@@ -136,7 +136,9 @@
     <!--<None Include="ChnlsOutlookAddIn.snk" /> -->
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fav.ico" />
+    <Content Include="fav.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\fav.png" />
     <Content Include="images\square.png" />
     <Content Include="images\square_dark.png" />
