@@ -1,14 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using chnls.Model;
 using Microsoft.Office.Interop.Outlook;
 
+#endregion
+
 namespace chnls.Utils
 {
-    class ComposeHelper
+    internal class ComposeHelper
     {
         public static string RecipientAddress(Recipient recpient)
         {
@@ -24,6 +26,7 @@ namespace chnls.Utils
         {
             return EmailHelper.GetChannel(RecipientAddress(recpient), channels);
         }
+
         public static string GetChannelAddress(Recipient recpient, List<ChannelInfo> channels)
         {
             return GetChannelAddress(RecipientAddress(recpient), channels);
@@ -92,7 +95,7 @@ namespace chnls.Utils
                 try
                 {
                     rec = recipients.Add(bogusAddress);
-                    rec.Type = (int)OlMailRecipientType.olBCC;
+                    rec.Type = (int) OlMailRecipientType.olBCC;
                     rec.Resolve();
                     for (var i = 1; i <= recipients.Count; i++)
                     {
@@ -131,7 +134,7 @@ namespace chnls.Utils
 
         public static void AddEmailChannel(MailItem mailItem, ChannelInfo channel)
         {
-            var channels = new List<ChannelInfo> { channel };
+            var channels = new List<ChannelInfo> {channel};
             AddEmailChannels(mailItem, channels);
         }
 
@@ -173,7 +176,8 @@ namespace chnls.Utils
                     {
                         rec = recipients[i];
                         var recipientAddress = EmailHelper.GetSmtpAddress(rec);
-                        if (channel.channelEmailAddress.address.Equals(recipientAddress, StringComparison.InvariantCultureIgnoreCase))
+                        if (channel.channelEmailAddress.address.Equals(recipientAddress,
+                            StringComparison.InvariantCultureIgnoreCase))
                         {
                             todelete.Insert(0, i);
                         }
@@ -202,7 +206,8 @@ namespace chnls.Utils
             }
         }
 
-        private static void AddRecipients(IEnumerable<ChannelInfo> channels, OlMailRecipientType type, Recipients recipients)
+        private static void AddRecipients(IEnumerable<ChannelInfo> channels, OlMailRecipientType type,
+            Recipients recipients)
         {
             foreach (var channel in channels)
             {
@@ -212,10 +217,10 @@ namespace chnls.Utils
                 try
                 {
                     recipient = recipients.Add(channel.channelEmailAddress.address);
-                    recipient.Type = (int)type;
+                    recipient.Type = (int) type;
                     recipient.Resolve();
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
+                    // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
                 }
@@ -229,6 +234,5 @@ namespace chnls.Utils
                 }
             }
         }
-        
     }
 }

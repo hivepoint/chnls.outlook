@@ -92,7 +92,7 @@ namespace chnls.Utils
                 var count = intersect.Count();
                 if (count > 0)
                 {
-                    holders.Add(new SuggestionHolder { ChannelInfo = channel, Score = count });
+                    holders.Add(new SuggestionHolder {ChannelInfo = channel, Score = count});
                 }
             }
             holders.Sort((s0, s1) => s0.Score.CompareTo(s1.Score));

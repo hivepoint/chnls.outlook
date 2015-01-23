@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace chnls.Utils
+﻿namespace chnls.Utils
 {
-    class OutlookEmailHeaderConst
+    internal class OutlookEmailHeaderConst
     {
         public const string EMAIL_HEADER =
-           @"<html xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:w=""urn:schemas-microsoft-com:office:word"" xmlns:m=""http://schemas.microsoft.com/office/2004/12/omml"" xmlns=""http://www.w3.org/TR/REC-html40""><head><META HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=us-ascii""><meta name=ProgId content=Word.Document><meta name=Generator content=""Microsoft Word 14""><meta name=Originator content=""Microsoft Word 14""><link rel=File-List href=""cid:filelist.xml@01CEEF7E.42BE0430""><!--[if gte mso 9]><xml>
+            @"<html xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:w=""urn:schemas-microsoft-com:office:word"" xmlns:m=""http://schemas.microsoft.com/office/2004/12/omml"" xmlns=""http://www.w3.org/TR/REC-html40""><head><META HTTP-EQUIV=""Content-Type"" CONTENT=""text/html; charset=us-ascii""><meta name=ProgId content=Word.Document><meta name=Generator content=""Microsoft Word 14""><meta name=Originator content=""Microsoft Word 14""><link rel=File-List href=""cid:filelist.xml@01CEEF7E.42BE0430""><!--[if gte mso 9]><xml>
 <o:OfficeDocumentSettings>
 <o:AllowPNG/>
 </o:OfficeDocumentSettings>
@@ -382,6 +377,5 @@ table.MsoNormalTable
 <o:shapelayout v:ext=""edit"">
 <o:idmap v:ext=""edit"" data=""1"" />
 </o:shapelayout></xml><![endif]--></head>";
-
     }
 }

@@ -1,4 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
+using System.Net.Mail;
+
+#endregion
 
 namespace chnls.Model
 {
@@ -8,6 +13,11 @@ namespace chnls.Model
     {
         public string address;
         public string name;
+
+        public MailAddress MailAddress
+        {
+            get { return new MailAddress(address, name); }
+        }
     }
 }
 

@@ -1,15 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
-using System.Text;
 using chnls.Model;
 using Microsoft.Office.Interop.Outlook;
 
+#endregion
+
 namespace chnls.Utils
 {
-    class EmailHelper
+    internal class EmailHelper
     {
         public static ChannelInfo GetChannel(string emailAddress, List<ChannelInfo> channels)
         {
@@ -31,7 +34,7 @@ namespace chnls.Utils
                 var mailAddress = new MailAddress(text);
                 return !String.IsNullOrWhiteSpace(mailAddress.Address);
             }
-            // ReSharper disable once EmptyGeneralCatchClause
+                // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
             }
@@ -58,7 +61,31 @@ namespace chnls.Utils
             var smtpAddress = GetSmtpAddress(recipient);
             return String.IsNullOrWhiteSpace(smtpAddress)
                 ? null
-                : new EmailAddress { address = smtpAddress, name = recipient.Name };
+                : new EmailAddress {address = smtpAddress, name = recipient.Name};
+        }
+
+        internal static void SetHeader(MailItem item, string headerName, string headerValue)
+        {
+            if (!String.IsNullOrWhiteSpace(headerValue))
+            {
+                PropertyAccessor propAccessor = null;
+                try
+                {
+                    propAccessor = item.PropertyAccessor;
+                    propAccessor.SetProperty(
+                        "http://schemas.microsoft.com/mapi/string/{00020386-0000-0000-C000-000000000046}/" + headerName,
+                        headerValue);
+                }
+                finally
+                {
+                    if (null != propAccessor)
+                    {
+                        Marshal.ReleaseComObject(propAccessor);
+                        // ReSharper disable once RedundantAssignment
+                        propAccessor = null;
+                    }
+                }
+            }
         }
     }
 }

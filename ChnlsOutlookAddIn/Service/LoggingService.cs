@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace chnls.Service
 {
-    enum LogLevel
+    internal enum LogLevel
     {
-        Error, Info, Warn, Debug
+        Error,
+        Info,
+        Warn,
+        Debug
     }
-    class LoggingService
+
+    internal class LoggingService
     {
         public static void Debug(string message)
         {
@@ -20,10 +25,12 @@ namespace chnls.Service
         {
             Log(LogLevel.Info, message, null);
         }
+
         internal static void Warn(string message)
         {
             Log(LogLevel.Warn, message, null);
         }
+
         internal static void Error(string message)
         {
             Log(LogLevel.Error, message, null);
@@ -42,9 +49,6 @@ namespace chnls.Service
                 message = message.Substring(0, 1000) + "...";
             }*/
             System.Diagnostics.Debug.WriteLine(level + ": " + message + (ex != null ? "\n\t" + ex.Message : ""));
-
         }
-
-       
     }
 }

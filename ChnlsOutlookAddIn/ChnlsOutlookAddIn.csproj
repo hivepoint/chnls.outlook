@@ -96,6 +96,12 @@
     <Compile Include="Controls\Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AddToChannelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddToChannelForm.Designer.cs">
+      <DependentUpon>AddToChannelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WebPopupWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,11 +119,15 @@
     <Compile Include="Model\NameValuePair.cs" />
     <Compile Include="Model\ReplyMessageInfo.cs" />
     <Compile Include="Model\SendMessageEnvelopeRequest.cs" />
+    <Compile Include="Utils\AddToChannelsHelper.cs" />
+    <Compile Include="Utils\ChannelHelper.cs" />
     <Compile Include="Utils\ComposeHelper.cs" />
     <Compile Include="Utils\ComposeMonitor.cs" />
     <Compile Include="Utils\ComposeMonitor.Monitor.cs" />
+    <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\OutlookEmailHeaderConst.cs" />
+    <Compile Include="Utils\ReplyHelper.cs" />
     <Compile Include="Utils\Scheduler.cs" />
     <None Include="Loader\adxloader.dll.manifest" />
     <None Include="packages.config" />
@@ -232,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutChnlsForm.resx">
       <DependentUpon>AboutChnlsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddToChannelForm.resx">
+      <DependentUpon>AddToChannelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PropertiesForm.resx">
       <DependentUpon>PropertiesForm.cs</DependentUpon>
