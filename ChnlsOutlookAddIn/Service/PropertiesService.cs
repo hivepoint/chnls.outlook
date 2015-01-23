@@ -12,22 +12,25 @@ namespace chnls.Service
         public static PropertiesService Instance = new PropertiesService();
 
 
-        private bool _debugVisible = false;
         private readonly object _propertiesLock = new object();
-
-        public bool DebugPanelVisible
-        {
-            get { return _debugVisible; }
-            set { _debugVisible = value; OnDebugVisibleChanged(); }
-        }
-
-        public bool Connected { get; set; }
+        private bool _debugVisible;
 
         private PropertiesService()
         {
             LoadProperties();
         }
 
+        public bool DebugPanelVisible
+        {
+            get { return _debugVisible; }
+            set
+            {
+                _debugVisible = value;
+                OnDebugVisibleChanged();
+            }
+        }
+
+        public bool Connected { get; set; }
     }
 
     partial class PropertiesService
@@ -70,11 +73,6 @@ namespace chnls.Service
             }
         }
 
-        public bool IsSignedIn
-        {
-            get { return String.IsNullOrWhiteSpace(UserEmail); }
-        }
-
         public string UserEmail
         {
             get
@@ -109,18 +107,17 @@ namespace chnls.Service
                 }
                 else
                 {
-                    
-                if (!Properties.UserProperties.ContainsKey(Properties.CurrentUser))
-                {
-                    CurrentUserProperties = new UserProperties { EmailAddress = Properties.CurrentUser };
-                    Properties.UserProperties[Properties.CurrentUser] = CurrentUserProperties;
+                    if (!Properties.UserProperties.ContainsKey(Properties.CurrentUser))
+                    {
+                        CurrentUserProperties = new UserProperties {EmailAddress = Properties.CurrentUser};
+                        Properties.UserProperties[Properties.CurrentUser] = CurrentUserProperties;
+                    }
+                    else
+                    {
+                        CurrentUserProperties = Properties.UserProperties[Properties.CurrentUser];
+                    }
                 }
-                else
-                {
-                    CurrentUserProperties = Properties.UserProperties[Properties.CurrentUser];
-                }
-                }
-            } 
+            }
         }
 
         internal void ResetToDefaults()

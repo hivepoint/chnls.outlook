@@ -1,9 +1,9 @@
 ﻿#region
 
-using System.Xml.Linq;
-using chnls.Service;
 using System;
 using System.IO;
+using System.Xml.Linq;
+using chnls.Service;
 using chnls.Utils;
 
 #endregion
@@ -78,7 +78,8 @@ namespace chnls.Services
                         }
                         else
                         {
-                            LoggingService.Error("Error loading install manifect, version missing: " + installManifestFile);
+                            LoggingService.Error("Error loading install manifect, version missing: " +
+                                                 installManifestFile);
                         }
                         return;
                     }
@@ -102,7 +103,7 @@ namespace chnls.Services
         {
             if (!IsUpdateAvailable)
             {
-                var delay_ms = delay_sec * 1000;
+                var delay_ms = delay_sec*1000;
                 if (delay_ms <= 0)
                 {
                     delay_ms = 100;
@@ -147,7 +148,7 @@ namespace chnls.Services
                     {
                         if (!IsUpdateAvailable)
                         {
-                            SilentCheck(60 * 60);
+                            SilentCheck(60*60);
                         }
                     }
                 }, delay_ms);

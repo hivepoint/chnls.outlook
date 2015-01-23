@@ -1,11 +1,12 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
+#endregion
 
 namespace chnls.Model
 {
-    class ChannelList
+    internal class ChannelList
     {
         // ReSharper disable InconsistentNaming
         public List<ChannelInfo> channels;

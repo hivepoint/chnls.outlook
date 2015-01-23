@@ -17,7 +17,7 @@ namespace chnls.Model
         ACTIVE,
         DELETED
     }
-       
+
     [Serializable]
     internal class ChannelGroupInfo
     {

@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using chnls.Service;
 using chnls.Services;
@@ -50,7 +49,7 @@ namespace chnls.Forms
 
         private void labelHeading_Click(object sender, EventArgs e)
         {
-            if ((((int)ModifierKeys) & ((int)Keys.Control)) > 0 && (((int)ModifierKeys) & ((int)Keys.Shift)) > 0)
+            if ((((int) ModifierKeys) & ((int) Keys.Control)) > 0 && (((int) ModifierKeys) & ((int) Keys.Shift)) > 0)
             {
                 OptionsClick();
             }
@@ -68,7 +67,7 @@ namespace chnls.Forms
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            if ((((int)ModifierKeys) & ((int)Keys.Control)) > 0 && (((int)ModifierKeys) & ((int)Keys.Shift)) > 0)
+            if ((((int) ModifierKeys) & ((int) Keys.Control)) > 0 && (((int) ModifierKeys) & ((int) Keys.Shift)) > 0)
             {
                 OptionsClick();
             }

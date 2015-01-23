@@ -19,7 +19,6 @@ namespace chnls.Model
         public string replyPrefix;
         public EmailAddress sender;
         public long sent;
-        public List<string> shareTags = new List<string>();
         public string subject;
         public string threadId;
         public List<EmailAddress> to = new List<EmailAddress>();

@@ -82,7 +82,9 @@ namespace chnls.Service
             {
                 lock (_propertiesLock)
                 {
-                    return !SignedIn ? new List<string>() : new List<String>(CurrentUserProperties.RecentComposeChannels);
+                    return !SignedIn
+                        ? new List<string>()
+                        : new List<String>(CurrentUserProperties.RecentComposeChannels);
                 }
             }
         }
@@ -93,10 +95,14 @@ namespace chnls.Service
             {
                 lock (_propertiesLock)
                 {
-                    return !SignedIn ? new List<string>() : new List<String>(CurrentUserProperties.RecentForwardChannels);
+                    return !SignedIn
+                        ? new List<string>()
+                        : new List<String>(CurrentUserProperties.RecentForwardChannels);
                 }
             }
         }
+
+        public string LastForwardFromAddress { get; set; }
 
         public void ChannelListDirty()
         {
@@ -138,9 +144,9 @@ namespace chnls.Service
             OnRecentComposeChannelListChanged();
         }
 
-        public void AddRecentForwardChannels(List<string> channelEmails)
+        public void AddRecentForwardChannels(List<ChannelInfo> channels)
         {
-            if (channelEmails.Count == 0)
+            if (!channels.Any())
             {
                 return;
             }
@@ -150,7 +156,7 @@ namespace chnls.Service
                 {
                     return;
                 }
-                var channels = GetChannelInfoForEmails(channelEmails);
+
                 CurrentUserProperties.RecentComposeChannels.RemoveAll(
                     e => channels.Any(channel => e.Equals(channel._id)));
                 CurrentUserProperties.RecentComposeChannels.InsertRange(0,
@@ -168,7 +174,8 @@ namespace chnls.Service
                     ? null
                     : CurrentUserProperties.Channels.FirstOrDefault(
                         channel =>
-                            channel.channelEmailAddress.address.Equals(emailAddress, StringComparison.InvariantCultureIgnoreCase));
+                            channel.channelEmailAddress.address.Equals(emailAddress,
+                                StringComparison.InvariantCultureIgnoreCase));
             }
         }
 

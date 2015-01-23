@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using chnls.Model;
 using chnls.Service;
-using chnls.Services;
 using Microsoft.Office.Interop.Outlook;
 using Exception = System.Exception;
 
@@ -84,6 +83,7 @@ namespace chnls.Utils
         /*
          * Refresh the toggle button state
          */
+
         public void RefreshParticipants(bool fireUpdates)
         {
             try
@@ -117,7 +117,7 @@ namespace chnls.Utils
                                 if (!String.IsNullOrWhiteSpace(recipientAddress))
                                 {
                                     participants.Add(recipientAddress.ToLower());
-                                } 
+                                }
                             }
                         }
                         finally

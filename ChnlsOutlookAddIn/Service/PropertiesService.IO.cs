@@ -1,16 +1,20 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using chnls.Model;
 using Newtonsoft.Json;
 
+#endregion
+
 namespace chnls.Service
 {
     partial class PropertiesService
     {
-        private readonly Timer _timerWrite = new Timer();
         private const int TimerInterval = 500;
+        private readonly Timer _timerWrite = new Timer();
         private string _preferencesFile;
 
         protected void PropertiesDirty()
@@ -32,7 +36,7 @@ namespace chnls.Service
             try
             {
                 var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                   "ChnlsAddIn");
+                    "ChnlsAddIn");
                 Directory.CreateDirectory(folder);
                 _preferencesFile = Path.Combine(folder, "ChnlsAddIn.properties.json");
 
@@ -102,8 +106,8 @@ namespace chnls.Service
             lock (Properties)
             {
                 json = JsonConvert.SerializeObject(Properties,
-                   Formatting.Indented,
-                   new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    Formatting.Indented,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
             }
 
             var writer = new StreamWriter(_preferencesFile, false, Encoding.UTF8);
