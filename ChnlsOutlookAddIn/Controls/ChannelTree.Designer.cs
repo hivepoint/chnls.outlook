@@ -45,7 +45,6 @@
             this.treeView.Name = "treeView";
             this.treeView.SelectedImageIndex = 0;
             this.treeView.ShowLines = false;
-            this.treeView.ShowPlusMinus = false;
             this.treeView.ShowRootLines = false;
             this.treeView.Size = new System.Drawing.Size(231, 528);
             this.treeView.TabIndex = 0;

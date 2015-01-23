@@ -110,6 +110,7 @@ namespace chnls.Service
             {
                 ChannelsDirty = true;
             }
+            OnChannelListChanged();
         }
 
         public void ChannelGroupListDirty()
@@ -118,6 +119,7 @@ namespace chnls.Service
             {
                 ChannelGroupsDirty = true;
             }
+            OnGroupListChanged();
         }
 
         // Channel and group properties
@@ -157,9 +159,9 @@ namespace chnls.Service
                     return;
                 }
 
-                CurrentUserProperties.RecentComposeChannels.RemoveAll(
+                CurrentUserProperties.RecentForwardChannels.RemoveAll(
                     e => channels.Any(channel => e.Equals(channel._id)));
-                CurrentUserProperties.RecentComposeChannels.InsertRange(0,
+                CurrentUserProperties.RecentForwardChannels.InsertRange(0,
                     channels.Select(channel => channel._id).ToList());
             }
             PropertiesDirty();

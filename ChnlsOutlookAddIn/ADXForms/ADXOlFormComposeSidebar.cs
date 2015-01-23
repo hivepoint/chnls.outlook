@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AddinExpress.OL;
+using chnls.Controls;
 using chnls.Model;
 using chnls.Service;
 using chnls.Utils;
@@ -26,20 +27,10 @@ namespace chnls.ADXForms
             InitializeComponent();
             Width = 150;
             PropertiesService.Instance.UserChanged += Instance_UserChanged;
+            PropertiesService.Instance.ChannelListChanged += Instance_ChannelListChanged;
+            PropertiesService.Instance.GroupListChanged += Instance_GroupListChanged;
             channelTree.ChannelSelected += channelTree_ChannelSelected;
             channelTree.ChannelUnselected += channelTree_ChannelUnselected;
-        }
-
-        void channelTree_ChannelUnselected(object sender, Controls.ChannelTree.ChannelInfoEventArgs e)
-        {
-            if (null == _monitor) return;
-            _monitor.RemoveChannel(e.Channel);
-        }
-
-        void channelTree_ChannelSelected(object sender, Controls.ChannelTree.ChannelInfoEventArgs e)
-        {
-            if (null == _monitor) return;
-            _monitor.AddChannel(e.Channel);
         }
 
         private List<ChannelInfo> Channels { get; set; }
@@ -57,6 +48,44 @@ namespace chnls.ADXForms
                 }
                 _mailItem = value;
             }
+        }
+
+        void ComposeMonitor.IComposeMonitorCallback.OnChannelsChanged(List<ChannelInfo> channels)
+        {
+            channelTree.SelectedChannels = channels;
+        }
+
+        void ComposeMonitor.IComposeMonitorCallback.OnSuggestionsChanged(List<string> suggestedChannels)
+        {
+            channelTree.SuggestedChannelIds = suggestedChannels;
+        }
+
+        private void Instance_GroupListChanged(object sender, EventArgs e)
+        {
+            OnChannelsChanged();
+        }
+
+        private void Instance_ChannelListChanged(object sender, EventArgs e)
+        {
+            OnChannelsChanged();
+        }
+
+        private void OnChannelsChanged()
+        {
+            Scheduler.RunIfNotScheduled("ComposeSidebarUpdateChannels", "Update channels", 100,
+                () => channelTree.SetState(PropertiesService.Instance.Channels, PropertiesService.Instance.Groups));
+        }
+
+        private void channelTree_ChannelUnselected(object sender, ChannelTree.ChannelInfoEventArgs e)
+        {
+            if (null == _monitor) return;
+            _monitor.RemoveChannel(e.Channel);
+        }
+
+        private void channelTree_ChannelSelected(object sender, ChannelTree.ChannelInfoEventArgs e)
+        {
+            if (null == _monitor) return;
+            _monitor.AddChannel(e.Channel);
         }
 
         private void Instance_UserChanged(object sender, EventArgs e)
@@ -157,16 +186,6 @@ namespace chnls.ADXForms
             RegionState = ADXRegionState.Normal;
         }
 
-        void ComposeMonitor.IComposeMonitorCallback.OnChannelsChanged(List<ChannelInfo> channels)
-        {
-            channelTree.SelectedChannels = channels;
-        }
-
-        void ComposeMonitor.IComposeMonitorCallback.OnSuggestionsChanged(List<string> suggestedChannels)
-        {
-            channelTree.SuggestedChannelIds = suggestedChannels;
-        }
-
         private void ADXOlComposeHelperForm_ADXBeforeFormShow()
         {
             LoadContent();
@@ -179,7 +198,7 @@ namespace chnls.ADXForms
 
         private void ADXOlComposeHelperForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-           Stop();
+            Stop();
         }
 
         private void Stop()

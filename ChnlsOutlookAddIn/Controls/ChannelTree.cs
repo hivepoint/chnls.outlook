@@ -212,8 +212,6 @@ namespace chnls.Controls
 
         private bool AddGroup(TreeNodeCollection nodes, ChannelGroupInfo group, List<ChannelInfo> channels)
         {
-            if (!channels.Any())
-                return false;
             var node = new TreeNode
             {
                 Text = group.name,

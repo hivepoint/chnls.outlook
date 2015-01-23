@@ -78,10 +78,8 @@ namespace chnls.Utils
         {
             var holders = new List<SuggestionHolder>();
 
-            foreach (var channel in Channels)
-            {
-                if (IsStale(channel)) continue;
-
+            foreach (var channel in Channels.Where(e=>!IsStale(e)))
+            {               
                 var subscribers =
                     new HashSet<string>(
                         channel.associations.Where(
