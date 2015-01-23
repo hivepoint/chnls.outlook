@@ -110,6 +110,7 @@ namespace chnls.Service
             {
                 ChannelsDirty = true;
             }
+            OnChannelListChanged();
         }
 
         public void ChannelGroupListDirty()
@@ -118,6 +119,7 @@ namespace chnls.Service
             {
                 ChannelGroupsDirty = true;
             }
+            OnGroupListChanged();
         }
 
         // Channel and group properties
