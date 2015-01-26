@@ -233,8 +233,7 @@ namespace chnls.Controls
             var text = channel.name;
             if (addGroup)
             {
-                var channelGroup = Groups.FirstOrDefault(element => element._id.Equals(channel.groupId));
-                text += "@" + (null != channelGroup ? channelGroup.name : "go");
+                text = ChannelHelper.GetNameWithGroup(channel, Groups);
             }
 
             var node = new TreeNode
