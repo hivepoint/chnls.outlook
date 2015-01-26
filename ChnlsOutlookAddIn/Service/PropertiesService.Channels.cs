@@ -102,7 +102,28 @@ namespace chnls.Service
             }
         }
 
-        public string LastForwardFromAddress { get; set; }
+        public string LastForwardFromAddress
+        {
+            get
+            {
+                lock (_propertiesLock)
+                {
+                    return CurrentUserProperties != null ? CurrentUserProperties.LastForwardFromAddress : null;
+                }
+            }
+            set
+            {
+                lock (_propertiesLock)
+                {
+                    if (CurrentUserProperties == null || CurrentUserProperties.LastForwardFromAddress.Equals(value))
+                    {
+                        return;
+                    }
+                    CurrentUserProperties.LastForwardFromAddress = value;
+                    PropertiesDirty();
+                }
+            }
+        }
 
         public void ChannelListDirty()
         {
