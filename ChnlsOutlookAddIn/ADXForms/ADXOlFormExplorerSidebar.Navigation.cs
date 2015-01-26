@@ -28,13 +28,12 @@ namespace chnls.ADXForms
     partial class ADXOlFormExplorerSidebar
     {
         private const string ActionCreateChannel = "createChannel";
-        private static int _requestCount;
 
 
-        private readonly Dictionary<int, Action<CreateChannelResponse>> createChannelCallbacks =
+        private readonly Dictionary<int, Action<CreateChannelResponse>> _createChannelCallbacks =
             new Dictionary<int, Action<CreateChannelResponse>>();
 
-        private readonly Dictionary<int, Action<bool>> sendMessageCallbacks = new Dictionary<int, Action<bool>>();
+        private readonly Dictionary<int, Action<bool>> _sendMessageCallbacks = new Dictionary<int, Action<bool>>();
 
         private HtmlDocument Document
         {
@@ -242,7 +241,7 @@ namespace chnls.ADXForms
             {
                 return;
             }
-            var callback = createChannelCallbacks[request.reqId];
+            var callback = _createChannelCallbacks[request.reqId];
             if (null == callback) return;
             CreateChannelResponse response = null;
             if (!String.IsNullOrWhiteSpace(actionResponse))
@@ -263,7 +262,7 @@ namespace chnls.ADXForms
             {
                 return;
             }
-            var callback = sendMessageCallbacks[request.reqId];
+            var callback = _sendMessageCallbacks[request.reqId];
             if (null == callback) return;
             callback(success);
         }

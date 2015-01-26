@@ -7,7 +7,6 @@ using AddinExpress.OL;
 using chnls.Forms;
 using chnls.Properties;
 using chnls.Service;
-using chnls.Services;
 using chnls.Utils;
 using WebBrowserCom = SHDocVw.WebBrowser;
 

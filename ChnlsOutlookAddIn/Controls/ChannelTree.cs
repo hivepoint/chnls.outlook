@@ -196,7 +196,7 @@ namespace chnls.Controls
 
                     hasGroups |= AddGroup(treeView.Nodes, group, channels);
                 }
-                var goGroupInfo = new ChannelGroupInfo {_id = null, name = hasGroups ? "Other" : "Channels"};
+                var goGroupInfo = new ChannelGroupInfo { _id = null, name = hasGroups ? "Other" : "Channels" };
                 var goGroupChannels = Channels.Where(
                     elemenet =>
                         String.IsNullOrWhiteSpace(elemenet.groupId) && !SelectedChannelIds.Contains(elemenet._id) &&
@@ -216,7 +216,7 @@ namespace chnls.Controls
             {
                 Text = group.name,
                 Name = group._id,
-                ImageKey = @"stack",
+                ImageKey = @"arrow-down",
                 ForeColor = SystemColors.GrayText
             };
             nodes.Add(node);
@@ -233,8 +233,7 @@ namespace chnls.Controls
             var text = channel.name;
             if (addGroup)
             {
-                var channelGroup = Groups.FirstOrDefault(element => element._id.Equals(channel.groupId));
-                text += "@" + (null != channelGroup ? channelGroup.name : "go");
+                text = ChannelHelper.GetNameWithGroup(channel, Groups);
             }
 
             var node = new TreeNode
@@ -269,7 +268,7 @@ namespace chnls.Controls
             var handler = ChannelSelected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs {Channel = channel});
+                handler(this, new ChannelInfoEventArgs { Channel = channel });
             }
         }
 
@@ -279,7 +278,7 @@ namespace chnls.Controls
             var handler = ChannelUnselected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs {Channel = channel});
+                handler(this, new ChannelInfoEventArgs { Channel = channel });
             }
         }
 
@@ -310,13 +309,15 @@ namespace chnls.Controls
             }
             else
             {
-                if (e.Node.IsExpanded)
+                if (e.Node.IsExpanded && e.Node.Nodes.Count > 0)
                 {
                     e.Node.Collapse();
+                    e.Node.ImageKey = @"arrow-right";
                 }
                 else
                 {
                     e.Node.Expand();
+                    e.Node.ImageKey = @"arrow-down";
                 }
             }
             e.Cancel = true;

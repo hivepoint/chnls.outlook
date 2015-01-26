@@ -58,6 +58,8 @@
             this.imageList.Images.SetKeyName(1, "checkmark");
             this.imageList.Images.SetKeyName(2, "checkmark2");
             this.imageList.Images.SetKeyName(3, "stack");
+            this.imageList.Images.SetKeyName(4, "arrow-down");
+            this.imageList.Images.SetKeyName(5, "arrow-right");
             // 
             // ChannelTree
             // 
