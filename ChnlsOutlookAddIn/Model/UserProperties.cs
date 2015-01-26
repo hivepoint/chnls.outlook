@@ -25,5 +25,6 @@ namespace chnls.Model
         public List<ChannelInfo> Channels { get; set; }
 
         public List<ChannelGroupInfo> Groups { get; set; }
+        public string LastForwardFromAddress { get; set; }
     }
 }
