@@ -3,12 +3,11 @@
 using System;
 using System.IO;
 using System.Xml.Linq;
-using chnls.Service;
 using chnls.Utils;
 
 #endregion
 
-namespace chnls.Services
+namespace chnls.Service
 {
     partial class UpdateService
     {
@@ -17,13 +16,29 @@ namespace chnls.Services
 
     partial class UpdateService
     {
+        private bool _updateAvailable = false;
         private UpdateService()
         {
         }
 
         public String UpdateLocation { private set; get; }
 
-        public bool IsUpdateAvailable { get; private set; }
+        public bool IsUpdateAvailable
+        {
+            get
+            {
+                return _updateAvailable;
+            }
+            private set
+            {
+                if (!_updateAvailable && value)
+                {
+                    OnUpdateAvailable();
+                }
+                _updateAvailable = value;
+            }
+        }
+
         public event EventHandler UpdateAvailable;
 
         protected void OnUpdateAvailable()
@@ -39,7 +54,7 @@ namespace chnls.Services
         public void Start()
         {
             InitUpdateLocation();
-            if (AddinModule.CurrentInstance.IsNetworkDeployed())
+            if (true||AddinModule.CurrentInstance.IsNetworkDeployed())
             {
                 SilentCheck(3);
             }

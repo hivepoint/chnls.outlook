@@ -1,40 +1,44 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using chnls.Forms;
 using chnls.Service;
 using chnls.Utils;
 using Microsoft.Office.Interop.Outlook;
+using Exception = System.Exception;
+
+#endregion
 
 namespace chnls
 {
     public partial class AddinModule
     {
-
         internal void ContactSupport()
         {
-            throw new NotImplementedException();
+            Process.Start(Constants.UrlSupport);
         }
 
         internal void GotoChnlsServer()
         {
-            throw new NotImplementedException();
+            Process.Start(PropertiesService.Instance.BaseUrl);
         }
 
         private void InitializeChnls()
         {
             PropertiesService.Instance.ChannelListChanged += Instance_ChannelListChanged;
             PropertiesService.Instance.UserChanged += Instance_UserChanged;
+            UpdateService.Instance.Start();
         }
 
-        void Instance_UserChanged(object sender, EventArgs e)
+        private void Instance_UserChanged(object sender, EventArgs e)
         {
             UpdateShareEnablement();
         }
 
-        void Instance_ChannelListChanged(object sender, EventArgs e)
+        private void Instance_ChannelListChanged(object sender, EventArgs e)
         {
             UpdateShareEnablement();
         }
@@ -55,15 +59,17 @@ namespace chnls
             var items = new List<MailItem>();
             Selection selection = null;
             var explorer = OutlookApp.ActiveExplorer();
-           
+
             try
             {
                 try
                 {
                     selection = explorer.Selection;
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
-                catch { }
+                    // ReSharper disable once EmptyGeneralCatchClause
+                catch
+                {
+                }
                 if (null != selection)
                 {
                     for (var i = 0; i < selection.Count; i++)
@@ -74,7 +80,7 @@ namespace chnls
                             item = selection[i + 1]; // COM 1 BASED
                             if (item is MailItem)
                             {
-                                items.Add((MailItem)item);
+                                items.Add((MailItem) item);
                                 item = null;
                             }
                         }
@@ -90,7 +96,7 @@ namespace chnls
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 LoggingService.Error("Error getting selection", ex);
             }
@@ -108,7 +114,6 @@ namespace chnls
                     // ReSharper disable once RedundantAssignment
                     explorer = null;
                 }
-
             }
             return items;
         }
