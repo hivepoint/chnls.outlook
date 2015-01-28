@@ -73,7 +73,11 @@ namespace chnls.ADXForms
         private void OnChannelsChanged()
         {
             Scheduler.RunIfNotScheduled("ComposeSidebarUpdateChannels", "Update channels", 100,
-                () => channelTree.SetState(PropertiesService.Instance.Channels, PropertiesService.Instance.Groups));
+                () =>
+                {
+                    channelTree.SetState(PropertiesService.Instance.Channels, PropertiesService.Instance.Groups);
+                    channelTree_SelectionChanged(null, null);
+                });
         }
 
         private void channelTree_ChannelUnselected(object sender, ChannelTree.ChannelInfoEventArgs e)

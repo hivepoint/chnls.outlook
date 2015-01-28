@@ -144,5 +144,10 @@ namespace chnls.Forms
             Debug.WriteLine("POP closing");
             webBrowser.Stop();
         }
+
+        public void LoadUrl(string url)
+        {
+            webBrowser.Navigate(url);
+        }
     }
 }
