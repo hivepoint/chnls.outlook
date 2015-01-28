@@ -102,6 +102,12 @@
     <Compile Include="Forms\AddToChannelForm.Designer.cs">
       <DependentUpon>AddToChannelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WebAppPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebAppPopup.Designer.cs">
+      <DependentUpon>WebAppPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WebPopupWindowForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,7 @@
     <Compile Include="Model\AuthorizeUrlResponse.cs" />
     <Compile Include="Model\ChannelGroupList.cs" />
     <Compile Include="Model\ChannelList.cs" />
+    <Compile Include="Model\CreateChannelDialogResponse.cs" />
     <Compile Include="Model\CreateChannelRequest.cs" />
     <Compile Include="Model\CreateChannelResponse.cs" />
     <Compile Include="Model\MessageEnvelope.cs" />
@@ -121,9 +128,12 @@
     <Compile Include="Model\SendMessageEnvelopeRequest.cs" />
     <Compile Include="Utils\AddToChannelsHelper.cs" />
     <Compile Include="Utils\ChannelHelper.cs" />
+    <Compile Include="Utils\ChnlsBrowserHelper.cs" />
+    <Compile Include="Utils\ChnlsUrlHelper.cs" />
     <Compile Include="Utils\ComposeHelper.cs" />
     <Compile Include="Utils\ComposeMonitor.cs" />
     <Compile Include="Utils\ComposeMonitor.Monitor.cs" />
+    <Compile Include="Utils\CreateChannelHelper.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\OutlookEmailHeaderConst.cs" />
@@ -250,6 +260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PropertiesForm.resx">
       <DependentUpon>PropertiesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WebAppPopup.resx">
+      <DependentUpon>WebAppPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebPopupWindowForm.resx">
       <DependentUpon>WebPopupWindowForm.cs</DependentUpon>

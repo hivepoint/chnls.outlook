@@ -13,6 +13,8 @@ namespace chnls.Service
     {
         List<ChannelInfo> Channels();
         List<ChannelGroupInfo> Groups();
+
+        void NotifyChannelCreated();
     }
 
     partial class PropertiesService
@@ -244,7 +246,36 @@ namespace chnls.Service
             PropertiesDirty();
             OnGroupListChanged();
         }
-
+        internal void NotifyChannelCreated(ChannelInfo channel, ChannelGroupInfo group)
+        {
+            BrowserObjectDelegate.NotifyChannelCreated();
+            lock (_propertiesLock)
+            {
+                if (null == CurrentUserProperties)
+                {
+                    return;
+                }
+                if (null != channel)
+                {
+                    CurrentUserProperties.Channels.RemoveAll(e => e._id.Equals(channel._id));
+                    CurrentUserProperties.Channels.Add(channel);
+                }
+                if (null != group)
+                {
+                    CurrentUserProperties.Groups.RemoveAll(e => e._id.Equals(group._id));
+                    CurrentUserProperties.Groups.Add(group);
+                }
+            }
+            PropertiesDirty();
+            if (null != channel)
+            {
+                OnChannelListChanged();
+            }
+            if (null != group)
+            {
+                OnGroupListChanged();
+            }
+        }
         public event EventHandler ChannelListChanged;
         public event EventHandler GroupListChanged;
         public event EventHandler RecentComposeChannelListChanged;
@@ -282,5 +313,7 @@ namespace chnls.Service
         }
 
         #endregion
+
+
     }
 }

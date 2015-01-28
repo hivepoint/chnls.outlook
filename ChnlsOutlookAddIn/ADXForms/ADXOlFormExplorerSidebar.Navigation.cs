@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Web;
 using System.Windows.Forms;
 using chnls.Model;
 using chnls.Service;
+using chnls.Utils;
 using mshtml;
 using Newtonsoft.Json;
 
@@ -15,20 +15,11 @@ using Newtonsoft.Json;
 
 namespace chnls.ADXForms
 {
-    internal enum ExtensionQueryType
-    {
-        // ReSharper disable InconsistentNaming
-        CHANNELS,
-        GROUPS,
-        REPLY_MESSAGE_INFO
-        // ReSharper restore InconsistentNaming
-    }
+
 
     // ReSharper disable once InconsistentNaming
     partial class ADXOlFormExplorerSidebar
     {
-        private const string ActionCreateChannel = "createChannel";
-
 
         private readonly Dictionary<int, Action<CreateChannelResponse>> _createChannelCallbacks =
             new Dictionary<int, Action<CreateChannelResponse>>();
@@ -49,66 +40,60 @@ namespace chnls.ADXForms
             PropertiesService.Instance.BrowserObjectDelegate = new BrowserObjectDelegate { Broswer = this };
         }
 
-        private static bool IsHivePointUrl(Uri uri)
-        {
-            return uri.Scheme.Equals("channels", StringComparison.OrdinalIgnoreCase);
-        }
-
         private void HandleHivePointUrl(Uri uri)
         {
-            var queryString = uri.Query.TrimStart('?');
-
-            var query = HttpUtility.ParseQueryString(queryString);
             LoggingService.Debug("Handle Chnls URI: " + uri);
-            switch (uri.Host.ToLower())
+            var request = ChnlsUrlHelper.GetChnlsRequest(uri);
+            switch (request.Type)
             {
-                case "clientloaded":
+                case ChannelsRequestType.ClientLoaded:
                     statusToast.Detail = "Registering add-in";
                     RegisterCallbacks();
-                    RegisterWithWebClient();
+                    ChnlsBrowserHelper.RegisterWithWebClient(Document);
                     LoadComplete();
                     break;
-                case "contentloaded":
-                    statusToast.HideToast();
-                    break;
-                case "replyto":
-                    ReplyToMessageId(query["id"]);
-                    break;
-                case "openwindow":
-                    var url = query["value"];
+                case ChannelsRequestType.OpenWindow:
+                    var url = ((ChannelsRequestWithUrl)request).Url;
                     if (!String.IsNullOrWhiteSpace(url) &&
                         String.Compare(url, "about:blank", StringComparison.OrdinalIgnoreCase) != 0)
                     {
                         Debug.WriteLine("NewWindow:" + url);
                         Process.Start(url);
                     }
+
                     break;
-                case "channellistupdated":
+                case ChannelsRequestType.CloseWindow:
+                    break;
+                case ChannelsRequestType.ContentLoaded:
+                    statusToast.HideToast();
+                    break;
+                case ChannelsRequestType.ChannelUpdated:
+                case ChannelsRequestType.ChannelListUpdated:
                     PropertiesService.Instance.ChannelListDirty();
                     break;
-                case "channelgrouplistupdated":
+                case ChannelsRequestType.ChannelGroupListUpdated:
                     PropertiesService.Instance.ChannelGroupListDirty();
                     break;
-                case "actioncomplete":
-                    var success = false;
-                    try
-                    {
-                        success = Boolean.Parse(query["success"]);
-                    }
-                    catch (ArgumentNullException)
-                    {
-                    }
-                    catch (FormatException)
-                    {
-                    }
-                    OnActionResponseInt(query["value"], query["action"], success, query["response"]);
+                case ChannelsRequestType.ActionComplete:
+                    OnActionResponseInt((ChannelsRequestActionComplete)request);
                     break;
-                case "usersignedin":
-                    PropertiesService.Instance.UserEmail = query["email"];
+                case ChannelsRequestType.NewItemsAddedToFeed:
                     break;
-                case "usersignedout":
+                case ChannelsRequestType.ReplyToMessage:
+                    ReplyToMessageId((ChannelsRequestWithId)request);
+                    break;
+                case ChannelsRequestType.UserSignedIn:
+                    PropertiesService.Instance.UserEmail = ((ChannelsRequestWithEmailAndName)request).Email;
+                    break;
+                case ChannelsRequestType.UserSignedOut:
                     PropertiesService.Instance.UserEmail = null;
                     break;
+                case ChannelsRequestType.HandleCreateChannel:
+                    var requestWithGroup = (ChannelsRequestWithGroupAndEmails)request;
+                    CreateChannelHelper.CreateChannel(requestWithGroup.Group, requestWithGroup.Emails);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -129,7 +114,7 @@ namespace chnls.ADXForms
             if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower() + "ui/svc"))
             {
                 // if it is a url that is a hivepoint url, get it authorized
-                if (!PerformAction("AUTHORIZE_URL", "{'url':'" + url + "'}"))
+                if (!ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL, "{'url':'" + url + "'}"))
                 {
                     // authorize url is not supported, so just open the url
                     Process.Start(url.ToString());
@@ -160,61 +145,22 @@ namespace chnls.ADXForms
 
         // This nested class must be ComVisible for the JavaScript to be able to call it.
 
-        private void RegisterWithWebClient()
-        {
-            var code = @"channelsExtensionHelper.registerExtension({'version':'" + GetType().Assembly.GetName().Version +
-                       @"', capabilities:['HANDLES_REPLIES','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_CREATE_CHANNEL']});";
-            object[] codeString = { code };
-            Document.InvokeScript("eval", codeString);
-        }
 
-        private void ReplyToMessageId(string messageId)
+        private void ReplyToMessageId(ChannelsRequestWithId request)
         {
-            var info = GetWebObject<ReplyMessageInfo>(ExtensionQueryType.REPLY_MESSAGE_INFO, messageId);
+            var info = ChnlsBrowserHelper.GetWebObject<ReplyMessageInfo>(Document, ExtensionQueryType.REPLY_MESSAGE_INFO,
+                request.Id);
             if (null != info)
             {
                 //ComposeService.Instance.ReplyTo(info);
             }
         }
 
-        private T GetWebObject<T>(ExtensionQueryType queryType, string key)
+
+        private void OnActionResponseInt(ChannelsRequestActionComplete request)
         {
-            if (!PropertiesService.Instance.Connected)
-            {
-                return default(T);
-            }
-            object[] codeString = { @"channelsExtensionHelper.getValue('" + queryType + "', '" + key + "');" };
-            if (webBrowserMain.Document == null) return default(T);
-            var result = webBrowserMain.Document.InvokeScript("eval", codeString);
-            var json = result as string;
-            LoggingService.Debug("json:\n" + json);
-            return String.IsNullOrWhiteSpace(json) ? default(T) : JsonConvert.DeserializeObject<T>(json);
+            OnActionResponseInt(request.ActionType, request.Action, request.Success, request.Resposne);
         }
-
-        private bool PerformAction(string type, string actionJson)
-        {
-            if (!IsActionSupported(type))
-            {
-                return false;
-            }
-            var code = "channelsExtensionHelper.performAction('" + type + "', " + actionJson + ");";
-            object[] codeString = { code };
-            Debug.WriteLine("type: " + type + " action:" + actionJson);
-            Document.InvokeScript("eval", codeString);
-
-            return true;
-        }
-
-        private bool IsActionSupported(string actionType)
-        {
-            var code = "channelsExtensionHelper.isActionSupported('" + actionType + "');";
-            object[] codeString = { code };
-            var result = Document.InvokeScript("eval", codeString);
-            var supported = null != result &&
-                            String.Equals("true", (string)result, StringComparison.InvariantCultureIgnoreCase);
-            return supported;
-        }
-
 
         private void OnActionResponseInt(string actionType, string actionRequest, bool success, string actionResponse)
         {
@@ -273,14 +219,17 @@ namespace chnls.ADXForms
 
             public List<ChannelInfo> Channels()
             {
-                var channelList = Broswer.GetWebObject<ChannelList>(ExtensionQueryType.CHANNELS, "");
-                return null != channelList ? channelList.channels : null;
+                return ChnlsBrowserHelper.GetChannels(Broswer.Document);
             }
 
             public List<ChannelGroupInfo> Groups()
             {
-                var groupList = Broswer.GetWebObject<ChannelGroupList>(ExtensionQueryType.GROUPS, "");
-                return null != groupList ? groupList.groups : null;
+                return ChnlsBrowserHelper.GetGroups(Broswer.Document);
+            }
+
+            public void NotifyChannelCreated()
+            {
+                ChnlsBrowserHelper.NotifyChannelRefresh(Broswer.Document);
             }
         }
 

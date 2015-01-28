@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using AddinExpress.OL;
 using chnls.Service;
+using chnls.Utils;
 
 #endregion
 
@@ -51,15 +52,11 @@ namespace chnls.ADXForms
 
         private void UpdateBaseUrl()
         {
-            var updatedUrl = (String.IsNullOrWhiteSpace(PropertiesService.Instance.BaseUrl)
-                ? Constants.UrlChnlsProduction
-                : PropertiesService.Instance.BaseUrl) + Constants.UrlSuffix + "&clientVersion=" +
-                             GetType().Assembly.GetName().Version;
-            if (_baseUrl != updatedUrl)
-            {
-                _baseUrl = updatedUrl;
-                Reconnect(0);
-            }
+            var updatedUrl = ChnlsUrlHelper.GetAppUrl();
+            if (_baseUrl == updatedUrl) return;
+
+            _baseUrl = updatedUrl;
+            Reconnect(0);
         }
 
         private void LoadComplete()

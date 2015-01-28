@@ -83,7 +83,7 @@ namespace chnls.ADXForms
                         // this isn't the current load itertion, ignore
                         return;
                     }
-                    if (IsHivePointUrl(Url))
+                    if (ChnlsUrlHelper.IsHivePointUrl(Url))
                     {
                         HandleHivePointUrl(Url);
                     }
@@ -105,7 +105,7 @@ namespace chnls.ADXForms
             Debug.WriteLine(description);
             LoggingService.Debug(description);
 
-            if (IsHivePointUrl(e.Url))
+            if (ChnlsUrlHelper.IsHivePointUrl(e.Url))
             {
                 Scheduler.Run(description,
                     () =>
