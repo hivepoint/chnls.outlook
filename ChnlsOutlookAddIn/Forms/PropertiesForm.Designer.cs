@@ -44,7 +44,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(158, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "@Channels Server";
+            this.label1.Text = "Email Channels Server";
             // 
             // radioButtonChnlsIO
             // 
@@ -106,7 +106,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PropertiesForm";
-            this.Text = "@Channels Properties";
+            this.Text = "Email Channels Properties";
             this.ResumeLayout(false);
             this.PerformLayout();
 

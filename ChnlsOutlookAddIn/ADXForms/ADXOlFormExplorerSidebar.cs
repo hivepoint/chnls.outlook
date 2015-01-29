@@ -26,7 +26,7 @@ namespace chnls.ADXForms
             var wbCoMmain = (WebBrowserCom) webBrowserMain.ActiveXInstance;
             wbCoMmain.NewWindow3 += wbCOMmain_NewWindow3;
 
-            Text = "@Channels";
+            Text = "Email Channels";
             Icon = Resources.favIcon;
 
             debugBar.Browser = this;

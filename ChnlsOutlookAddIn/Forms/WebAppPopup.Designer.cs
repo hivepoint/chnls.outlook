@@ -64,7 +64,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "WebAppPopup";
-            this.Text = "@Channels";
+            this.Text = "Email Channels";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebAppPopup_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
