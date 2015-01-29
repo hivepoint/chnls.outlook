@@ -44,13 +44,13 @@ namespace chnls.ADXForms
         }
 
 
-        private void wbCOMmain_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext,
+        private void wbCOMmain_NewWindow3(ref object ppDisp, ref bool cancel, uint dwFlags, string bstrUrlContext,
             string bstrUrl)
         {
             var uri = new Uri(bstrUrl);
             if (bstrUrl == "about:blank" || IsNotCurrentLoadIteration())
             {
-                Cancel = true;
+                cancel = true;
                 return;
             }
             var description = "Navigating new window: " + uri;
@@ -75,7 +75,7 @@ namespace chnls.ADXForms
             }
             else
             {
-                Cancel = true;
+                cancel = true;
                 Scheduler.Run(description, () =>
                 {
                     if (IsNotCurrentLoadIteration())
@@ -138,24 +138,24 @@ namespace chnls.ADXForms
                 HandleMailTo(e.Url);
                 e.Cancel = true;
             }
-            else if (IsIEErrorUrl(e.Url))
+            else if (IsIeErrorUrl(e.Url))
             {
-                HandleInvalidIEVersion(e.Url);
+                HandleInvalidIeVersion();
             }
         }
 
         private static bool IsOauth(Uri url)
         {
-            return url.PathAndQuery.ToLower().Contains("/r/svc/google_oauth");
+            return url.PathAndQuery.ToLower().Contains("/r/client/google_oauth/v1/request");
         }
 
-        private void HandleInvalidIEVersion(Uri uri)
+        private void HandleInvalidIeVersion()
         {
             LoggingService.Debug("Invalide IE Version");
             statusToast.Show("Invalid IE version", null, 15);
         }
 
-        private bool IsIEErrorUrl(Uri uri)
+        private static bool IsIeErrorUrl(Uri uri)
         {
             return uri.ToString().ToLower().Contains(Constants.UrlIeVersionProblemString);
         }
