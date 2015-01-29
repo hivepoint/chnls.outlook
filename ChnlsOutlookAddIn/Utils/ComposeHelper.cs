@@ -3,8 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Web;
 using chnls.Model;
+using chnls.Service;
 using Microsoft.Office.Interop.Outlook;
+using Exception = System.Exception;
 
 #endregion
 
@@ -231,6 +234,101 @@ namespace chnls.Utils
                         Marshal.ReleaseComObject(recipient);
                         recipient = null;
                     }
+                }
+            }
+        }
+
+        internal static void MailTo(Uri mailtoUri)
+        {
+            if (null == mailtoUri ||
+                !Uri.UriSchemeMailto.Equals(mailtoUri.Scheme, StringComparison.InvariantCultureIgnoreCase)) return;
+
+            var orig = mailtoUri.OriginalString.Substring(Uri.UriSchemeMailto.Length+1);
+            if (orig.Contains("?"))
+            {
+                orig = orig.Substring(orig.IndexOf("?", System.StringComparison.Ordinal));
+            }
+            if (orig.Contains("#"))
+            {
+                orig = orig.Substring(orig.IndexOf("#", System.StringComparison.Ordinal));
+            }
+           
+            var to = HttpUtility.UrlDecode(orig);
+            var query = HttpUtility.ParseQueryString(mailtoUri.Query);
+            var subject = query["subject"] ?? query["Subject"];
+            var body = query["body"] ?? query["Body"];
+            var cc = query["CC"] ?? query["cc"];
+            var bcc = query["BCC"] ?? query["bcc"];
+
+            Application application = null;
+            MailItem mail = null;
+            try
+            {
+                application = AddinModule.CurrentInstance.OutlookApp.Application;
+
+                // Create a new mail item and set it's subject to be a reply to the message
+                mail = (MailItem) application.CreateItem(OlItemType.olMailItem);
+                if (!String.IsNullOrWhiteSpace(subject))
+                {
+                    mail.Subject = subject;
+                }
+
+                if (!String.IsNullOrWhiteSpace(to))
+                {
+                    mail.To = to;
+                }
+
+                if (!String.IsNullOrWhiteSpace(cc))
+                {
+                    mail.CC = cc;
+                }
+
+                if (!String.IsNullOrWhiteSpace(bcc))
+                {
+                    mail.BCC = bcc;
+                }
+
+                Recipients msgRecipients = null;
+                try
+                {
+                    // resolve all the recipients so that we can send the message
+                    msgRecipients = mail.Recipients;
+                    msgRecipients.ResolveAll();
+                }
+                catch (Exception ex)
+                {
+                    // the recipients might not be correct, but the user will see this and there will be outlook validation before they send the message.  There really isn't anything else we can do.
+                    LoggingService.Error(
+                        "Failed to resolve recipients: " + mailtoUri, ex);
+                }
+                finally
+                {
+                    if (null != msgRecipients)
+                    {
+                        Marshal.ReleaseComObject(msgRecipients);
+                        // ReSharper disable once RedundantAssignment
+                        msgRecipients = null;
+                    }
+                }
+                if (!String.IsNullOrWhiteSpace(body))
+                {
+                    mail.Body = body;
+                }
+                mail.Display();
+            }
+            finally
+            {
+                if (null != mail)
+                {
+                    Marshal.ReleaseComObject(mail);
+                    // ReSharper disable once RedundantAssignment
+                    mail = null;
+                }
+                if (null != application)
+                {
+                    Marshal.ReleaseComObject(application);
+                    // ReSharper disable once RedundantAssignment
+                    application = null;
                 }
             }
         }
