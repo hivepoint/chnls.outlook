@@ -117,7 +117,8 @@ namespace chnls.Service
             {
                 lock (_propertiesLock)
                 {
-                    if (CurrentUserProperties == null || CurrentUserProperties.LastForwardFromAddress.Equals(value))
+                    if (CurrentUserProperties == null ||
+                        String.Equals(CurrentUserProperties.LastForwardFromAddress, value))
                     {
                         return;
                     }
@@ -246,6 +247,7 @@ namespace chnls.Service
             PropertiesDirty();
             OnGroupListChanged();
         }
+
         internal void NotifyChannelCreated(ChannelInfo channel, ChannelGroupInfo group)
         {
             BrowserObjectDelegate.NotifyChannelCreated();
@@ -276,6 +278,7 @@ namespace chnls.Service
                 OnGroupListChanged();
             }
         }
+
         public event EventHandler ChannelListChanged;
         public event EventHandler GroupListChanged;
         public event EventHandler RecentComposeChannelListChanged;
@@ -313,7 +316,5 @@ namespace chnls.Service
         }
 
         #endregion
-
-
     }
 }

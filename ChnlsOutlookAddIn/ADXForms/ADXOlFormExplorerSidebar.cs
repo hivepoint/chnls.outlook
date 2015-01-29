@@ -47,15 +47,15 @@ namespace chnls.ADXForms
         private void wbCOMmain_NewWindow3(ref object ppDisp, ref bool Cancel, uint dwFlags, string bstrUrlContext,
             string bstrUrl)
         {
-            var Url = new Uri(bstrUrl);
+            var uri = new Uri(bstrUrl);
             if (bstrUrl == "about:blank" || IsNotCurrentLoadIteration())
             {
                 Cancel = true;
                 return;
             }
-            var description = "Navigating new window: " + Url;
+            var description = "Navigating new window: " + uri;
             LoggingService.Debug(description);
-            if (IsOauth(Url))
+            if (IsOauth(uri))
             {
                 var pwf = new WebPopupWindowForm(webBrowserMain, url => GoogleOAuthReturn(url.Fragment))
                 {
@@ -83,16 +83,30 @@ namespace chnls.ADXForms
                         // this isn't the current load itertion, ignore
                         return;
                     }
-                    if (ChnlsUrlHelper.IsHivePointUrl(Url))
+                    if (ChnlsUrlHelper.IsHivePointUrl(uri))
                     {
-                        HandleHivePointUrl(Url);
+                        HandleHivePointUrl(uri);
+                    }
+                    else if (IsMailTo(uri))
+                    {
+                        HandleMailTo(uri);
                     }
                     else
                     {
-                        AuthorizeUrl(Url);
+                        AuthorizeUrl(uri);
                     }
                 }, 10);
             }
+        }
+
+        private void HandleMailTo(Uri uri)
+        {
+            ComposeHelper.MailTo(uri);
+        }
+
+        private static bool IsMailTo(Uri uri)
+        {
+            return Uri.UriSchemeMailto.Equals(uri.Scheme, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private void webBrowserMain_Navigating(object sender, WebBrowserNavigatingEventArgs e)
@@ -119,6 +133,11 @@ namespace chnls.ADXForms
                     }, 10);
                 e.Cancel = true;
             }
+            else if (IsMailTo(e.Url))
+            {
+                HandleMailTo(e.Url);
+                e.Cancel = true;
+            }
             else if (IsIEErrorUrl(e.Url))
             {
                 HandleInvalidIEVersion(e.Url);
@@ -140,6 +159,5 @@ namespace chnls.ADXForms
         {
             return uri.ToString().ToLower().Contains(Constants.UrlIeVersionProblemString);
         }
-
     }
 }
