@@ -79,7 +79,7 @@ namespace chnls.ADXForms
                     break;
                 case ChannelsRequestType.NewItemsAddedToFeed:
                     break;
-                case ChannelsRequestType.ReplyToMessage:
+                case ChannelsRequestType.HandleMessageReply:
                     ReplyToMessageId((ChannelsRequestWithId)request);
                     break;
                 case ChannelsRequestType.UserSignedIn:
@@ -152,7 +152,7 @@ namespace chnls.ADXForms
                 request.Id);
             if (null != info)
             {
-                //ComposeService.Instance.ReplyTo(info);
+                ReplyHelper.ReplyTo(info);
             }
         }
 

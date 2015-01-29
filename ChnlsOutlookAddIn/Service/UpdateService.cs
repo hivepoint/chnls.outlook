@@ -54,7 +54,7 @@ namespace chnls.Service
         public void Start()
         {
             InitUpdateLocation();
-            if (true||AddinModule.CurrentInstance.IsNetworkDeployed())
+            if (AddinModule.CurrentInstance.IsNetworkDeployed())
             {
                 SilentCheck(3);
             }

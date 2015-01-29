@@ -63,6 +63,8 @@ namespace chnls.Utils
                 RemoveCurrentUser(tos);
                 RemoveCurrentUser(ccs);
 
+                EnsureChannels(tos, ccs, replyTo.channelIds);
+
                 mail.To = GetAddressString(tos);
                 mail.CC = GetAddressString(ccs);
                 Recipients msgRecipients = null;
@@ -108,6 +110,25 @@ namespace chnls.Utils
                     // ReSharper disable once RedundantAssignment
                     application = null;
                 }
+            }
+        }
+
+        private static void EnsureChannels(ICollection<EmailAddress> tos, ICollection<EmailAddress> ccs, ICollection<string> channelIds)
+        {
+            var recipients = new HashSet<String>();
+            foreach (var address in tos.Select(e=>e.address))
+            {
+                recipients.Add(address.ToLowerInvariant());
+            }
+            foreach (var address in ccs.Select(e => e.address))
+            {
+                recipients.Add(address.ToLowerInvariant());
+            }
+            var channels = PropertiesService.Instance.Channels.Where(e => channelIds.Contains(e._id));
+            var missingChannels = channels.Where(e => !recipients.Contains(e.channelEmailAddress.address.ToLowerInvariant()));
+            foreach (var missingChannel in missingChannels)
+            {
+                ccs.Add(missingChannel.channelEmailAddress);
             }
         }
 
