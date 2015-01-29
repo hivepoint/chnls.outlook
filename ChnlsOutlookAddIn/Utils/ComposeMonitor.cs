@@ -26,8 +26,8 @@ namespace chnls.Utils
             _callback = callback;
             _timer.Tick += timer_Tick;
             _timer.Interval = 2000;
-            CurrentMailItem = mailItem;
             Channels = PropertiesService.Instance.Channels;
+            CurrentMailItem = mailItem;
             RefreshParticipants(true);
             UpdateSuggestions();
         }
@@ -66,7 +66,7 @@ namespace chnls.Utils
         {
             if (channelsChanged)
             {
-                _callback.OnChannelsChanged(Channels.ToList());
+                _callback.OnChannelsChanged(_currentChannels.Values.ToList());
             }
             if (channelsChanged || participantsChanged)
             {

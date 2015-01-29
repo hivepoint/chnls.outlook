@@ -51,7 +51,7 @@ namespace chnls.Utils
                         return new ChannelsRequestWithPlace(type, query["place"]);
                     case ChannelsRequestType.OpenWindow:
                         return new ChannelsRequestWithUrl(type, query["ActionType"]);
-                    case ChannelsRequestType.ReplyToMessage:
+                    case ChannelsRequestType.HandleMessageReply:
                         return new ChannelsRequestWithId(type, query["id"]);
                     case ChannelsRequestType.ChannelUpdated:
                         return new ChannelsRequestWithId(type, query["id"]);
@@ -182,7 +182,7 @@ namespace chnls.Utils
         ChannelUpdated,
         ChannelGroupListUpdated,
         NewItemsAddedToFeed,
-        ReplyToMessage,
+        HandleMessageReply,
         ActionComplete,
         UserSignedIn,
         UserSignedOut,

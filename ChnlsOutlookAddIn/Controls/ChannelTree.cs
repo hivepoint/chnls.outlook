@@ -196,7 +196,7 @@ namespace chnls.Controls
 
                     hasGroups |= AddGroup(treeView.Nodes, group, channels);
                 }
-                var goGroupInfo = new ChannelGroupInfo { _id = null, name = hasGroups ? "Other" : "Channels" };
+                var goGroupInfo = new ChannelGroupInfo {_id = null, name = hasGroups ? "Other" : "Channels"};
                 var goGroupChannels = Channels.Where(
                     elemenet =>
                         String.IsNullOrWhiteSpace(elemenet.groupId) && !SelectedChannelIds.Contains(elemenet._id) &&
@@ -235,13 +235,36 @@ namespace chnls.Controls
             {
                 text = ChannelHelper.GetNameWithGroup(channel, Groups);
             }
+            var tooltip = String.IsNullOrWhiteSpace(channel.descr)
+                ? ""
+                : channel.descr;
+
+            var subscribers = ChannelHelper.GetInterestMemberCount(channel, EntityCollection.SUBSCRIPTIONS);
+            var watchers = ChannelHelper.GetInterestMemberCount(channel, EntityCollection.FOLLOWING);
+            if (subscribers > 0)
+            {
+                if (!String.IsNullOrWhiteSpace(tooltip))
+                {
+                    tooltip += "\n";
+                }
+                tooltip += subscribers + " subscriber" + (subscribers != 1 ? "s" : "");
+            }
+            if (watchers > 0)
+            {
+                if (!String.IsNullOrWhiteSpace(tooltip))
+                {
+                    tooltip += "\n";
+                }
+                tooltip += watchers + " watching";
+            }
 
             var node = new TreeNode
             {
                 Tag = tag,
                 Text = text,
                 Name = channel._id,
-                ImageKey = SelectedChannelTag.Equals(tag) ? @"checkmark2" : null
+                ImageKey = SelectedChannelTag.Equals(tag) ? @"checkmark2" : null,
+                ToolTipText = tooltip
             };
             group.Add(node);
         }
@@ -268,7 +291,7 @@ namespace chnls.Controls
             var handler = ChannelSelected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs { Channel = channel });
+                handler(this, new ChannelInfoEventArgs {Channel = channel});
             }
         }
 
@@ -278,7 +301,7 @@ namespace chnls.Controls
             var handler = ChannelUnselected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs { Channel = channel });
+                handler(this, new ChannelInfoEventArgs {Channel = channel});
             }
         }
 

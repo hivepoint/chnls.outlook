@@ -12,6 +12,12 @@ using Newtonsoft.Json;
 
 namespace chnls.Utils
 {
+    /*
+     * This class is a place for all browser logic for dealing with the chnls web service.
+     * 
+     * For example, all javascript actions that are performed on the browser should be done through this helper and all chnls url messages should be processed here too.
+     */
+
     internal enum ExtensionQueryType
     {
         // ReSharper disable InconsistentNaming
@@ -37,7 +43,7 @@ namespace chnls.Utils
         {
             var code = @"channelsExtensionHelper.registerExtension({'version':'" +
                        typeof (ChnlsBrowserHelper).Assembly.GetName().Version +
-                       @"', capabilities:['HANDLES_REPLIES','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_CREATE_CHANNEL']});";
+                       @"', capabilities:['HANDLES_MESSAGE_REPLY','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_CREATE_CHANNEL']});";
             object[] codeString = {code};
             document.InvokeScript("eval", codeString);
         }

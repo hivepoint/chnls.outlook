@@ -129,7 +129,7 @@ namespace chnls.Utils
                             }
                         }
                     }
-                    var channelsChanged = _currentChannels.Keys.Except(channels.Keys).Any();
+                    var channelsChanged = _currentChannels.Keys.Except(channels.Keys).Any() || channels.Keys.Except(_currentChannels.Keys).Any();
                     var participantsChanged = !_participants.SequenceEqual(participants);
                     if (channelsChanged)
                     {
