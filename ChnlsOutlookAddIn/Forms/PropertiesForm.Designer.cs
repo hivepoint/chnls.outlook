@@ -54,7 +54,7 @@
             this.radioButtonChnlsIO.Size = new System.Drawing.Size(121, 17);
             this.radioButtonChnlsIO.TabIndex = 1;
             this.radioButtonChnlsIO.TabStop = true;
-            this.radioButtonChnlsIO.Text = "Production (chnls.io)";
+            this.radioButtonChnlsIO.Text = "Production (EmailChannels.com)";
             this.radioButtonChnlsIO.UseVisualStyleBackColor = true;
             this.radioButtonChnlsIO.CheckedChanged += new System.EventHandler(this.radioButtonChnlsIO_CheckedChanged);
             // 
@@ -66,7 +66,7 @@
             this.radioButtonChnlsUS.Size = new System.Drawing.Size(95, 17);
             this.radioButtonChnlsUS.TabIndex = 8;
             this.radioButtonChnlsUS.TabStop = true;
-            this.radioButtonChnlsUS.Text = "Beta (chnls.us)";
+            this.radioButtonChnlsUS.Text = "Beta (EmailChannels.us)";
             this.radioButtonChnlsUS.UseVisualStyleBackColor = true;
             this.radioButtonChnlsUS.CheckedChanged += new System.EventHandler(this.radioButtonChnlsUS_CheckedChanged);
             // 
@@ -78,7 +78,7 @@
             this.radioButtonChnlsDEV.Size = new System.Drawing.Size(163, 17);
             this.radioButtonChnlsDEV.TabIndex = 9;
             this.radioButtonChnlsDEV.TabStop = true;
-            this.radioButtonChnlsDEV.Text = "Development (chnlsdev.com)";
+            this.radioButtonChnlsDEV.Text = "Development (EmailChannels.net)";
             this.radioButtonChnlsDEV.UseVisualStyleBackColor = true;
             this.radioButtonChnlsDEV.CheckedChanged += new System.EventHandler(this.radioButtonChnlsDEV_CheckedChanged);
             // 

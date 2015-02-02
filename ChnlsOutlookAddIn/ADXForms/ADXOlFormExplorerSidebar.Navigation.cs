@@ -111,7 +111,7 @@ namespace chnls.ADXForms
         public void AuthorizeUrl(Uri url)
         {
             LoggingService.Debug("Authorize1: " + url);
-            if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower() + "ui/svc"))
+            if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower()))
             {
                 // if it is a url that is a hivepoint url, get it authorized
                 if (!ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL, "{'url':'" + url + "'}"))

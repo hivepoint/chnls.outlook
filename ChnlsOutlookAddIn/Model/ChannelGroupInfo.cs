@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 
 #endregion
 
@@ -22,18 +21,9 @@ namespace chnls.Model
     internal class ChannelGroupInfo
     {
         public string _id;
-        public List<string> admins;
-        public long created;
-        public string creator;
         public string descr;
         public long lastUpdated;
-        public bool limitChannelCreators;
         public string name;
-        public List<string> permittedChannelAddrs;
-        public List<string> permittedChannelCreatorAddrs;
-        public List<string> permittedChannelCreatorDomains;
-        public List<string> permittedChannelDomains;
-        public ChannelGroupState state;
     }
 }
 

@@ -78,19 +78,15 @@ namespace chnls.Utils
         {
             var holders = new List<SuggestionHolder>();
 
-            foreach (var channel in Channels.Where(e=>!IsStale(e)))
-            {               
+            foreach (var channel in Channels.Where(e => !IsStale(e)))
+            {
                 var subscribers =
-                    new HashSet<string>(
-                        channel.associations.Where(
-                            e =>
-                                EntityInterestLevel.INTERESTED == e.interestLevel &&
-                                EntityCollection.SUBSCRIPTIONS == e.collection).Select(e => e.userEmail));
+                    new HashSet<string>(channel.subscribers.Select(e => e.address));
                 var intersect = _participants.Intersect(subscribers);
                 var count = intersect.Count();
                 if (count > 0)
                 {
-                    holders.Add(new SuggestionHolder {ChannelInfo = channel, Score = count});
+                    holders.Add(new SuggestionHolder { ChannelInfo = channel, Score = count });
                 }
             }
             holders.Sort((s0, s1) => s0.Score.CompareTo(s1.Score));
@@ -124,9 +120,9 @@ namespace chnls.Utils
             }
         }
 
-        private bool IsStale(ChannelInfo channel)
+        private static bool IsStale(ChannelInfo channel)
         {
-            return false;
+            return channel.activityState != EmbedChannelActivityState.STALE;
         }
 
         public interface IComposeMonitorCallback

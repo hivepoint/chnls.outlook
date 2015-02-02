@@ -98,7 +98,7 @@ namespace chnls.Utils
                 try
                 {
                     rec = recipients.Add(bogusAddress);
-                    rec.Type = (int) OlMailRecipientType.olBCC;
+                    rec.Type = (int)OlMailRecipientType.olBCC;
                     rec.Resolve();
                     for (var i = 1; i <= recipients.Count; i++)
                     {
@@ -137,7 +137,7 @@ namespace chnls.Utils
 
         public static void AddEmailChannel(MailItem mailItem, ChannelInfo channel)
         {
-            var channels = new List<ChannelInfo> {channel};
+            var channels = new List<ChannelInfo> { channel };
             AddEmailChannels(mailItem, channels);
         }
 
@@ -220,10 +220,10 @@ namespace chnls.Utils
                 try
                 {
                     recipient = recipients.Add(channel.channelEmailAddress.address);
-                    recipient.Type = (int) type;
+                    recipient.Type = (int)type;
                     recipient.Resolve();
                 }
-                    // ReSharper disable once EmptyGeneralCatchClause
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
                 }
@@ -243,7 +243,7 @@ namespace chnls.Utils
             if (null == mailtoUri ||
                 !Uri.UriSchemeMailto.Equals(mailtoUri.Scheme, StringComparison.InvariantCultureIgnoreCase)) return;
 
-            var orig = mailtoUri.OriginalString.Substring(Uri.UriSchemeMailto.Length+1);
+            var orig = mailtoUri.OriginalString.Substring(Uri.UriSchemeMailto.Length + 1);
             if (orig.Contains("?"))
             {
                 orig = orig.Substring(orig.IndexOf("?", System.StringComparison.Ordinal));
@@ -252,7 +252,7 @@ namespace chnls.Utils
             {
                 orig = orig.Substring(orig.IndexOf("#", System.StringComparison.Ordinal));
             }
-           
+
             var to = HttpUtility.UrlDecode(orig);
             var query = HttpUtility.ParseQueryString(mailtoUri.Query);
             var subject = query["subject"] ?? query["Subject"];
@@ -260,6 +260,11 @@ namespace chnls.Utils
             var cc = query["CC"] ?? query["cc"];
             var bcc = query["BCC"] ?? query["bcc"];
 
+            MailTo(to, cc, bcc, subject, body);
+        }
+
+        internal static void MailTo(string to = null, string cc = null, string bcc = null, string subject = null, string body = null)
+        {
             Application application = null;
             MailItem mail = null;
             try
@@ -267,7 +272,7 @@ namespace chnls.Utils
                 application = AddinModule.CurrentInstance.OutlookApp.Application;
 
                 // Create a new mail item and set it's subject to be a reply to the message
-                mail = (MailItem) application.CreateItem(OlItemType.olMailItem);
+                mail = (MailItem)application.CreateItem(OlItemType.olMailItem);
                 if (!String.IsNullOrWhiteSpace(subject))
                 {
                     mail.Subject = subject;
@@ -299,7 +304,8 @@ namespace chnls.Utils
                 {
                     // the recipients might not be correct, but the user will see this and there will be outlook validation before they send the message.  There really isn't anything else we can do.
                     LoggingService.Error(
-                        "Failed to resolve recipients: " + mailtoUri, ex);
+                        "Failed to resolve recipients: to:'" + to + "' cc:'" + cc + "' bcc:'" + bcc +
+                        "'", ex);
                 }
                 finally
                 {

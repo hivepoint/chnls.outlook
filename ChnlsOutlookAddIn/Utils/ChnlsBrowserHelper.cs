@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using chnls.Model;
 using chnls.Service;
@@ -89,13 +90,65 @@ namespace chnls.Utils
         internal static List<ChannelInfo> GetChannels(HtmlDocument document)
         {
             var channelList = GetWebObject<ChannelList>(document, ExtensionQueryType.CHANNELS, "");
-            return null != channelList ? channelList.channels : null;
+            if (null == channelList || null == channelList.channels)
+            {
+                return null;
+            }
+            return
+                channelList.channels.Select(ValidateAndCorrectChannel)
+                    .Where(verifiedChannel => null != verifiedChannel)
+                    .ToList();
+        }
+
+        private static ChannelInfo ValidateAndCorrectChannel(ChannelInfo channelInfo)
+        {
+            if (null == channelInfo.channelEmailAddress
+                || String.IsNullOrWhiteSpace(channelInfo.name)
+                || String.IsNullOrWhiteSpace(channelInfo._id)
+                || (!String.IsNullOrWhiteSpace(channelInfo.groupId) && String.IsNullOrWhiteSpace(channelInfo.groupName))
+                || (String.IsNullOrWhiteSpace(channelInfo.groupId) && !String.IsNullOrWhiteSpace(channelInfo.groupName)))
+            {
+                return null;
+            }
+            if (EmbedChannelActivityState.None == channelInfo.activityState)
+            {
+                channelInfo.activityState = EmbedChannelActivityState.ACTIVE;
+            }
+
+            if (null == channelInfo.subscribers)
+            {
+                channelInfo.subscribers = new List<EmailAddress>();
+            }
+            channelInfo.subscribers.RemoveAll(e => null == e || String.IsNullOrWhiteSpace(e.address));
+            if (null == channelInfo.watchers)
+            {
+                channelInfo.watchers = new List<EmailAddress>();
+            }
+            channelInfo.watchers.RemoveAll(e => null == e || String.IsNullOrWhiteSpace(e.address));
+            return channelInfo;
         }
 
         internal static List<ChannelGroupInfo> GetGroups(HtmlDocument document)
         {
             var groupList = GetWebObject<ChannelGroupList>(document, ExtensionQueryType.GROUPS, "");
-            return null != groupList ? groupList.groups : null;
+            if (null == groupList || null == groupList.groups)
+            {
+                return null;
+            }
+            return
+                groupList.groups.Select(ValidateAndCorrectChannelGroup)
+                    .Where(validatedGroup => null != validatedGroup)
+                    .ToList();
+        }
+
+        private static ChannelGroupInfo ValidateAndCorrectChannelGroup(ChannelGroupInfo groupInfo)
+        {
+            if (String.IsNullOrWhiteSpace(groupInfo._id)
+                || String.IsNullOrWhiteSpace(groupInfo.name))
+            {
+                return null;
+            }
+            return groupInfo;
         }
 
         internal static T GetWebObject<T>(HtmlDocument document, ExtensionQueryType queryType, string key)

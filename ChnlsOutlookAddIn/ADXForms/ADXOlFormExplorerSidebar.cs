@@ -24,8 +24,8 @@ namespace chnls.ADXForms
 
             webBrowserMain.Url = new Uri("about:blank");
             var wbCoMmain = (WebBrowserCom) webBrowserMain.ActiveXInstance;
-            wbCoMmain.NewWindow3 += wbCOMmain_NewWindow3;
-
+         //   wbCoMmain.NewWindow3 += wbCOMmain_NewWindow3;
+            wbCoMmain.NewWindow3 += new SHDocVw.DWebBrowserEvents2_NewWindow3EventHandler(wbCOMmain_NewWindow3);
             Text = "Email Channels";
             Icon = Resources.favIcon;
 
@@ -159,5 +159,7 @@ namespace chnls.ADXForms
         {
             return uri.ToString().ToLower().Contains(Constants.UrlIeVersionProblemString);
         }
+
+        
     }
 }
