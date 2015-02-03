@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace chnls.Controls
             {
                 _dirty = false;
             }
-            var subscribers = new Dictionary<string,EmailAddress>();
+            var subscribers = new Dictionary<string, EmailAddress>();
             var watchers = new Dictionary<string, EmailAddress>();
             treeView.SuspendLayout();
             treeView.Nodes.Clear();
@@ -87,12 +88,16 @@ namespace chnls.Controls
         private void AddMembers(string label, string imageKey, ICollection<EmailAddress> members)
         {
             if (!members.Any()) return;
-            var displayValues = members.Select(e => e.MailAddress.DisplayName).ToList();
-            displayValues.Sort();
-            treeView.Nodes.Add(new TreeNode { Text = label, ImageKey = imageKey });
+
+            var displayValues = members.ToList();
+            displayValues.Sort(
+                (e0, e1) =>
+                    String.Compare(e0.MailAddress.ToString().Replace("\"", ""),
+                        e1.MailAddress.ToString().Replace("\"", ""), StringComparison.InvariantCultureIgnoreCase));
+            treeView.Nodes.Add(new TreeNode {Text = label, ImageKey = imageKey});
             foreach (var email in displayValues)
             {
-                treeView.Nodes.Add(new TreeNode { Text = email });
+                treeView.Nodes.Add(new TreeNode {Text = email.MailAddress.ToString().Replace("\"", "")});
             }
         }
 
