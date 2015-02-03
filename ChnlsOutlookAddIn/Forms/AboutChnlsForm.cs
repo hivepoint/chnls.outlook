@@ -32,7 +32,7 @@ namespace chnls.Forms
                 userEmail = "<not signed in>";
             }
             labelUser.Text = @"User: " + userEmail;
-            labelSupport.Text = @"Feedback: " + Constants.UrlSupport;
+            labelSupport.Text = @"Feedback: " + Constants.SupportEmailAddress;
             labelVersion.Text = @"Version: " + GetType().Assembly.GetName().Version;
         }
 

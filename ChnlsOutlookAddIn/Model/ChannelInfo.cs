@@ -9,35 +9,27 @@ namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
     [Serializable]
-    internal enum ChannelState
+    internal enum EmbedChannelActivityState
+
     {
-        PROPOSED,
-        PENDING_OWNER,
-        PENDING_CONFIRMATION,
+        None,
+        RECENT,
         ACTIVE,
-        DELETED
+        STALE
     }
 
     [Serializable]
     internal class ChannelInfo
     {
         public string _id;
-        public List<string> admins;
-        public List<UserEntityAssociation> associations;
+        public EmbedChannelActivityState activityState;
         public EmailAddress channelEmailAddress;
-        public string channelUrl;
-        public long created;
-        public string creator;
         public string descr;
         public string groupId;
         public string groupName;
-        public long lastUpdated;
-        public long mostRecentMessage;
         public string name;
-        public List<EmailAddress> permittedAddresses;
-        public List<string> permittedDomains;
-        public bool privateToGroup;
-        public ChannelState state;
+        public List<EmailAddress> subscribers;
+        public List<EmailAddress> watchers;
     }
 }
 

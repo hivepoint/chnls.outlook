@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using AddinExpress.MSO;
 using chnls.Model;
 
 #endregion
@@ -19,11 +18,20 @@ namespace chnls.Utils
 
         internal static int GetInterestMemberCount(ChannelInfo channel, EntityCollection collection)
         {
-            if (null == channel || null==channel.associations)
+            if (null == channel)
             {
                 return 0;
             }
-            return channel.associations.Count(e => e.collection == collection&& e.interestLevel==EntityInterestLevel.INTERESTED);
+            var members = new HashSet<string>();
+            foreach (var address in channel.subscribers.Select(e => e.address))
+            {
+                members.Add(address.ToLowerInvariant());
+            }
+            foreach (var address in channel.watchers.Select(e => e.address))
+            {
+                members.Add(address.ToLowerInvariant());
+            }
+            return members.Count();
         }
     }
 }

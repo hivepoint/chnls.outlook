@@ -18,7 +18,7 @@ namespace chnls
     {
         internal void ContactSupport()
         {
-            Process.Start(Constants.UrlSupport);
+            ComposeHelper.MailTo(Constants.SupportEmailAddress,subject:"Email Channels support request");
         }
 
         internal void GotoChnlsServer()

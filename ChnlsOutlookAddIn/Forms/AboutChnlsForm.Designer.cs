@@ -58,9 +58,9 @@
             this.labelHeading.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHeading.Location = new System.Drawing.Point(187, 13);
             this.labelHeading.Name = "labelHeading";
-            this.labelHeading.Size = new System.Drawing.Size(211, 18);
+            this.labelHeading.Size = new System.Drawing.Size(177, 18);
             this.labelHeading.TabIndex = 2;
-            this.labelHeading.Text = "@Channels Outlook Add-In";
+            this.labelHeading.Text = "Email Channels Add-In";
             this.labelHeading.Click += new System.EventHandler(this.labelHeading_Click);
             // 
             // label3
@@ -153,7 +153,7 @@
             this.Name = "AboutChnlsForm";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "About @Channels";
+            this.Text = "About Email Channels";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

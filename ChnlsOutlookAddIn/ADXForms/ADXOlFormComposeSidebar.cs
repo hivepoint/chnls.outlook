@@ -15,6 +15,9 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace chnls.ADXForms
 {
+    /*
+     * This is the sidebar that appears in the compose email inpsector window
+     */
     // ReSharper disable once InconsistentNaming
     public partial class ADXOlFormComposeSidebar : ADXOlForm, ComposeMonitor.IComposeMonitorCallback
     {

@@ -45,7 +45,7 @@ namespace chnls.Utils
                     MailItem mailItem2Send = null;
                     var size = 0;
                     var bodyAddMessage =
-                        "<p>Any messages that were not already in @Channels will be added to the following channel";
+                        "<p>Any messages that were not already in Email Channels will be added to the following channel";
                     if (channels.Count > 0)
                     {
                         bodyAddMessage += "s";

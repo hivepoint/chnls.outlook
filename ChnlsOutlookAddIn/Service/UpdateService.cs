@@ -16,7 +16,8 @@ namespace chnls.Service
 
     partial class UpdateService
     {
-        private bool _updateAvailable = false;
+        private bool _updateAvailable;
+
         private UpdateService()
         {
         }
@@ -25,10 +26,7 @@ namespace chnls.Service
 
         public bool IsUpdateAvailable
         {
-            get
-            {
-                return _updateAvailable;
-            }
+            get { return _updateAvailable; }
             private set
             {
                 if (!_updateAvailable && value)
@@ -53,11 +51,9 @@ namespace chnls.Service
 
         public void Start()
         {
+            if (!AddinModule.CurrentInstance.IsNetworkDeployed()) return;
             InitUpdateLocation();
-            if (AddinModule.CurrentInstance.IsNetworkDeployed())
-            {
-                SilentCheck(3);
-            }
+            SilentCheck(3);
         }
 
         private void InitUpdateLocation()
@@ -108,20 +104,20 @@ namespace chnls.Service
             {
                 if (String.IsNullOrWhiteSpace(UpdateLocation))
                 {
-                    UpdateLocation = "https://downloads.chnls.io/outlook/";
+                    UpdateLocation = "https://downloads.emailchannels.com/outlook/";
                     LoggingService.Error("Update location unset, setting to default: '" + UpdateLocation + "'");
                 }
             }
         }
 
-        private void SilentCheck(int delay_sec)
+        private void SilentCheck(int delaySec)
         {
             if (!IsUpdateAvailable)
             {
-                var delay_ms = delay_sec*1000;
-                if (delay_ms <= 0)
+                var delayMs = delaySec * 1000;
+                if (delayMs <= 0)
                 {
-                    delay_ms = 100;
+                    delayMs = 100;
                 }
                 Scheduler.Run("Check for update", () =>
                 {
@@ -163,10 +159,10 @@ namespace chnls.Service
                     {
                         if (!IsUpdateAvailable)
                         {
-                            SilentCheck(60*60);
+                            SilentCheck(60 * 60);
                         }
                     }
-                }, delay_ms);
+                }, delayMs);
             }
         }
 

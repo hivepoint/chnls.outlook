@@ -33,7 +33,6 @@ namespace chnls.ADXForms
             this.panelBrowsers = new System.Windows.Forms.Panel();
             this.splash = new chnls.Controls.Splash();
             this.webBrowserMain = new System.Windows.Forms.WebBrowser();
-            this.webBrowserHidden = new System.Windows.Forms.WebBrowser();
             this.upgradePanel = new chnls.Controls.UpgradePanel();
             this.debugBar = new chnls.Controls.DebugBar();
             this.statusToast = new chnls.Controls.StatusToast();
@@ -44,7 +43,6 @@ namespace chnls.ADXForms
             // 
             this.panelBrowsers.Controls.Add(this.splash);
             this.panelBrowsers.Controls.Add(this.webBrowserMain);
-            this.panelBrowsers.Controls.Add(this.webBrowserHidden);
             this.panelBrowsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelBrowsers.Location = new System.Drawing.Point(0, 29);
             this.panelBrowsers.Name = "panelBrowsers";
@@ -69,16 +67,6 @@ namespace chnls.ADXForms
             this.webBrowserMain.TabIndex = 1;
             this.webBrowserMain.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowserMain_DocumentCompleted);
             this.webBrowserMain.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowserMain_Navigating);
-            // 
-            // webBrowserHidden
-            // 
-            this.webBrowserHidden.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowserHidden.Location = new System.Drawing.Point(0, 0);
-            this.webBrowserHidden.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowserHidden.Name = "webBrowserHidden";
-            this.webBrowserHidden.Size = new System.Drawing.Size(315, 481);
-            this.webBrowserHidden.TabIndex = 2;
-            this.webBrowserHidden.Visible = false;
             // 
             // upgradePanel
             // 
@@ -128,7 +116,6 @@ namespace chnls.ADXForms
         private Controls.DebugBar debugBar;
         private System.Windows.Forms.WebBrowser webBrowserMain;
         private Controls.Splash splash;
-        private System.Windows.Forms.WebBrowser webBrowserHidden;
         private Controls.StatusToast statusToast;
 
     }

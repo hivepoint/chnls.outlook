@@ -113,14 +113,7 @@ namespace chnls.ADXForms
                 _iterationCounter++;
             }
             _reconnectCountdown = delay;
-            if (delay <= 0)
-            {
-                _timerReconnect.Interval = 10;
-            }
-            else
-            {
-                _timerReconnect.Interval = 1000;
-            }
+            _timerReconnect.Interval = delay <= 0 ? 10 : 1000;
             _timerReconnect.Enabled = false;
             _timerReconnect.Enabled = true;
         }

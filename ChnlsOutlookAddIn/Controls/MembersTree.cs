@@ -50,36 +50,33 @@ namespace chnls.Controls
             {
                 _dirty = false;
             }
-            var subscribers = new HashSet<string>();
-            var watchers = new HashSet<string>();
+            var subscribers = new Dictionary<string,EmailAddress>();
+            var watchers = new Dictionary<string, EmailAddress>();
             treeView.SuspendLayout();
             treeView.Nodes.Clear();
             try
             {
                 foreach (var channel in _selectedChannels)
                 {
-                    foreach (var association in channel.associations)
+                    foreach (var subscriber in channel.subscribers)
                     {
-                        if (association.interestLevel != EntityInterestLevel.INTERESTED)
-                            continue;
-                        switch (association.collection)
-                        {
-                            case EntityCollection.FOLLOWING:
-                                watchers.Add(association.userEmail.ToLowerInvariant());
-                                break;
-                            case EntityCollection.SUBSCRIPTIONS:
-                                subscribers.Add(association.userEmail.ToLowerInvariant());
-                                break;
-                        }
+                        subscribers[subscriber.address.ToLowerInvariant()] = subscriber;
+                    }
+                    foreach (var watcher in channel.watchers)
+                    {
+                        watchers[watcher.address.ToLowerInvariant()] = watcher;
                     }
                 }
-                watchers.RemoveWhere(subscribers.Contains);
-                AddMembers(@"Subscribers", @"subscribers", subscribers.ToList());
+                foreach (var address in subscribers.Keys)
+                {
+                    watchers.Remove(address);
+                }
+                AddMembers(@"Subscribers", @"subscribers", subscribers.Values);
                 if (subscribers.Any() && watchers.Any())
                 {
                     treeView.Nodes.Add(new TreeNode());
                 }
-                AddMembers(@"Watchers", @"watchers", watchers.ToList());
+                AddMembers(@"Watchers", @"watchers", watchers.Values);
             }
             finally
             {
@@ -87,13 +84,13 @@ namespace chnls.Controls
             }
         }
 
-        private void AddMembers(string label, string imageKey, List<string> members)
+        private void AddMembers(string label, string imageKey, ICollection<EmailAddress> members)
         {
             if (!members.Any()) return;
-
-            members.Sort();
+            var displayValues = members.Select(e => e.MailAddress.DisplayName).ToList();
+            displayValues.Sort();
             treeView.Nodes.Add(new TreeNode { Text = label, ImageKey = imageKey });
-            foreach (var email in members)
+            foreach (var email in displayValues)
             {
                 treeView.Nodes.Add(new TreeNode { Text = email });
             }

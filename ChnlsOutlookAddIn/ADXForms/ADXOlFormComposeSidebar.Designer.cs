@@ -45,7 +45,7 @@ namespace chnls.ADXForms
             this.labelChannels.Name = "labelChannels";
             this.labelChannels.Size = new System.Drawing.Size(300, 18);
             this.labelChannels.TabIndex = 1;
-            this.labelChannels.Text = "@Channels";
+            this.labelChannels.Text = "Email Channels";
             // 
             // labelMembers
             // 
