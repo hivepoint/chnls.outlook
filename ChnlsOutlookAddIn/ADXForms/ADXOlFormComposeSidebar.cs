@@ -56,6 +56,7 @@ namespace chnls.ADXForms
         void ComposeMonitor.IComposeMonitorCallback.OnChannelsChanged(List<ChannelInfo> channels)
         {
             channelTree.SelectedChannels = channels;
+            membersTree.SelectedChannels = channels;
         }
 
         void ComposeMonitor.IComposeMonitorCallback.OnSuggestionsChanged(List<string> suggestedChannels)
