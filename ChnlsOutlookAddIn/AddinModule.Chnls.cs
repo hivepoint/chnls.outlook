@@ -16,6 +16,7 @@ namespace chnls
 {
     public partial class AddinModule
     {
+        // example review comment
         internal void ContactSupport()
         {
             ComposeHelper.MailTo(Constants.SupportEmailAddress,subject:"Email Channels support request");
