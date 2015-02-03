@@ -50,7 +50,7 @@ namespace chnls.Utils
                     case ChannelsRequestType.ContentLoaded:
                         return new ChannelsRequestWithPlace(type, query["place"]);
                     case ChannelsRequestType.OpenWindow:
-                        return new ChannelsRequestWithUrl(type, query["ActionType"]);
+                        return new ChannelsRequestWithUrl(type, query["value"]);
                     case ChannelsRequestType.HandleMessageReply:
                         return new ChannelsRequestWithId(type, query["id"]);
                     case ChannelsRequestType.ChannelUpdated:
