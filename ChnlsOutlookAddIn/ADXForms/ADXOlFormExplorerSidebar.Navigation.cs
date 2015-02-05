@@ -90,7 +90,7 @@ namespace chnls.ADXForms
                     break;
                 case ChannelsRequestType.HandleCreateChannel:
                     var requestWithGroup = (ChannelsRequestWithGroupAndEmails)request;
-                    CreateChannelHelper.CreateChannel(requestWithGroup.Group, requestWithGroup.Emails);
+                    CreateChannelHelper.CreateChannel(requestWithGroup.Group, requestWithGroup.Emails, true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -230,6 +230,11 @@ namespace chnls.ADXForms
             public void NotifyChannelCreated()
             {
                 ChnlsBrowserHelper.NotifyChannelRefresh(Broswer.Document);
+            }
+
+            public void GotoChannel(string channelId)
+            {
+                ChnlsBrowserHelper.GotoChannel(Broswer.Document, channelId);
             }
         }
 

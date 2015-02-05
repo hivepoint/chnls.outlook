@@ -15,6 +15,8 @@ namespace chnls.Service
         List<ChannelGroupInfo> Groups();
 
         void NotifyChannelCreated();
+
+        void GotoChannel(string p);
     }
 
     partial class PropertiesService
@@ -248,9 +250,13 @@ namespace chnls.Service
             OnGroupListChanged();
         }
 
-        internal void NotifyChannelCreated(ChannelInfo channel, ChannelGroupInfo group)
+        internal void NotifyChannelCreated(ChannelInfo channel, ChannelGroupInfo group, bool gotoChannel)
         {
             BrowserObjectDelegate.NotifyChannelCreated();
+            if (gotoChannel)
+            {
+                BrowserObjectDelegate.GotoChannel(channel._id);
+            }
             lock (_propertiesLock)
             {
                 if (null == CurrentUserProperties)

@@ -40,9 +40,11 @@ namespace chnls.Forms
                     break;
                 case ChannelsRequestType.UserSignedOut:
                     Close();
+                    webBrowser.Navigate("about:blank");
                     break;
                 case ChannelsRequestType.CloseWindow:
                     Close();
+                    webBrowser.Navigate("about:blank");
                     break;
             }
         }

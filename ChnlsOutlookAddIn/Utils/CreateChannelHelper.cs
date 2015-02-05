@@ -14,7 +14,7 @@ namespace chnls.Utils
 {
     internal class CreateChannelHelper
     {
-        internal static void CreateChannel(string groupId, List<string> emails)
+        internal static void CreateChannel(string groupId, List<string> emails, bool gotoChannel)
         {
             const string reqId = @"CreateChannel";
             var form = new WebAppPopup((document =>
@@ -26,7 +26,7 @@ namespace chnls.Utils
                 {
                     return;
                 }
-                PropertiesService.Instance.NotifyChannelCreated(result.channel, result.group);
+                PropertiesService.Instance.NotifyChannelCreated(result.channel, result.group, gotoChannel);
             }))
             {
                 StartPosition = FormStartPosition.CenterParent

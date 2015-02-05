@@ -8,10 +8,10 @@ namespace chnls.Model
     // ReSharper disable InconsistentNaming
     class CreateChannelDialogResponse
     {
-        internal string resultId;
-        internal bool success;
-        internal ChannelInfo channel;
-        internal ChannelGroupInfo group;
+        public string resultId;
+        public bool success;
+        public ChannelInfo channel;
+        public ChannelGroupInfo group;
     }
     // ReSharper restore InconsistentNaming
 }
