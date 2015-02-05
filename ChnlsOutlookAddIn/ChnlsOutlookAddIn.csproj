@@ -75,6 +75,9 @@
     <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Navigation.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Controls\BufferedTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ChannelTree.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MembersTree));
-            this.treeView = new System.Windows.Forms.TreeView();
+            this.treeView = new BufferedTreeView();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
@@ -74,7 +74,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView;
+        private BufferedTreeView treeView;
         private System.Windows.Forms.ImageList imageList;
     }
 }

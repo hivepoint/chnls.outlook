@@ -158,16 +158,16 @@ namespace chnls.Controls
             treeView.Nodes.Clear();
             try
             {
-                foreach (var channelId in SelectedChannelIds)
+                var selectedChannels =
+                    SelectedChannelIds.Select(
+                        channelId => Channels.FirstOrDefault(element => element._id.Equals(channelId)))
+                        .Where(e => null != e);
+                foreach (var channel in selectedChannels.OrderBy(ChannelHelper.GetNameWithGroup))
                 {
-                    var selectedChannel = Channels.FirstOrDefault(element => element._id.Equals(channelId));
-                    if (null != selectedChannel)
-                    {
-                        AddChannel(selectedChannel, treeView.Nodes, SelectedChannelTag, true);
-                    }
+                    AddChannel(channel, treeView.Nodes, SelectedChannelTag, true);
                 }
-                var suggestedChannels = SuggestedChannelIds.Where(e => !SelectedChannelIds.Contains(e)).ToList();
-                if (suggestedChannels.Any())
+                var suggestedChannelIds = SuggestedChannelIds.Where(e => !SelectedChannelIds.Contains(e)).ToList();
+                if (suggestedChannelIds.Any())
                 {
                     var node = new TreeNode
                     {
@@ -177,13 +177,12 @@ namespace chnls.Controls
                     };
 
                     treeView.Nodes.Add(node);
-                    foreach (var channelId in suggestedChannels)
+                    var suggestedChannels = suggestedChannelIds.Select(
+                             channelId => Channels.FirstOrDefault(element => element._id.Equals(channelId)))
+                             .Where(e => null != e).ToList();
+                    foreach (var channel in suggestedChannels.OrderBy(ChannelHelper.GetNameWithGroup))
                     {
-                        var recentChannel = Channels.FirstOrDefault(element => element._id.Equals(channelId));
-                        if (null != recentChannel)
-                        {
-                            AddChannel(recentChannel, treeView.Nodes, ChannelTag, true);
-                        }
+                        AddChannel(channel, treeView.Nodes, ChannelTag, true);
                     }
                 }
                 var hasGroups = false;
@@ -197,7 +196,7 @@ namespace chnls.Controls
 
                     hasGroups |= AddGroup(treeView.Nodes, group, channels);
                 }
-                var goGroupInfo = new ChannelGroupInfo {_id = null, name = hasGroups ? "Other" : "Channels"};
+                var goGroupInfo = new ChannelGroupInfo { _id = null, name = hasGroups ? "Other" : "Channels" };
                 var goGroupChannels = Channels.Where(
                     elemenet =>
                         String.IsNullOrWhiteSpace(elemenet.groupId) && !SelectedChannelIds.Contains(elemenet._id) &&
@@ -209,7 +208,7 @@ namespace chnls.Controls
             {
                 if (treeView.Nodes.Count > 0)
                 {
-                    treeView.Nodes[0].EnsureVisible();                    
+                    treeView.Nodes[0].EnsureVisible();
                 }
                 treeView.ResumeLayout();
             }
@@ -226,15 +225,40 @@ namespace chnls.Controls
                 Tag = GroupTag
             };
             nodes.Add(node);
-            foreach (var channel in channels)
+            foreach (var channel in channels.Where(e => !e.name.StartsWith("a") && e.activityState == EmbedChannelActivityState.RECENT).OrderBy(e => e.name))
             {
                 AddChannel(channel, node.Nodes, ChannelTag, false);
+            }
+            TreeNode moreNode = null;
+            foreach (var channel in channels.Where(e =>e.name.StartsWith("a")|| e.activityState == EmbedChannelActivityState.ACTIVE).OrderBy(e => e.name))
+            {
+                if (SelectedChannelIds.Contains(channel._id)||SuggestedChannelIds.Contains(channel._id))
+                {
+                    continue;
+                }
+                if (null == moreNode)
+                {
+                    moreNode = new TreeNode
+                    {
+                        Text = @"more",
+                        Name = @"more",
+                        ImageKey = @"arrow-right",
+                        ForeColor = SystemColors.GrayText,
+                        Tag = GroupTag
+                    };
+                    node.Nodes.Add(moreNode);
+                }
+                AddChannel(channel, moreNode.Nodes, ChannelTag, false);
+            }
+            if (null != moreNode)
+            {
+                moreNode.Collapse();
             }
             node.Expand();
             return true;
         }
 
-        private void AddChannel(ChannelInfo channel, TreeNodeCollection group, string tag, bool addGroup)
+        private static void AddChannel(ChannelInfo channel, TreeNodeCollection group, string tag, bool addGroup)
         {
             var text = channel.name;
             if (addGroup)
@@ -297,7 +321,7 @@ namespace chnls.Controls
             var handler = ChannelSelected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs {Channel = channel});
+                handler(this, new ChannelInfoEventArgs { Channel = channel });
             }
         }
 
@@ -307,7 +331,7 @@ namespace chnls.Controls
             var handler = ChannelUnselected;
             if (handler != null)
             {
-                handler(this, new ChannelInfoEventArgs {Channel = channel});
+                handler(this, new ChannelInfoEventArgs { Channel = channel });
             }
         }
 
@@ -336,7 +360,7 @@ namespace chnls.Controls
                 OnChannelSelected(Channels.First(c => c._id.Equals(e.Node.Name)));
                 OnSelectedChannelsChanged();
             }
-            else if(GroupTag.Equals(e.Node.Tag))
+            else if (GroupTag.Equals(e.Node.Tag))
             {
                 if (e.Node.IsExpanded && e.Node.Nodes.Count > 0)
                 {

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChannelTree));
-            this.treeView = new System.Windows.Forms.TreeView();
+            this.treeView = new chnls.Controls.BufferedTreeView();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
@@ -47,6 +47,7 @@
             this.treeView.SelectedImageIndex = 0;
             this.treeView.ShowLines = false;
             this.treeView.ShowNodeToolTips = true;
+            this.treeView.ShowPlusMinus = false;
             this.treeView.ShowRootLines = false;
             this.treeView.Size = new System.Drawing.Size(231, 528);
             this.treeView.TabIndex = 0;
@@ -76,7 +77,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView;
+        private BufferedTreeView treeView;
         private System.Windows.Forms.ImageList imageList;
     }
 }
