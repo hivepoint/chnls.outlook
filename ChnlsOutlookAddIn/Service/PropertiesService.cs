@@ -97,6 +97,17 @@ namespace chnls.Service
             }
         }
 
+        public bool SplashAlreadyShown
+        {
+            get { return Properties.SplashAlreadyShown; }
+            set
+            {
+                if (Properties.SplashAlreadyShown == value) return;
+                Properties.SplashAlreadyShown = value;
+                PropertiesDirty();
+            }
+        }
+
         private void UpdateCurrentUserProperties()
         {
             lock (_propertiesLock)

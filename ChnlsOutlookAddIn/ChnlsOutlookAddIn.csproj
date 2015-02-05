@@ -139,6 +139,7 @@
     <Compile Include="Utils\OutlookEmailHeaderConst.cs" />
     <Compile Include="Utils\ReplyHelper.cs" />
     <Compile Include="Utils\Scheduler.cs" />
+    <Compile Include="Utils\WelcomeScreenHelper.cs" />
     <None Include="Loader\adxloader.dll.manifest" />
     <None Include="packages.config" />
     <Compile Include="Service\LoggingService.cs" />

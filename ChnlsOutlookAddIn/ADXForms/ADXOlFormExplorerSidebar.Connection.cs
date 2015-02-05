@@ -67,6 +67,7 @@ namespace chnls.ADXForms
             statusToast.Detail = "Connecting to hive";
             splash.Visible = false;
             PropertiesService.Instance.Connected = true;
+            WelcomeScreenHelper.ShowSplash();
         }
 
 

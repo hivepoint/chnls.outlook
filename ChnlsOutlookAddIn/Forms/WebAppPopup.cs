@@ -2,6 +2,7 @@
 
 using System;
 using System.Windows.Forms;
+using chnls.Service;
 using chnls.Utils;
 
 #endregion
@@ -67,6 +68,12 @@ namespace chnls.Forms
             {
                 _callback(webBrowser.Document);
             }
+        }
+
+        internal void NavigateToNonAppPage(string pageAbsolutePath)
+        {
+            var baseUrl = PropertiesService.Instance.BaseUrl + pageAbsolutePath;
+            webBrowser.Navigate(baseUrl);
         }
     }
 }
