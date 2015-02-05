@@ -18,6 +18,7 @@ namespace chnls.Controls
     {
         private const string ChannelTag = "channel";
         private const string SelectedChannelTag = "channel_selected";
+        private const string GroupTag = "group";
         private readonly List<String> _suggestedChannelIds = new List<string>();
 
         private List<ChannelInfo> _channels;
@@ -206,6 +207,10 @@ namespace chnls.Controls
             }
             finally
             {
+                if (treeView.Nodes.Count > 0)
+                {
+                    treeView.Nodes[0].EnsureVisible();                    
+                }
                 treeView.ResumeLayout();
             }
         }
@@ -217,7 +222,8 @@ namespace chnls.Controls
                 Text = group.name,
                 Name = group._id,
                 ImageKey = @"arrow-down",
-                ForeColor = SystemColors.GrayText
+                ForeColor = SystemColors.GrayText,
+                Tag = GroupTag
             };
             nodes.Add(node);
             foreach (var channel in channels)
@@ -233,7 +239,7 @@ namespace chnls.Controls
             var text = channel.name;
             if (addGroup)
             {
-                text = ChannelHelper.GetNameWithGroup(channel, Groups);
+                text = ChannelHelper.GetNameWithGroup(channel);
             }
             var tooltip = String.IsNullOrWhiteSpace(channel.descr)
                 ? ""
@@ -330,7 +336,7 @@ namespace chnls.Controls
                 OnChannelSelected(Channels.First(c => c._id.Equals(e.Node.Name)));
                 OnSelectedChannelsChanged();
             }
-            else
+            else if(GroupTag.Equals(e.Node.Tag))
             {
                 if (e.Node.IsExpanded && e.Node.Nodes.Count > 0)
                 {
