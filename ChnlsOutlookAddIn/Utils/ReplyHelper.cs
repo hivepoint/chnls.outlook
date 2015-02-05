@@ -14,7 +14,7 @@ namespace chnls.Utils
     class ReplyHelper
     {
         /*
-        * Create a new message that is a reply to a message in HivePoint. 
+        * Create a new message that is a reply to a message in Email Channels. 
         * 
         * The message contents to reply to are provided by the parameter
         *     ReplyMessageInfo replyTo

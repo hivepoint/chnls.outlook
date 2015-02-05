@@ -25,7 +25,7 @@ namespace chnls.Forms
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (!ChnlsUrlHelper.IsHivePointUrl(e.Url)) return;
+            if (!ChnlsUrlHelper.IsEmailChannelsUrl(e.Url)) return;
 
             e.Cancel = true;
             ProcessRequest(ChnlsUrlHelper.GetChnlsRequest(e.Url));

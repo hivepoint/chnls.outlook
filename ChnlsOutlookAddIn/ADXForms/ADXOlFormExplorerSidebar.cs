@@ -83,9 +83,9 @@ namespace chnls.ADXForms
                         // this isn't the current load itertion, ignore
                         return;
                     }
-                    if (ChnlsUrlHelper.IsHivePointUrl(uri))
+                    if (ChnlsUrlHelper.IsEmailChannelsUrl(uri))
                     {
-                        HandleHivePointUrl(uri);
+                        HandleEmailChannelsUrl(uri);
                     }
                     else if (IsMailTo(uri))
                     {
@@ -119,7 +119,7 @@ namespace chnls.ADXForms
             Debug.WriteLine(description);
             LoggingService.Debug(description);
 
-            if (ChnlsUrlHelper.IsHivePointUrl(e.Url))
+            if (ChnlsUrlHelper.IsEmailChannelsUrl(e.Url))
             {
                 Scheduler.Run(description,
                     () =>
@@ -129,7 +129,7 @@ namespace chnls.ADXForms
                             // this isn't the current load itertion, ignore
                             return;
                         }
-                        HandleHivePointUrl(e.Url);
+                        HandleEmailChannelsUrl(e.Url);
                     }, 10);
                 e.Cancel = true;
             }

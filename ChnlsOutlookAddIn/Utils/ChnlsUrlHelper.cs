@@ -22,14 +22,14 @@ namespace chnls.Utils
         }
 
 
-        internal static bool IsHivePointUrl(Uri uri)
+        internal static bool IsEmailChannelsUrl(Uri uri)
         {
             return uri.Scheme.Equals("channels", StringComparison.OrdinalIgnoreCase);
         }
 
         internal static ChannelsRequest GetChnlsRequest(Uri uri)
         {
-            if (!IsHivePointUrl(uri)) return null;
+            if (!IsEmailChannelsUrl(uri)) return null;
 
             try
             {

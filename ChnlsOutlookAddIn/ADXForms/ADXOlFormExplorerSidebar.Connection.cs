@@ -215,7 +215,7 @@ namespace chnls.ADXForms
                         text += line + "\r\n";
                     }
                     reader.Close();
-                    if (text.Trim().Length > 0 && text.ToLower().Contains("hivepoint"))
+                    if (text.Trim().Length > 0 && text.ToLower().Contains("channels"))
                     {
                         LoggingService.Debug("Cookie: " + cookie + ": " + text);
                     }

@@ -80,7 +80,7 @@
             this.labelSupport.Name = "labelSupport";
             this.labelSupport.Size = new System.Drawing.Size(176, 13);
             this.labelSupport.TabIndex = 5;
-            this.labelSupport.Text = "Feedback: hivepoint.uservoice.com";
+            this.labelSupport.Text = "Feedback: support@emailchannels.com";
             this.labelSupport.Click += new System.EventHandler(this.labelSupport_Click);
             // 
             // labelServer
