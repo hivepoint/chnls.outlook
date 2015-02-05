@@ -32,7 +32,7 @@ namespace chnls.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebPopupWindowForm));
             this.textboxUrl = new System.Windows.Forms.TextBox();
-            this.webBrowser = new ClosingWebBrowser();
+            this.webBrowser = new chnls.Controls.ClosingWebBrowser();
             this.SuspendLayout();
             // 
             // textboxUrl
@@ -70,7 +70,7 @@ namespace chnls.Forms
             this.Name = "WebPopupWindowForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "HivePoint";
+            this.Text = "Email Channels";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebPopupWindowForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
