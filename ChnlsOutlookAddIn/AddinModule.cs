@@ -130,6 +130,7 @@ namespace chnls
             // 
             // explorerSidebar
             // 
+            this.explorerSidebar.AlwaysShowHeader = true;
             this.explorerSidebar.Cached = AddinExpress.OL.ADXOlCachingStrategy.OneInstanceForAllFolders;
             this.explorerSidebar.ExplorerAllowedDropRegions = AddinExpress.OL.ADXOlExplorerAllowedDropRegions.DockRight;
             this.explorerSidebar.ExplorerItemTypes = AddinExpress.OL.ADXOlExplorerItemTypes.olMailItem;
