@@ -19,7 +19,9 @@ namespace chnls.Controls
         private const string ChannelTag = "channel";
         private const string SelectedChannelTag = "channel_selected";
         private const string GroupTag = "group";
+        private const string MoreTag = "more";
         private readonly List<String> _suggestedChannelIds = new List<string>();
+        private HashSet<String> _moredGroups = new HashSet<string>();
 
         private List<ChannelInfo> _channels;
         private bool _dirty;
@@ -196,7 +198,7 @@ namespace chnls.Controls
 
                     hasGroups |= AddGroup(treeView.Nodes, group, channels);
                 }
-                var goGroupInfo = new ChannelGroupInfo { _id = null, name = hasGroups ? "Other" : "Channels" };
+                var goGroupInfo = new ChannelGroupInfo { _id = "", name = hasGroups ? "Other" : "Channels" };
                 var goGroupChannels = Channels.Where(
                     elemenet =>
                         String.IsNullOrWhiteSpace(elemenet.groupId) && !SelectedChannelIds.Contains(elemenet._id) &&
@@ -216,7 +218,7 @@ namespace chnls.Controls
 
         private bool AddGroup(TreeNodeCollection nodes, ChannelGroupInfo group, List<ChannelInfo> channels)
         {
-            var node = new TreeNode
+            var groupNode = new TreeNode
             {
                 Text = group.name,
                 Name = group._id,
@@ -224,37 +226,35 @@ namespace chnls.Controls
                 ForeColor = SystemColors.GrayText,
                 Tag = GroupTag
             };
-            nodes.Add(node);
-            foreach (var channel in channels.Where(e => !e.name.StartsWith("a") && e.activityState == EmbedChannelActivityState.RECENT).OrderBy(e => e.name))
+            nodes.Add(groupNode);
+            IEnumerable<ChannelInfo> groupChannels;
+            if (_moredGroups.Contains(group._id))
             {
-                AddChannel(channel, node.Nodes, ChannelTag, false);
+                groupChannels = channels.Where(e => e.activityState != EmbedChannelActivityState.STALE);
             }
-            TreeNode moreNode = null;
-            foreach (var channel in channels.Where(e =>e.name.StartsWith("a")|| e.activityState == EmbedChannelActivityState.ACTIVE).OrderBy(e => e.name))
+            else
             {
-                if (SelectedChannelIds.Contains(channel._id)||SuggestedChannelIds.Contains(channel._id))
+                groupChannels = channels.Where(e => e.activityState == EmbedChannelActivityState.RECENT);
+            }
+
+            foreach (var channel in groupChannels.OrderBy(e => e.name))
+            {
+                AddChannel(channel, groupNode.Nodes, ChannelTag, false);
+            }
+
+            if (!_moredGroups.Contains(group._id))
+            {
+                var moreNode = new TreeNode
                 {
-                    continue;
-                }
-                if (null == moreNode)
-                {
-                    moreNode = new TreeNode
-                    {
-                        Text = @"more",
-                        Name = @"more",
-                        ImageKey = @"arrow-right",
-                        ForeColor = SystemColors.GrayText,
-                        Tag = GroupTag
-                    };
-                    node.Nodes.Add(moreNode);
-                }
-                AddChannel(channel, moreNode.Nodes, ChannelTag, false);
+                    Text = @"more",
+                    Name = group._id,
+                    ForeColor = SystemColors.GrayText,
+                    Tag = MoreTag
+                };
+                groupNode.Nodes.Add(moreNode);
             }
-            if (null != moreNode)
-            {
-                moreNode.Collapse();
-            }
-            node.Expand();
+
+            groupNode.Expand();
             return true;
         }
 
@@ -372,6 +372,31 @@ namespace chnls.Controls
                     e.Node.Expand();
                     e.Node.ImageKey = @"arrow-down";
                 }
+            }
+            else if (MoreTag.Equals(e.Node.Tag))
+            {
+                var moreNode = e.Node;
+                var groupId = String.IsNullOrWhiteSpace(e.Node.Name) ? "" : e.Node.Name;
+                try
+                {
+                    _moredGroups.Add(groupId);
+                    treeView.SuspendLayout();
+                    var groupNode = moreNode.Parent;
+                    groupNode.Nodes.Clear();
+                    var groupChannels = Channels.Where(channel => String.Equals(channel.groupId, groupId) && channel.activityState != EmbedChannelActivityState.STALE);
+                    foreach (var channel in groupChannels.OrderBy(channel => channel.name))
+                    {
+                        AddChannel(channel, groupNode.Nodes, ChannelTag, String.IsNullOrWhiteSpace(groupId));
+                    }
+                    groupNode.Expand();
+                    groupNode.EnsureVisible();
+                }
+                finally
+                {
+                    treeView.ResumeLayout();
+                }
+
+
             }
             e.Cancel = true;
         }
