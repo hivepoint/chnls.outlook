@@ -161,6 +161,8 @@ namespace chnls.Forms
                 item.Account = null;
             }
             comboBoxFrom.Items.Clear();
+            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
+            PropertiesService.Instance.GroupListChanged -= Instance_ChannelListChanged;
 
             base.Close();
         }
