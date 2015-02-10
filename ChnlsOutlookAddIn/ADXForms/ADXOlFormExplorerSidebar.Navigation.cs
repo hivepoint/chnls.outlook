@@ -62,8 +62,6 @@ namespace chnls.ADXForms
                     }
 
                     break;
-                case ChannelsRequestType.CloseWindow:
-                    break;
                 case ChannelsRequestType.ContentLoaded:
                     statusToast.HideToast();
                     break;
@@ -88,9 +86,9 @@ namespace chnls.ADXForms
                 case ChannelsRequestType.UserSignedOut:
                     PropertiesService.Instance.UserEmail = null;
                     break;
-                case ChannelsRequestType.HandleCreateChannel:
-                    var requestWithGroup = (ChannelsRequestWithGroupAndEmails)request;
-                    CreateChannelHelper.CreateChannel(requestWithGroup.Group, requestWithGroup.Emails, true);
+                case ChannelsRequestType.OpenDialog:
+                    var openDialogRequest = (ChannelRequestOpenDialog)request;
+                    DialogHelper.OpenDialog(openDialogRequest);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -227,7 +225,7 @@ namespace chnls.ADXForms
                 return ChnlsBrowserHelper.GetGroups(Broswer.Document);
             }
 
-            public void NotifyChannelCreated()
+            public void NotifyChannelRefresh()
             {
                 ChnlsBrowserHelper.NotifyChannelRefresh(Broswer.Document);
             }

@@ -29,9 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebAppPopup));
-            this.webBrowser = new chnls.Controls.ClosingWebBrowser();
             this.textboxUrl = new System.Windows.Forms.TextBox();
+            this.webBrowser = new chnls.Controls.ClosingWebBrowser();
             this.SuspendLayout();
+            // 
+            // textboxUrl
+            // 
+            this.textboxUrl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textboxUrl.Location = new System.Drawing.Point(0, 0);
+            this.textboxUrl.Name = "textboxUrl";
+            this.textboxUrl.ReadOnly = true;
+            this.textboxUrl.Size = new System.Drawing.Size(784, 20);
+            this.textboxUrl.TabIndex = 3;
             // 
             // webBrowser
             // 
@@ -43,14 +52,6 @@
             this.webBrowser.TabIndex = 2;
             this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
-            // 
-            // textboxUrl
-            // 
-            this.textboxUrl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textboxUrl.Location = new System.Drawing.Point(0, 0);
-            this.textboxUrl.Name = "textboxUrl";
-            this.textboxUrl.Size = new System.Drawing.Size(784, 20);
-            this.textboxUrl.TabIndex = 3;
             // 
             // WebAppPopup
             // 
@@ -66,6 +67,7 @@
             this.Name = "WebAppPopup";
             this.Text = "Email Channels";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebAppPopup_FormClosing);
+            this.Load += new System.EventHandler(this.WebAooWindowForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -136,7 +136,7 @@
     <Compile Include="Utils\ComposeHelper.cs" />
     <Compile Include="Utils\ComposeMonitor.cs" />
     <Compile Include="Utils\ComposeMonitor.Monitor.cs" />
-    <Compile Include="Utils\CreateChannelHelper.cs" />
+    <Compile Include="Utils\DialogHelper.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\OutlookEmailHeaderConst.cs" />

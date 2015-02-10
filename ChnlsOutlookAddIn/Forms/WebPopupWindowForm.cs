@@ -3,6 +3,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using chnls.Service;
@@ -17,6 +18,8 @@ namespace chnls.Forms
         private readonly Action<Uri> _callback;
         private readonly WebBrowser _wparent;
         private bool _parentSet;
+        private int _paddingHeight = 0;
+        private int _paddingWidth = 0;
 
         public WebPopupWindowForm(WebBrowser wparent, Action<Uri> callback)
         {
@@ -64,7 +67,7 @@ namespace chnls.Forms
         // after document in popup window was loaded
         private void w2_DocumentCompleted(object sender, EventArgs e)
         {
-            var popup = (WebBrowser)sender;
+            var popup = (WebBrowser) sender;
             SetOpener(_wparent, popup);
         }
 
@@ -89,8 +92,8 @@ namespace chnls.Forms
                 var fi = htmlPopup.GetType().GetField("htmlWindow2", BindingFlags.Instance | BindingFlags.NonPublic);
 
                 Debug.Assert(fi != null, "fi == null");
-                var htmlPopup2 = (IHTMLWindow2)fi.GetValue(htmlPopup);
-                var htmlOpener2 = (IHTMLWindow2)fi.GetValue(htmlOpener);
+                var htmlPopup2 = (IHTMLWindow2) fi.GetValue(htmlPopup);
+                var htmlOpener2 = (IHTMLWindow2) fi.GetValue(htmlOpener);
 
                 // opener is set here
                 htmlPopup2.window.opener = htmlOpener2.window.self;
@@ -105,7 +108,7 @@ namespace chnls.Forms
                 {
                     webBrowser.Url = new Uri(textboxUrl.Text);
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
+                    // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
                 }
@@ -148,6 +151,34 @@ namespace chnls.Forms
         public void LoadUrl(string url)
         {
             webBrowser.Navigate(url);
+        }
+
+        private void WebPopupWindowForm_Load(object sender, EventArgs e)
+        {
+            _paddingHeight = Height - webBrowser.Height;
+            _paddingWidth = Width - webBrowser.Width;
+        }
+
+        public void SetContentSize(int height, int width)
+        {
+            if (height <= 0)
+            {
+                height = 400;
+            }
+            if (width <= 0)
+            {
+                width = 600;
+            }
+            if (height < 200)
+            {
+                height = 150;
+            }
+            if (width < 200)
+            {
+                width = 200;
+            }
+            Height = height + _paddingHeight;
+            Width = width + _paddingWidth;
         }
     }
 }

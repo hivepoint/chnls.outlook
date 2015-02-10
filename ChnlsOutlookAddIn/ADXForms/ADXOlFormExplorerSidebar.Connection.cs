@@ -56,7 +56,19 @@ namespace chnls.ADXForms
             if (_baseUrl == updatedUrl) return;
 
             _baseUrl = updatedUrl;
-            Reconnect(0);
+            if (_baseUrl.Contains(Constants.UrlChnlsBeta))
+            {
+                Text = @"Email Channels (BETA)";
+            }
+            else if (_baseUrl.Contains(Constants.UrlChnlsDev))
+            {
+                Text = @"Email Channels (DEV)";
+            }
+            else
+            {
+                Text = @"Email Channels";                
+            }
+                Reconnect(0);
         }
 
         private void LoadComplete()

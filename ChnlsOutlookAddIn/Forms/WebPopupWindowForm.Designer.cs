@@ -40,6 +40,7 @@ namespace chnls.Forms
             this.textboxUrl.Dock = System.Windows.Forms.DockStyle.Top;
             this.textboxUrl.Location = new System.Drawing.Point(0, 0);
             this.textboxUrl.Name = "textboxUrl";
+            this.textboxUrl.ReadOnly = true;
             this.textboxUrl.Size = new System.Drawing.Size(564, 20);
             this.textboxUrl.TabIndex = 1;
             this.textboxUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textboxUrl_KeyDown);
@@ -72,6 +73,7 @@ namespace chnls.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Email Channels";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebPopupWindowForm_FormClosing);
+            this.Load += new System.EventHandler(this.WebPopupWindowForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

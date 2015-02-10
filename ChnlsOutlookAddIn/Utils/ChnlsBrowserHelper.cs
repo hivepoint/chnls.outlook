@@ -45,7 +45,7 @@ namespace chnls.Utils
         {
             var code = @"channelsExtensionHelper.registerExtension({'version':'" +
                        typeof(ChnlsBrowserHelper).Assembly.GetName().Version +
-                       @"', capabilities:['HANDLES_MESSAGE_REPLY','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_CREATE_CHANNEL']});";
+                       @"', capabilities:['HANDLES_MESSAGE_REPLY','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_DIALOGS']});";
             object[] codeString = { code };
             document.InvokeScript("eval", codeString);
         }
@@ -63,6 +63,7 @@ namespace chnls.Utils
         {
             PerformAction(document, ExtensionActionType.GO_TO_CHANNEL, "{'channelId':'" + channelId + "'}");
         }
+
         internal static void NotifyChannelRefresh(HtmlDocument document)
         {
             PerformAction(document, ExtensionActionType.REFRESH_CHANNELS, "");
@@ -95,6 +96,21 @@ namespace chnls.Utils
                             String.Equals("true", (string)result, StringComparison.InvariantCultureIgnoreCase);
             return supported;
         }
+
+        internal static void OnDialogClosed(HtmlDocument document, ChannelRequestCloseDialog dialogClosedRequest)
+        {
+            if (String.IsNullOrWhiteSpace(dialogClosedRequest.DialogType))
+            {
+                return;
+            }
+            var dialogType = dialogClosedRequest.DialogType;
+            var id = String.IsNullOrWhiteSpace(dialogClosedRequest.Id) ? ":" : dialogClosedRequest.Id;
+            var response = String.IsNullOrWhiteSpace(dialogClosedRequest.Response) ? "" : dialogClosedRequest.Response;
+            var code = "if ( channelsExtensionHelper && channelsExtensionHelper.onDialogClosed ) { channelsExtensionHelper.onDialogClosed('" + dialogType + "', '" + id + "', '" + response + "'); }";
+            object[] codeString = { code };
+            document.InvokeScript("eval", codeString);
+        }
+
 
         internal static List<ChannelInfo> GetChannels(HtmlDocument document)
         {

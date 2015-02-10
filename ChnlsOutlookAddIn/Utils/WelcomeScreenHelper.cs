@@ -14,10 +14,7 @@ namespace chnls.Utils
         {
             if (PropertiesService.Instance.SplashAlreadyShown) return;
 
-            var wap = new WebAppPopup((document) =>
-            {
-
-            })
+            var wap = new WebAppPopup()
             {
                 StartPosition = FormStartPosition.CenterParent
             };
