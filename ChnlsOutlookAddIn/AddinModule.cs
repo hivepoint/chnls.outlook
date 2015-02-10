@@ -106,6 +106,7 @@ namespace chnls
             this.adxRibbonButtonFeedback.Id = "adxRibbonButton_e59bae8d653f401496334f2611f7005e";
             this.adxRibbonButtonFeedback.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.adxRibbonButtonFeedback.Ribbons = AddinExpress.MSO.ADXRibbons.msrOutlookExplorer;
+            this.adxRibbonButtonFeedback.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.adxRibbonButtonFeedback_OnClick);
             // 
             // adxRibbonButtonAbout
             // 
@@ -129,6 +130,7 @@ namespace chnls
             // 
             // explorerSidebar
             // 
+            this.explorerSidebar.AlwaysShowHeader = true;
             this.explorerSidebar.Cached = AddinExpress.OL.ADXOlCachingStrategy.OneInstanceForAllFolders;
             this.explorerSidebar.ExplorerAllowedDropRegions = AddinExpress.OL.ADXOlExplorerAllowedDropRegions.DockRight;
             this.explorerSidebar.ExplorerItemTypes = AddinExpress.OL.ADXOlExplorerItemTypes.olMailItem;
@@ -317,6 +319,11 @@ namespace chnls
                     }
                 }
             });
+        }
+
+        private void adxRibbonButtonFeedback_OnClick(object sender, IRibbonControl control, bool pressed)
+        {
+            ContactSupport();
         }
     }
 }

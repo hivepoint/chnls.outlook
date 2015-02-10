@@ -75,6 +75,9 @@
     <Compile Include="ADXForms\ADXOlFormExplorerSidebar.Navigation.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Controls\BufferedTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ChannelTree.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -133,12 +136,13 @@
     <Compile Include="Utils\ComposeHelper.cs" />
     <Compile Include="Utils\ComposeMonitor.cs" />
     <Compile Include="Utils\ComposeMonitor.Monitor.cs" />
-    <Compile Include="Utils\CreateChannelHelper.cs" />
+    <Compile Include="Utils\DialogHelper.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\EmailHelper.cs" />
     <Compile Include="Utils\OutlookEmailHeaderConst.cs" />
     <Compile Include="Utils\ReplyHelper.cs" />
     <Compile Include="Utils\Scheduler.cs" />
+    <Compile Include="Utils\WelcomeScreenHelper.cs" />
     <None Include="Loader\adxloader.dll.manifest" />
     <None Include="packages.config" />
     <Compile Include="Service\LoggingService.cs" />

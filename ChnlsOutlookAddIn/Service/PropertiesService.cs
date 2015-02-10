@@ -17,6 +17,7 @@ namespace chnls.Service
 
         private PropertiesService()
         {
+            ChannelsDirty = false;
             LoadProperties();
         }
 
@@ -86,6 +87,7 @@ namespace chnls.Service
             {
                 lock (_propertiesLock)
                 {
+                    ChannelsDirty = false;
                     if (String.Equals(value, Properties.CurrentUser, StringComparison.InvariantCultureIgnoreCase))
                         return;
                     value = value.ToLowerInvariant();
@@ -94,6 +96,17 @@ namespace chnls.Service
                     PropertiesDirty();
                     OnUserChanged();
                 }
+            }
+        }
+
+        public bool SplashAlreadyShown
+        {
+            get { return Properties.SplashAlreadyShown; }
+            set
+            {
+                if (Properties.SplashAlreadyShown == value) return;
+                Properties.SplashAlreadyShown = value;
+                PropertiesDirty();
             }
         }
 
@@ -141,6 +154,7 @@ namespace chnls.Service
 
         protected void OnUserChanged()
         {
+            ChannelsDirty = false;
             LoggingService.Debug("OnUserChanged");
             var handler = UserChanged;
             if (handler != null)

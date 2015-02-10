@@ -34,6 +34,7 @@ namespace chnls.Utils
         // ReSharper disable InconsistentNaming
         AUTHORIZE_URL,
         GO_HOME,
+        GO_TO_CHANNEL,
         REFRESH_CHANNELS
         // ReSharper restore InconsistentNaming
     }
@@ -43,19 +44,24 @@ namespace chnls.Utils
         internal static void RegisterWithWebClient(HtmlDocument document)
         {
             var code = @"channelsExtensionHelper.registerExtension({'version':'" +
-                       typeof (ChnlsBrowserHelper).Assembly.GetName().Version +
-                       @"', capabilities:['HANDLES_MESSAGE_REPLY','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_CREATE_CHANNEL']});";
-            object[] codeString = {code};
+                       typeof(ChnlsBrowserHelper).Assembly.GetName().Version +
+                       @"', capabilities:['HANDLES_MESSAGE_REPLY','HANDLES_OPEN_WINDOW','NEEDS_URL_AUTH','HANDLES_DIALOGS']});";
+            object[] codeString = { code };
             document.InvokeScript("eval", codeString);
         }
 
         public static void RegisterPopupWithWebClient(HtmlDocument document)
         {
             var code = @"channelsExtensionHelper.registerExtension({'version':'" +
-                       typeof (ChnlsBrowserHelper).Assembly.GetName().Version +
+                       typeof(ChnlsBrowserHelper).Assembly.GetName().Version +
                        @"', capabilities:['HANDLES_CLOSE_WINDOW']});";
-            object[] codeString = {code};
+            object[] codeString = { code };
             document.InvokeScript("eval", codeString);
+        }
+
+        internal static void GotoChannel(HtmlDocument document, string channelId)
+        {
+            PerformAction(document, ExtensionActionType.GO_TO_CHANNEL, "{'channelId':'" + channelId + "'}");
         }
 
         internal static void NotifyChannelRefresh(HtmlDocument document)
@@ -69,8 +75,12 @@ namespace chnls.Utils
             {
                 return false;
             }
+            if (String.IsNullOrWhiteSpace(actionJson))
+            {
+                actionJson = "{}";
+            }
             var code = "channelsExtensionHelper.performAction('" + type + "', " + actionJson + ");";
-            object[] codeString = {code};
+            object[] codeString = { code };
             Debug.WriteLine("type: " + type + " action:" + actionJson);
             document.InvokeScript("eval", codeString);
 
@@ -80,12 +90,27 @@ namespace chnls.Utils
         private static bool IsActionSupported(HtmlDocument document, ExtensionActionType actionType)
         {
             var code = "channelsExtensionHelper.isActionSupported('" + actionType + "');";
-            object[] codeString = {code};
+            object[] codeString = { code };
             var result = document.InvokeScript("eval", codeString);
             var supported = null != result &&
-                            String.Equals("true", (string) result, StringComparison.InvariantCultureIgnoreCase);
+                            String.Equals("true", (string)result, StringComparison.InvariantCultureIgnoreCase);
             return supported;
         }
+
+        internal static void OnDialogClosed(HtmlDocument document, ChannelRequestCloseDialog dialogClosedRequest)
+        {
+            if (String.IsNullOrWhiteSpace(dialogClosedRequest.DialogType))
+            {
+                return;
+            }
+            var dialogType = dialogClosedRequest.DialogType;
+            var id = String.IsNullOrWhiteSpace(dialogClosedRequest.Id) ? ":" : dialogClosedRequest.Id;
+            var response = String.IsNullOrWhiteSpace(dialogClosedRequest.Response) ? "" : dialogClosedRequest.Response;
+            var code = "if ( channelsExtensionHelper && channelsExtensionHelper.onDialogClosed ) { channelsExtensionHelper.onDialogClosed('" + dialogType + "', '" + id + "', '" + response + "'); }";
+            object[] codeString = { code };
+            document.InvokeScript("eval", codeString);
+        }
+
 
         internal static List<ChannelInfo> GetChannels(HtmlDocument document)
         {
@@ -157,7 +182,7 @@ namespace chnls.Utils
             {
                 return default(T);
             }
-            object[] codeString = {@"channelsExtensionHelper.getValue('" + queryType + "', '" + key + "');"};
+            object[] codeString = { @"channelsExtensionHelper.getValue('" + queryType + "', '" + key + "');" };
             if (document == null) return default(T);
             var result = document.InvokeScript("eval", codeString);
             var json = result as string;

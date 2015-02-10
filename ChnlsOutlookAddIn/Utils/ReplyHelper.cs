@@ -14,7 +14,7 @@ namespace chnls.Utils
     class ReplyHelper
     {
         /*
-        * Create a new message that is a reply to a message in HivePoint. 
+        * Create a new message that is a reply to a message in Email Channels. 
         * 
         * The message contents to reply to are provided by the parameter
         *     ReplyMessageInfo replyTo
@@ -113,7 +113,7 @@ namespace chnls.Utils
             }
         }
 
-        private static void EnsureChannels(ICollection<EmailAddress> tos, ICollection<EmailAddress> ccs, ICollection<string> channelIds)
+        private static void EnsureChannels(IEnumerable<EmailAddress> tos, ICollection<EmailAddress> ccs, ICollection<string> channelIds)
         {
             var recipients = new HashSet<String>();
             foreach (var address in tos.Select(e=>e.address))
@@ -140,9 +140,9 @@ namespace chnls.Utils
 
             html.Append("<div><p>&nbsp;</p></div>\n");
 
-            html.Append("<div style='border:none;border-left:solid blue 1.5pt;padding:0in 0in 0in 4.0pt'>");
+            html.Append("<div style='border:none;border-left:solid #e1e1e1 1.0pt;padding:0in 0in 0in 4.0pt'>");
             html.Append("<div>");
-            html.Append("<div style='border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in 0in 0in'>");
+            html.Append("<div style='border:none;border-top:solid #e1e1e1 1.0pt;padding:3.0pt 0in 0in 0in'>");
             if (null != replyTo.from)
             {
                 var fromString = HttpUtility.HtmlEncode(replyTo.from.MailAddress.ToString());

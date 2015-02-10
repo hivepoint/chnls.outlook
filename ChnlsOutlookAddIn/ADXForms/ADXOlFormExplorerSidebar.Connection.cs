@@ -56,7 +56,19 @@ namespace chnls.ADXForms
             if (_baseUrl == updatedUrl) return;
 
             _baseUrl = updatedUrl;
-            Reconnect(0);
+            if (_baseUrl.Contains(Constants.UrlChnlsBeta))
+            {
+                Text = @"Email Channels (BETA)";
+            }
+            else if (_baseUrl.Contains(Constants.UrlChnlsDev))
+            {
+                Text = @"Email Channels (DEV)";
+            }
+            else
+            {
+                Text = @"Email Channels";                
+            }
+                Reconnect(0);
         }
 
         private void LoadComplete()
@@ -67,6 +79,7 @@ namespace chnls.ADXForms
             statusToast.Detail = "Connecting to hive";
             splash.Visible = false;
             PropertiesService.Instance.Connected = true;
+            WelcomeScreenHelper.ShowSplash();
         }
 
 
@@ -214,7 +227,7 @@ namespace chnls.ADXForms
                         text += line + "\r\n";
                     }
                     reader.Close();
-                    if (text.Trim().Length > 0 && text.ToLower().Contains("hivepoint"))
+                    if (text.Trim().Length > 0 && text.ToLower().Contains("channels"))
                     {
                         LoggingService.Debug("Cookie: " + cookie + ": " + text);
                     }

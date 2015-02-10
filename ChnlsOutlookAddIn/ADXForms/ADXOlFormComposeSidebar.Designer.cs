@@ -33,9 +33,12 @@ namespace chnls.ADXForms
         private void InitializeComponent()
         {
             this.labelChannels = new System.Windows.Forms.Label();
-            this.labelMembers = new System.Windows.Forms.Label();
+            this.panelHR = new System.Windows.Forms.Panel();
+            this.panelSpacer = new System.Windows.Forms.Panel();
             this.channelTree = new chnls.Controls.ChannelTree();
             this.membersTree = new chnls.Controls.MembersTree();
+            this.panelMembers = new System.Windows.Forms.Panel();
+            this.panelMembers.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelChannels
@@ -47,45 +50,72 @@ namespace chnls.ADXForms
             this.labelChannels.TabIndex = 1;
             this.labelChannels.Text = "Email Channels";
             // 
-            // labelMembers
+            // panelHR
             // 
-            this.labelMembers.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelMembers.Location = new System.Drawing.Point(0, 84);
-            this.labelMembers.Name = "labelMembers";
-            this.labelMembers.Size = new System.Drawing.Size(300, 16);
-            this.labelMembers.TabIndex = 3;
-            this.labelMembers.Text = "Members ";
+            this.panelHR.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panelHR.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelHR.Location = new System.Drawing.Point(0, 0);
+            this.panelHR.Name = "panelHR";
+            this.panelHR.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.panelHR.Size = new System.Drawing.Size(300, 1);
+            this.panelHR.TabIndex = 3;
+            // 
+            // panelSpacer
+            // 
+            this.panelSpacer.BackColor = System.Drawing.SystemColors.Control;
+            this.panelSpacer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSpacer.Location = new System.Drawing.Point(0, 1);
+            this.panelSpacer.Name = "panelSpacer";
+            this.panelSpacer.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.panelSpacer.Size = new System.Drawing.Size(300, 3);
+            this.panelSpacer.TabIndex = 4;
             // 
             // channelTree
             // 
             this.channelTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.channelTree.Location = new System.Drawing.Point(0, 18);
             this.channelTree.Name = "channelTree";
-            this.channelTree.Size = new System.Drawing.Size(300, 66);
+            this.channelTree.Size = new System.Drawing.Size(300, 182);
             this.channelTree.TabIndex = 0;
             this.channelTree.SelectionChanged += new System.EventHandler(this.channelTree_SelectionChanged);
             // 
             // membersTree
             // 
-            this.membersTree.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.membersTree.Location = new System.Drawing.Point(0, 100);
+            this.membersTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.membersTree.Location = new System.Drawing.Point(0, 4);
+            this.membersTree.Margin = new System.Windows.Forms.Padding(3, 8, 3, 3);
             this.membersTree.Name = "membersTree";
-            this.membersTree.Size = new System.Drawing.Size(300, 200);
+            this.membersTree.Size = new System.Drawing.Size(300, 91);
             this.membersTree.TabIndex = 2;
+            // 
+            // panelMembers
+            // 
+            this.panelMembers.BackColor = System.Drawing.SystemColors.Control;
+            this.panelMembers.Controls.Add(this.membersTree);
+            this.panelMembers.Controls.Add(this.panelSpacer);
+            this.panelMembers.Controls.Add(this.panelHR);
+            this.panelMembers.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelMembers.Location = new System.Drawing.Point(0, 200);
+            this.panelMembers.Name = "panelMembers";
+            this.panelMembers.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.panelMembers.Size = new System.Drawing.Size(300, 100);
+            this.panelMembers.TabIndex = 5;
             // 
             // ADXOlFormComposeSidebar
             // 
             this.ClientSize = new System.Drawing.Size(300, 300);
             this.Controls.Add(this.channelTree);
-            this.Controls.Add(this.labelMembers);
-            this.Controls.Add(this.membersTree);
+            this.Controls.Add(this.panelMembers);
             this.Controls.Add(this.labelChannels);
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ADXOlFormComposeSidebar";
             this.Text = "ADXOlFormComposeSidebar";
             this.ADXBeforeFormShow += new AddinExpress.OL.ADXOlForm.BeforeFormShow_EventHandler(this.ADXOlComposeHelperForm_ADXBeforeFormShow);
+            this.ADXAfterFormShow += new AddinExpress.OL.ADXOlForm.AfterFormShow_EventHandler(this.ADXOlFormComposeSidebar_ADXAfterFormShow);
             this.ADXAfterFormHide += new AddinExpress.OL.ADXOlForm.ADXAfterFormHideEventHandler(this.ADXOlComposeHelperForm_ADXAfterFormHide);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ADXOlComposeHelperForm_FormClosing);
+            this.Resize += new System.EventHandler(this.ADXOlFormComposeSidebar_Resize);
+            this.panelMembers.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -94,6 +124,8 @@ namespace chnls.ADXForms
         private Controls.ChannelTree channelTree;
         private System.Windows.Forms.Label labelChannels;
         private Controls.MembersTree membersTree;
-        private System.Windows.Forms.Label labelMembers;
+        private System.Windows.Forms.Panel panelHR;
+        private System.Windows.Forms.Panel panelSpacer;
+        private System.Windows.Forms.Panel panelMembers;
     }
 }

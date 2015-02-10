@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AddinExpress.OL;
@@ -34,6 +35,9 @@ namespace chnls.ADXForms
             PropertiesService.Instance.GroupListChanged += Instance_GroupListChanged;
             channelTree.ChannelSelected += channelTree_ChannelSelected;
             channelTree.ChannelUnselected += channelTree_ChannelUnselected;
+            panelMembers.Visible = false;
+            panelMembers.BackColor = membersTree.BackColor;
+            panelSpacer.BackColor = membersTree.BackColor;
         }
 
         private List<ChannelInfo> Channels { get; set; }
@@ -103,7 +107,10 @@ namespace chnls.ADXForms
 
         private void channelTree_SelectionChanged(object sender, EventArgs e)
         {
-            membersTree.SelectedChannels = channelTree.SelectedChannels;
+            var selectedChannels = channelTree.SelectedChannels;
+            var visible = selectedChannels.Any();
+            panelMembers.Visible = visible;
+            membersTree.SelectedChannels = selectedChannels;
         }
 
         private void LoadContent()
@@ -214,6 +221,33 @@ namespace chnls.ADXForms
             if (null == _monitor) return;
             _monitor.Stop();
             _monitor = null;
+            PropertiesService.Instance.UserChanged -= Instance_UserChanged;
+            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
+            PropertiesService.Instance.GroupListChanged -= Instance_GroupListChanged;
+            channelTree.ChannelSelected -= channelTree_ChannelSelected;
+            channelTree.ChannelUnselected -= channelTree_ChannelUnselected;
+
+        }
+
+
+        private void ADXOlFormComposeSidebar_ADXAfterFormShow()
+        {
+            UpdateMemberViewSize();
+        }
+
+        private void ADXOlFormComposeSidebar_Resize(object sender, EventArgs e)
+        {
+            UpdateMemberViewSize();
+        }
+
+        private void UpdateMemberViewSize()
+        {
+            var height = Height / 3;
+            if (height > 200)
+            {
+                height = 200;
+            }
+            panelMembers.Height = height;
         }
     }
 }

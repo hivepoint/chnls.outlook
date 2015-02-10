@@ -10,10 +10,9 @@ namespace chnls.Utils
 {
     internal class ChannelHelper
     {
-        internal static string GetNameWithGroup(ChannelInfo channel, List<ChannelGroupInfo> groups)
+        internal static string GetNameWithGroup(ChannelInfo channel)
         {
-            var group = groups.FirstOrDefault(e => e._id.Equals(channel._id));
-            return (null != group ? (group.name + "/") : "") + channel.name;
+            return (string.IsNullOrWhiteSpace(channel.groupName) ? "" : (channel.groupName + "/")) + channel.name;
         }
 
         internal static int GetInterestMemberCount(ChannelInfo channel, EntityCollection collection)

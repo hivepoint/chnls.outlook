@@ -25,5 +25,8 @@ namespace chnls.Model
 
         [DefaultValue(Constants.UrlChnlsProduction)]
         public string BaseUrl { get; set; }
+
+        [DefaultValue(false)]
+        public bool SplashAlreadyShown { get; set; }
     }
 }

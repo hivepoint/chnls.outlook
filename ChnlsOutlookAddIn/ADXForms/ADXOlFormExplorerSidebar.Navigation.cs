@@ -40,7 +40,7 @@ namespace chnls.ADXForms
             PropertiesService.Instance.BrowserObjectDelegate = new BrowserObjectDelegate { Broswer = this };
         }
 
-        private void HandleHivePointUrl(Uri uri)
+        private void HandleEmailChannelsUrl(Uri uri)
         {
             LoggingService.Debug("Handle Chnls URI: " + uri);
             var request = ChnlsUrlHelper.GetChnlsRequest(uri);
@@ -61,8 +61,6 @@ namespace chnls.ADXForms
                         Process.Start(url);
                     }
 
-                    break;
-                case ChannelsRequestType.CloseWindow:
                     break;
                 case ChannelsRequestType.ContentLoaded:
                     statusToast.HideToast();
@@ -88,9 +86,9 @@ namespace chnls.ADXForms
                 case ChannelsRequestType.UserSignedOut:
                     PropertiesService.Instance.UserEmail = null;
                     break;
-                case ChannelsRequestType.HandleCreateChannel:
-                    var requestWithGroup = (ChannelsRequestWithGroupAndEmails)request;
-                    CreateChannelHelper.CreateChannel(requestWithGroup.Group, requestWithGroup.Emails);
+                case ChannelsRequestType.OpenDialog:
+                    var openDialogRequest = (ChannelRequestOpenDialog)request;
+                    DialogHelper.OpenDialog(openDialogRequest);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -113,7 +111,7 @@ namespace chnls.ADXForms
             LoggingService.Debug("Authorize1: " + url);
             if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower()))
             {
-                // if it is a url that is a hivepoint url, get it authorized
+                // if it is a url that is a email channels url, get it authorized
                 if (!ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL, "{'url':'" + url + "'}"))
                 {
                     // authorize url is not supported, so just open the url
@@ -227,9 +225,14 @@ namespace chnls.ADXForms
                 return ChnlsBrowserHelper.GetGroups(Broswer.Document);
             }
 
-            public void NotifyChannelCreated()
+            public void NotifyChannelRefresh()
             {
                 ChnlsBrowserHelper.NotifyChannelRefresh(Broswer.Document);
+            }
+
+            public void GotoChannel(string channelId)
+            {
+                ChnlsBrowserHelper.GotoChannel(Broswer.Document, channelId);
             }
         }
 

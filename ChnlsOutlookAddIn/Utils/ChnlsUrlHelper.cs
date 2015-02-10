@@ -1,10 +1,9 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using chnls.Service;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -22,14 +21,14 @@ namespace chnls.Utils
         }
 
 
-        internal static bool IsHivePointUrl(Uri uri)
+        internal static bool IsEmailChannelsUrl(Uri uri)
         {
             return uri.Scheme.Equals("channels", StringComparison.OrdinalIgnoreCase);
         }
 
         internal static ChannelsRequest GetChnlsRequest(Uri uri)
         {
-            if (!IsHivePointUrl(uri)) return null;
+            if (!IsEmailChannelsUrl(uri)) return null;
 
             try
             {
@@ -44,7 +43,6 @@ namespace chnls.Utils
                     case ChannelsRequestType.ChannelListUpdated:
                     case ChannelsRequestType.ChannelGroupListUpdated:
                     case ChannelsRequestType.UserSignedOut:
-                    case ChannelsRequestType.CloseWindow:
                     case ChannelsRequestType.NewItemsAddedToFeed:
                         return new ChannelsRequest(type);
                     case ChannelsRequestType.ContentLoaded:
@@ -57,8 +55,6 @@ namespace chnls.Utils
                         return new ChannelsRequestWithId(type, query["id"]);
                     case ChannelsRequestType.UserSignedIn:
                         return new ChannelsRequestWithEmailAndName(type, query["email"], query["name"]);
-                    case ChannelsRequestType.HandleCreateChannel:
-                        return new ChannelsRequestWithGroupAndEmails(type, query["group"], query["emails"]);
                     case ChannelsRequestType.ActionComplete:
                         var success = false;
                         try
@@ -71,7 +67,13 @@ namespace chnls.Utils
                         catch (FormatException)
                         {
                         }
-                        return new ChannelsRequestActionComplete(type, query["action"], success, query["ActionType"], query["response"]);
+                        return new ChannelsRequestActionComplete(type, query["action"], success, query["ActionType"],
+                            query["response"]);
+                    case ChannelsRequestType.OpenDialog:
+                        return new ChannelRequestOpenDialog(type, query["type"], query["id"], query["value"],
+                            query["width"], query["height"]);
+                    case ChannelsRequestType.CloseDialog:
+                        return new ChannelRequestCloseDialog(type, query["type"], query["id"], query["response"]);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -104,6 +106,7 @@ namespace chnls.Utils
 
         internal string Url { get; private set; }
     }
+
     internal class ChannelsRequestWithId : ChannelsRequest
     {
         public ChannelsRequestWithId(ChannelsRequestType type, string id)
@@ -139,26 +142,10 @@ namespace chnls.Utils
         internal string Name { get; private set; }
     }
 
-    internal class ChannelsRequestWithGroupAndEmails : ChannelsRequest
-    {
-        public ChannelsRequestWithGroupAndEmails(ChannelsRequestType type, string group, string emails)
-            : base(type)
-        {
-            Group = group;
-            Emails = new List<string>();
-            if (!String.IsNullOrWhiteSpace(emails))
-            {
-                var addresses = emails.Split(',');
-                Emails.AddRange(addresses.Where(e => !String.IsNullOrWhiteSpace(e)));
-            }
-        }
-
-        internal string Group { get; private set; }
-        internal List<string> Emails { get; private set; }
-    }
     internal class ChannelsRequestActionComplete : ChannelsRequest
     {
-        public ChannelsRequestActionComplete(ChannelsRequestType type, string action, bool success, string actionType, string resposne)
+        public ChannelsRequestActionComplete(ChannelsRequestType type, string action, bool success, string actionType,
+            string resposne)
             : base(type)
         {
             Action = action;
@@ -172,11 +159,85 @@ namespace chnls.Utils
         internal string ActionType { get; private set; }
         internal string Resposne { get; private set; }
     }
+
+
+    internal class ChannelRequestOpenDialog : ChannelsRequest
+    {
+        public ChannelRequestOpenDialog(ChannelsRequestType type, string dialogType, string id, string token,
+            string suggestedWidth, String suggestedHeight)
+            : base(type)
+        {
+            DialogType = dialogType;
+            Id = id;
+            Token = token;
+            try
+            {
+                SuggestedHeight = int.Parse(suggestedHeight);
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch (Exception)
+            {
+                SuggestedHeight = 0;
+            }
+
+            try
+            {
+                SuggestedWidth = int.Parse(suggestedWidth);
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch (Exception)
+            {
+                SuggestedWidth = 0;
+            }
+        }
+
+        internal string DialogType { get; private set; }
+        internal string Id { get; private set; }
+        internal string Token { get; private set; }
+        internal int SuggestedWidth { get; private set; }
+        internal int SuggestedHeight { get; private set; }
+
+        internal DialogTypeEnum DialogTypeEnum
+        {
+            get
+            {
+                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+            }
+        }
+
+    }
+
+    internal class ChannelRequestCloseDialog : ChannelsRequest
+    {
+        public ChannelRequestCloseDialog(ChannelsRequestType type, string dialogType, string id, string response)
+            : base(type)
+        {
+            DialogType = dialogType;
+            Id = id;
+            Response = response;
+        }
+
+        internal string DialogType { get; private set; }
+        internal string Id { get; private set; }
+        internal string Response { get; private set; }
+        internal DialogTypeEnum DialogTypeEnum
+        {
+            get
+            {
+                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+            }
+        }
+
+        internal T GetResponse<T>()
+        {
+            return String.IsNullOrWhiteSpace(Response) ? default(T) : JsonConvert.DeserializeObject<T>(Response);
+        }
+    }
+
     internal enum ChannelsRequestType
     {
         ClientLoaded,
         OpenWindow,
-        CloseWindow,
         ContentLoaded,
         ChannelListUpdated,
         ChannelUpdated,
@@ -186,6 +247,15 @@ namespace chnls.Utils
         ActionComplete,
         UserSignedIn,
         UserSignedOut,
-        HandleCreateChannel
+        OpenDialog,
+        CloseDialog
     }
+    internal enum DialogTypeEnum
+    {
+        // ReSharper disable InconsistentNaming
+        CREATE_CHANNEL,
+        CREATE_GROUP
+        // ReSharper restore InconsistentNaming
+    }
+
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using chnls.Service;
+using chnls.Utils;
 
 #endregion
 
@@ -43,7 +44,8 @@ namespace chnls.Forms
 
         private void labelSupport_Click(object sender, EventArgs e)
         {
-            AddinModule.CurrentInstance.ContactSupport();
+            Close();
+            Scheduler.Run("Send support email", () => AddinModule.CurrentInstance.ContactSupport(), 10);
         }
 
         private void labelHeading_Click(object sender, EventArgs e)

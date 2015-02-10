@@ -103,7 +103,7 @@ namespace chnls.ADXForms
             this.Controls.Add(this.debugBar);
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ADXOlFormExplorerSidebar";
-            this.Text = "ADXOlFormExplorerSidebar";
+            this.Text = "Email Channels";
             this.Load += new System.EventHandler(this.ADXOlFormExplorerSidebar_Load);
             this.panelBrowsers.ResumeLayout(false);
             this.ResumeLayout(false);

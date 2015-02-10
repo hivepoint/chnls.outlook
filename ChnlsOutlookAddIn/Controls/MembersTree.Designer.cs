@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MembersTree));
-            this.treeView = new System.Windows.Forms.TreeView();
+            this.treeView = new BufferedTreeView();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
@@ -38,6 +38,7 @@
             // 
             this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView.ImageIndex = 0;
             this.treeView.ImageList = this.imageList;
             this.treeView.Indent = 10;
@@ -73,7 +74,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView;
+        private BufferedTreeView treeView;
         private System.Windows.Forms.ImageList imageList;
     }
 }

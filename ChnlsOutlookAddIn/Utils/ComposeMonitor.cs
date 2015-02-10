@@ -122,7 +122,7 @@ namespace chnls.Utils
 
         private static bool IsStale(ChannelInfo channel)
         {
-            return channel.activityState != EmbedChannelActivityState.STALE;
+            return channel.activityState == EmbedChannelActivityState.STALE;
         }
 
         public interface IComposeMonitorCallback

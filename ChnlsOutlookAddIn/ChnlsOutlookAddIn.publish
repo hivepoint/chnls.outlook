@@ -234,4 +234,94 @@
     </preferences>
     <prerequisites createSetupProgram="true" installFromVendor="false" />
   </application>
+  <application version="1.0.1.15">
+    <signingOptions>
+      <certificatePath>C:\Users\sevogle\Documents\git\choosr\code-signing\code.sign.sev.p12</certificatePath>
+      <timestamp>http://timestamp.comodoca.com/authenticode</timestamp>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application</providerURL>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+  <application version="1.0.1.16">
+    <signingOptions>
+      <certificatePath>C:\Users\sevogle\Documents\git\choosr\code-signing\code.sign.sev.p12</certificatePath>
+      <timestamp>http://timestamp.comodoca.com/authenticode</timestamp>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application</providerURL>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+  <application version="1.0.1.17">
+    <signingOptions>
+      <certificatePath>C:\Users\sevogle\Documents\git\choosr\code-signing\code.sign.sev.p12</certificatePath>
+      <timestamp>http://timestamp.comodoca.com/authenticode</timestamp>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application</providerURL>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+  <application version="1.0.1.18">
+    <signingOptions>
+      <certificatePath>C:\Users\sevogle\Documents\git\choosr\code-signing\code.sign.sev.p12</certificatePath>
+      <timestamp>http://timestamp.comodoca.com/authenticode</timestamp>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application</providerURL>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+  <application version="1.0.1.19">
+    <signingOptions>
+      <certificatePath>C:\Users\sevogle\Documents\git\choosr\code-signing\code.sign.sev.p12</certificatePath>
+      <timestamp>http://timestamp.comodoca.com/authenticode</timestamp>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application</providerURL>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
 </publishConfiguration>
