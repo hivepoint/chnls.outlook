@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using chnls.Model;
+using chnls.Utils;
 
 #endregion
 
@@ -17,6 +18,7 @@ namespace chnls.Service
         void NotifyChannelRefresh();
 
         void GotoChannel(string p);
+        void NotifyDialogClosed(ChannelRequestCloseDialog request);
     }
 
     partial class PropertiesService
@@ -248,6 +250,11 @@ namespace chnls.Service
             }
             PropertiesDirty();
             OnGroupListChanged();
+        }
+
+        public void NotifyDialogClosed(ChannelRequestCloseDialog request)
+        {
+            BrowserObjectDelegate.NotifyDialogClosed(request);
         }
 
         internal void NotifyChannelRefresh()
