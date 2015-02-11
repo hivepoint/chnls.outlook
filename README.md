@@ -68,8 +68,8 @@ This will result in the files being published into the Publish directory of the 
 	6. Select `chnlsoutlookaddin.application` and select upload and overwrite when prompted
 	7. Select `EmailChannelsSetup.exe` and select upload and overwrite when prompted
 8. Send out an email
-    1. Production `mailto:ops.deploy.outlook.C@channels.hivepoint.com`
-    2. Development `mailto:ops.deploy.outlook.D@channels.hivepoint.com`
+    1. Production ops.deploy.outlook.C@channels.hivepoint.com
+    2. Development ops.deploy.outlook.D@channels.hivepoint.com
 
 
 ### General Email Channels Information
