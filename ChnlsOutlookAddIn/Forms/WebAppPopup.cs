@@ -30,15 +30,6 @@ namespace chnls.Forms
             Closed += WebAppPopup_Closed;
         }
 
-        private HtmlDocument Document
-        {
-            get
-            {
-                Debug.Assert(webBrowser.Document != null, "webBrowser.Document != null");
-                return webBrowser.Document;
-            }
-        }
-
         internal static WebAppPopup GetInstance(Func<ChannelsRequest, bool> requestHandler = null,
             Action<HtmlDocument> closeCallback = null)
         {
@@ -115,7 +106,7 @@ namespace chnls.Forms
                     GotoBlank();
                     break;
                 case ChannelsRequestType.CloseDialog:
-                    ChnlsBrowserHelper.OnDialogClosed(Document, (ChannelRequestCloseDialog) request);
+                    PropertiesService.Instance.NotifyDialogClosed((ChannelRequestCloseDialog) request);
                     Close();
                     GotoBlank();
                     break;

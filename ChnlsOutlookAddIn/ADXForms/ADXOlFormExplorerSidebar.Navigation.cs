@@ -15,12 +15,9 @@ using Newtonsoft.Json;
 
 namespace chnls.ADXForms
 {
-
-
     // ReSharper disable once InconsistentNaming
     partial class ADXOlFormExplorerSidebar
     {
-
         private readonly Dictionary<int, Action<CreateChannelResponse>> _createChannelCallbacks =
             new Dictionary<int, Action<CreateChannelResponse>>();
 
@@ -37,7 +34,7 @@ namespace chnls.ADXForms
 
         private void InitializeChnlsNavigation()
         {
-            PropertiesService.Instance.BrowserObjectDelegate = new BrowserObjectDelegate { Broswer = this };
+            PropertiesService.Instance.BrowserObjectDelegate = new BrowserObjectDelegate {Broswer = this};
         }
 
         private void HandleEmailChannelsUrl(Uri uri)
@@ -53,7 +50,7 @@ namespace chnls.ADXForms
                     LoadComplete();
                     break;
                 case ChannelsRequestType.OpenWindow:
-                    var url = ((ChannelsRequestWithUrl)request).Url;
+                    var url = ((ChannelsRequestWithUrl) request).Url;
                     if (!String.IsNullOrWhiteSpace(url) &&
                         String.Compare(url, "about:blank", StringComparison.OrdinalIgnoreCase) != 0)
                     {
@@ -73,21 +70,21 @@ namespace chnls.ADXForms
                     PropertiesService.Instance.ChannelGroupListDirty();
                     break;
                 case ChannelsRequestType.ActionComplete:
-                    OnActionResponseInt((ChannelsRequestActionComplete)request);
+                    OnActionResponseInt((ChannelsRequestActionComplete) request);
                     break;
                 case ChannelsRequestType.NewItemsAddedToFeed:
                     break;
                 case ChannelsRequestType.HandleMessageReply:
-                    ReplyToMessageId((ChannelsRequestWithId)request);
+                    ReplyToMessageId((ChannelsRequestWithId) request);
                     break;
                 case ChannelsRequestType.UserSignedIn:
-                    PropertiesService.Instance.UserEmail = ((ChannelsRequestWithEmailAndName)request).Email;
+                    PropertiesService.Instance.UserEmail = ((ChannelsRequestWithEmailAndName) request).Email;
                     break;
                 case ChannelsRequestType.UserSignedOut:
                     PropertiesService.Instance.UserEmail = null;
                     break;
                 case ChannelsRequestType.OpenDialog:
-                    var openDialogRequest = (ChannelRequestOpenDialog)request;
+                    var openDialogRequest = (ChannelRequestOpenDialog) request;
                     DialogHelper.OpenDialog(openDialogRequest);
                     break;
                 default:
@@ -102,7 +99,7 @@ namespace chnls.ADXForms
                 hash = "";
             }
             var code = "window.googleOauth.__doFinish('" + hash + "');";
-            object[] codeString = { code };
+            object[] codeString = {code};
             Document.InvokeScript("eval", codeString);
         }
 
@@ -112,7 +109,9 @@ namespace chnls.ADXForms
             if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower()))
             {
                 // if it is a url that is a email channels url, get it authorized
-                if (!ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL, "{'url':'" + url + "'}"))
+                if (
+                    !ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL,
+                        "{'url':'" + url + "'}"))
                 {
                     // authorize url is not supported, so just open the url
                     Process.Start(url.ToString());
@@ -131,7 +130,7 @@ namespace chnls.ADXForms
             var head = Document.GetElementsByTagName("head")[0];
             var scriptEl = Document.CreateElement("script");
             Debug.Assert(scriptEl != null, "scriptEl != null");
-            var element = (IHTMLScriptElement)scriptEl.DomElement;
+            var element = (IHTMLScriptElement) scriptEl.DomElement;
             element.text =
                 "function ChnlsNativeOnActionComplete(actionType, actionRequest, success, actionResponse){"
                 +
@@ -233,6 +232,11 @@ namespace chnls.ADXForms
             public void GotoChannel(string channelId)
             {
                 ChnlsBrowserHelper.GotoChannel(Broswer.Document, channelId);
+            }
+
+            public void NotifyDialogClosed(ChannelRequestCloseDialog request)
+            {
+                ChnlsBrowserHelper.OnDialogClosed(Broswer.Document, request);
             }
         }
 

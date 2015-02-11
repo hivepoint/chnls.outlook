@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Windows.Forms;
 using chnls.Forms;
 using chnls.Model;
 using chnls.Service;
@@ -43,7 +44,7 @@ namespace chnls.Utils
                         break;
                 }
             });
-
+            form.StartPosition = FormStartPosition.CenterParent;
             form.NavigateFragment(openDialogRequest.Token);
             form.SetContentSize(openDialogRequest.SuggestedHeight, openDialogRequest.SuggestedWidth);
             form.ShowDialog();
