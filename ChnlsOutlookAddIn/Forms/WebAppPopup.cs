@@ -1,9 +1,7 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Forms;
 using chnls.Service;
 using chnls.Utils;
@@ -16,14 +14,15 @@ namespace chnls.Forms
     {
         //        private static readonly List<WebAppPopup> Forms = new List<WebAppPopup>();
 
-        private Func<ChannelsRequest, bool> _requestHandler;
+        private readonly Func<ChannelsRequest, bool> _requestHandler;
         private Action<HtmlDocument> _closeCallback;
-        private int _paddingHeight = 0;
-        private int _paddingWidth = 0;
-        private int _contentHeight = 0;
-        private int _contentWidth = 0;
+        private int _contentHeight;
+        private int _contentWidth;
+        private int _paddingHeight;
+        private int _paddingWidth;
 
-        internal WebAppPopup(Func<ChannelsRequest, bool> requestHandler = null, Action<HtmlDocument> closeCallback = null)
+        internal WebAppPopup(Func<ChannelsRequest, bool> requestHandler = null,
+            Action<HtmlDocument> closeCallback = null)
         {
             InitializeComponent();
             _closeCallback = closeCallback;
@@ -40,7 +39,8 @@ namespace chnls.Forms
             }
         }
 
-        internal static WebAppPopup GetInstance(Func<ChannelsRequest, bool> requestHandler = null, Action<HtmlDocument> closeCallback = null)
+        internal static WebAppPopup GetInstance(Func<ChannelsRequest, bool> requestHandler = null,
+            Action<HtmlDocument> closeCallback = null)
         {
             //lock (Forms)
             //{
@@ -77,14 +77,23 @@ namespace chnls.Forms
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            UpdateUrl(e.Url);
             if (!ChnlsUrlHelper.IsEmailChannelsUrl(e.Url))
             {
-                textboxUrl.Text = e.Url.ToString();
                 return;
             }
 
             e.Cancel = true;
             ProcessRequest(ChnlsUrlHelper.GetChnlsRequest(e.Url));
+        }
+
+        private void UpdateUrl(Uri url)
+        {
+            if (Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase) ||
+                Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase))
+            {
+                textboxUrl.Text = url.ToString();
+            }
         }
 
         private void ProcessRequest(ChannelsRequest request)
@@ -106,7 +115,7 @@ namespace chnls.Forms
                     GotoBlank();
                     break;
                 case ChannelsRequestType.CloseDialog:
-                    ChnlsBrowserHelper.OnDialogClosed(Document, (ChannelRequestCloseDialog)request);
+                    ChnlsBrowserHelper.OnDialogClosed(Document, (ChannelRequestCloseDialog) request);
                     Close();
                     GotoBlank();
                     break;
@@ -151,7 +160,6 @@ namespace chnls.Forms
 
         public void SetContentSize(int height, int width)
         {
-
             if (height <= 0)
             {
                 height = 400;

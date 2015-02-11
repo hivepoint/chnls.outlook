@@ -3,7 +3,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using chnls.Service;
@@ -17,9 +16,9 @@ namespace chnls.Forms
     {
         private readonly Action<Uri> _callback;
         private readonly WebBrowser _wparent;
+        private int _paddingHeight;
+        private int _paddingWidth;
         private bool _parentSet;
-        private int _paddingHeight = 0;
-        private int _paddingWidth = 0;
 
         public WebPopupWindowForm(WebBrowser wparent, Action<Uri> callback)
         {
@@ -39,7 +38,7 @@ namespace chnls.Forms
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            textboxUrl.Text = e.Url.ToString();
+            UpdateUrl(e.Url);
             var status = "";
             if (IsDisposed)
             {
@@ -60,6 +59,15 @@ namespace chnls.Forms
                     _callback(e.Url);
                     Close();
                 }
+            }
+        }
+
+        private void UpdateUrl(Uri url)
+        {
+            if (Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase) ||
+                Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase))
+            {
+                textboxUrl.Text = url.ToString();
             }
         }
 
