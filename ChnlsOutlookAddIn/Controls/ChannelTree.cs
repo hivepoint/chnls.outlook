@@ -269,8 +269,8 @@ namespace chnls.Controls
                 ? ""
                 : channel.descr;
 
-            var subscribers = ChannelHelper.GetInterestMemberCount(channel, EntityCollection.SUBSCRIPTIONS);
-            var watchers = ChannelHelper.GetInterestMemberCount(channel, EntityCollection.FOLLOWING);
+            var subscribers = channel.subscribers.Count;
+            var watchers = channel.watchers.Count;
             if (subscribers > 0)
             {
                 if (!String.IsNullOrWhiteSpace(tooltip))
