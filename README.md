@@ -10,9 +10,66 @@ Outlook plugin for @channels
  1. even number is customer build
 4. build number - this increments each time we publish a build
 
+### Code Signing
+When publishing, you need to have a code signing cert.  One is currently stored in the repository.  If this needs to be regenerated, the command to generate it is:
+```
+openssl pkcs12 -export -inkey HivePoint.key -in HivePoint.crt -out HivePoint.p12
+```
+
 ### Build/Deployment Process
-1. update the version information in properties
-2. 
+#### Build
+1. update the version information in properties per version rules above
+2. Rebuild - Menu --> Build --> Rebuild Solution
+3. Select and right click on Project
+4. Select "Publish ADX Project"
+5. Select the version that you want to publish
+6. Click "Populate"
+7. Scroll down to "fav.ico" and use the combo box to select "AppIcon"
+8. Update "provider url"
+   1. for production, enter http://downloads.emailchannels.com/outlook/chnlsoutlookaddin.application
+   2. for dev, enter http://downloads.emailchannels.net/outlook/chnlsoutlookaddin.application
+   3. NOTE there is no US version, just dev and production
+9. Ensure that the cert file is the right file, the path will be something like "C:\Users\sevogle\Documents\git\chnls.outlook\code-signing\HivePoint.p12"
+10. Enter password for key cert.  This password is in LastPass "HivePoint Code Signing Key"
+11. The timestamp server should be "http://timestamp.comodoca.com/authenticode"
+12. Click Publish
+
+This will result in the files being published into the Publish directory of the project
+`C:\Users\sevogle\Documents\git\chnls.outlook\ChnlsOutlookAddIn\Publish`
+
+#### Deploy
+1. Open this directory in Explorer
+2. rename setup.ext to EmailChannelsSetup.exe
+3. create a new directory `chnsl.outlook-<version>`
+4. move all the files into that folder
+    1. EmailChannelsSetup.exe
+	2. chnsloutlookaddin.application
+	3. folder with version number
+5. Right click on that file and select "Send to compressed zipped file"
+    1. this will generate a zip file `chnls.outlook-<version>`
+6. Open github to create release (optional)
+    1. https://github.com/SevogleAdmin/chnls.outlook/releases/new
+	2. select the branch that you want to associate the release with
+	3. enter tag version alpha/<version> or beta/<version> or just <version>
+	4. Enter release title - include version and anything else
+	5. Add any description that you want
+	6. Drag or select the zip file from above to add it to the release. 
+	7. Wait until it is uploaded
+	8. if this release is going to be used internally, i.e. it has an "odd" dot version number, select "this is a pre-release"
+	9. Click Publish Release
+7. Upload to S3
+    1. Open firefix and use S3 fox
+	2. Select the directory you created above `C:\Users\sevogle\Documents\git\chnls.outlook\ChnlsOutlookAddIn\Publish\chnls.outlook-1.0.1.21`
+	3. select the target directory in S3
+	    1. Production: `downloads.emailchannels.com/outlook`
+	    2. Development: `downloads.emailchannels.net/outlook`
+    4. Select the directory with your version nubmer `1.0.1.21` and click the upload button, the arrow pointing to the right
+	5. Wait until that completes
+	6. Select `chnlsoutlookaddin.application` and select upload and overwrite when prompted
+	7. Select `EmailChannelsSetup.exe` and select upload and overwrite when prompted
+8. Send out an email
+    1. Production `mailto:ops.deploy.outlook.C@channels.hivepoint.com`
+    2. Development `mailto:ops.deploy.outlook.D@channels.hivepoint.com`
 
 
 ### General Email Channels Information
@@ -46,4 +103,17 @@ The add-in adds three main functions to Outlook
 
 The add-in keeps a local cache of all it's state, to help with compose, this is done through the PropertiesService, which writes them out to files.
 
+
+### Development Environment
+
+* Windows 8 or 10
+* Add-In Express plugin
+* SourceTree + Git installed
+* Outlook 2010 or 2013
+* Visual Studio 2013
+  * Visual Studio will need to always be stared as *administrator*, done by right clicking on the icon and selecting `run as administrator`.
+  * select the appropriate Outlook Exec as the debug target
+
+  
+To register and unregister the add-in with outlook, right click on the project and select the appropriate menu items
 
