@@ -165,9 +165,7 @@ namespace chnls.Utils
             try
             {
                 recipients = mailItem.Recipients;
-                var todelete = new List<int>();
-                recipients = mailItem.Recipients;
-                for (var i = 1; i <= recipients.Count; i++)
+                for (var i = recipients.Count; i >= 1; i--)
                 {
                     Recipient rec = null;
                     try
@@ -177,7 +175,7 @@ namespace chnls.Utils
                         if (channel.channelEmailAddress.address.Equals(recipientAddress,
                             StringComparison.InvariantCultureIgnoreCase))
                         {
-                            todelete.Insert(0, i);
+                            recipients.Remove(i);
                         }
                     }
                     finally
@@ -187,10 +185,6 @@ namespace chnls.Utils
                             Marshal.ReleaseComObject(rec);
                         }
                     }
-                }
-                foreach (var index in todelete)
-                {
-                    recipients.Remove(index);
                 }
             }
             finally
