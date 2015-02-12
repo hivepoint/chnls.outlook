@@ -133,35 +133,24 @@ namespace chnls.ADXForms
                 else
                 {
                     HidePane();
-                    Inspector inspector = null;
-                    try
+                    var inspector = InspectorObj as Inspector; // Do not release this object, it is used by ADX
+                    if (null == inspector)
                     {
-                        inspector = InspectorObj as Inspector;
-                        if (null == inspector)
+                        HidePane();
+                        return;
+                    }
+                    else
+                    {
+                        var obj = inspector.CurrentItem;
+
+                        var mi = obj as MailItem;
+                        if (mi == null)
                         {
-                            HidePane();
-                            return;
+                            Marshal.ReleaseComObject(obj);
                         }
                         else
                         {
-                            var obj = inspector.CurrentItem;
-
-                            var mi = inspector.CurrentItem as MailItem;
-                            if (mi == null)
-                            {
-                                Marshal.ReleaseComObject(obj);
-                            }
-                            else
-                            {
-                                MailItem = mi;
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        if (null != inspector)
-                        {
-                            Marshal.ReleaseComObject(inspector);
+                            MailItem = mi;
                         }
                     }
                     if (null == MailItem)
@@ -226,7 +215,6 @@ namespace chnls.ADXForms
             PropertiesService.Instance.GroupListChanged -= Instance_GroupListChanged;
             channelTree.ChannelSelected -= channelTree_ChannelSelected;
             channelTree.ChannelUnselected -= channelTree_ChannelUnselected;
-
         }
 
 
@@ -242,7 +230,7 @@ namespace chnls.ADXForms
 
         private void UpdateMemberViewSize()
         {
-            var height = Height / 3;
+            var height = Height/3;
             if (height > 200)
             {
                 height = 200;
