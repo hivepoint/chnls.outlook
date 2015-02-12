@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AddinExpress.OL;
 using chnls.Forms;
@@ -17,15 +18,14 @@ namespace chnls.ADXForms
     // ReSharper disable once InconsistentNaming
     public partial class ADXOlFormExplorerSidebar : ADXOlForm
     {
+        private WebBrowserCom _wbComMain;
+
         public ADXOlFormExplorerSidebar()
         {
             PropertiesService.Instance.Connected = false;
             InitializeComponent();
 
             webBrowserMain.Url = new Uri("about:blank");
-            var wbCoMmain = (WebBrowserCom) webBrowserMain.ActiveXInstance;
-         //   wbCoMmain.NewWindow3 += wbCOMmain_NewWindow3;
-            wbCoMmain.NewWindow3 += new SHDocVw.DWebBrowserEvents2_NewWindow3EventHandler(wbCOMmain_NewWindow3);
             Text = "Email Channels";
             Icon = Resources.favIcon;
 
@@ -43,8 +43,20 @@ namespace chnls.ADXForms
             InitializeChnlsNavigation();
         }
 
+        private void ADXOlFormExplorerSidebar_ADXAfterFormShow()
+        {
+            _wbComMain = (WebBrowserCom) webBrowserMain.ActiveXInstance;
+            _wbComMain.NewWindow3 += WbComMainNewWindow3;
+        }
 
-        private void wbCOMmain_NewWindow3(ref object ppDisp, ref bool cancel, uint dwFlags, string bstrUrlContext,
+        private void ADXOlFormExplorerSidebar_ADXAfterFormHide(object sender, ADXAfterFormHideEventArgs e)
+        {
+            if (null == _wbComMain) return;
+            Marshal.ReleaseComObject(_wbComMain);
+            _wbComMain = null;
+        }
+
+        private void WbComMainNewWindow3(ref object ppDisp, ref bool cancel, uint dwFlags, string bstrUrlContext,
             string bstrUrl)
         {
             var uri = new Uri(bstrUrl);
@@ -159,7 +171,5 @@ namespace chnls.ADXForms
         {
             return uri.ToString().ToLower().Contains(Constants.UrlIeVersionProblemString);
         }
-
-        
     }
 }
