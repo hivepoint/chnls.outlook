@@ -18,7 +18,8 @@ namespace chnls.Forms
 {
     public partial class AddToChannelForm : Form
     {
-        public AddToChannelForm(List<MailItem> mailItems)
+        private bool _closed = false;
+        public AddToChannelForm(ICollection<MailItem> mailItems)
         {
             InitializeComponent();
             ResizeColumns();
@@ -41,6 +42,8 @@ namespace chnls.Forms
         {
             Scheduler.RunIfNotScheduled("AddToChannelForm:UpdateChannels", "UpdateChannels", delay, () =>
             {
+                if (_closed) return;
+
                 Channels = PropertiesService.Instance.Channels;
                 Groups = PropertiesService.Instance.Groups;
                 if (null != Channels && Channels.Any()) return;
@@ -163,8 +166,6 @@ namespace chnls.Forms
                 item.Account = null;
             }
             comboBoxFrom.Items.Clear();
-            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
-            PropertiesService.Instance.GroupListChanged -= Instance_ChannelListChanged;
 
             base.Close();
         }
@@ -192,6 +193,13 @@ namespace chnls.Forms
             {
                 return Account.SmtpAddress;
             }
+        }
+
+        private void AddToChannelForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _closed = true;
+            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
+            PropertiesService.Instance.GroupListChanged -= Instance_ChannelListChanged;
         }
     }
 }
