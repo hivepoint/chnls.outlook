@@ -18,7 +18,7 @@ namespace chnls.Utils
             {
                 StartPosition = FormStartPosition.CenterParent
             };
-            wap.NavigateToNonAppPage("/splash/outlook");
+            wap.NavigateFragment(Constants.SplashFragment);
             wap.ShowDialog();
             PropertiesService.Instance.SplashAlreadyShown = true;
         }
