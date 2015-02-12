@@ -45,37 +45,37 @@ namespace chnls.Utils
                     _mailItem = null;
                 }
                 _mailItem = value;
-                if (_mailItem != null)
+                
+                if (_mailItem == null) return;
+
+                _currentChannels.Clear();
+                _participants.Clear();
+                object parent = null;
+                Recipients recipients = null;
+                try
                 {
-                    _currentChannels.Clear();
-                    _participants.Clear();
-                    object parent = null;
-                    Recipients recipients = null;
-                    try
-                    {
-                        parent = _mailItem.Parent;
-                        recipients = _mailItem.Recipients;
-                    }
-                    finally
-                    {
-                        if (null != recipients)
-                        {
-                            Marshal.ReleaseComObject(recipients);
-                            recipients = null;
-                        }
-                        if (null != parent)
-                        {
-                            Marshal.ReleaseComObject(parent);
-                            parent = null;
-                        }
-                    }
-                    _mailItem.PropertyChange += mailItem_PropertyChange;
-                    _mailItem.CustomPropertyChange += mailItem_CustomPropertyChange;
-                    _mailItem.BeforeCheckNames += mailItem_BeforeCheckNames;
-                    ((ItemEvents_10_Event) _mailItem).Send += _sendEventHandler;
-                    _timer.Enabled = true;
-                    RefreshParticipants(true);
+                    parent = _mailItem.Parent;
+                    recipients = _mailItem.Recipients;
                 }
+                finally
+                {
+                    if (null != recipients)
+                    {
+                        Marshal.ReleaseComObject(recipients);
+                        recipients = null;
+                    }
+                    if (null != parent)
+                    {
+                        Marshal.ReleaseComObject(parent);
+                        parent = null;
+                    }
+                }
+                _mailItem.PropertyChange += mailItem_PropertyChange;
+                _mailItem.CustomPropertyChange += mailItem_CustomPropertyChange;
+                _mailItem.BeforeCheckNames += mailItem_BeforeCheckNames;
+                ((ItemEvents_10_Event) _mailItem).Send += _sendEventHandler;
+                _timer.Enabled = true;
+                RefreshParticipants(true);
             }
         }
 

@@ -183,7 +183,7 @@ namespace chnls.Utils
             EmailHelper.SetHeader(mailItem, "X-Channels-Populate", "" + count);
 
             mailItem.Subject = "Forwarded " + count + " message" + (count == 1 ? "" : "s") + " to the hive";
-            mailItem.HTMLBody = "<p>" + attachments.Count + " message" + (count == 1 ? " has" : "s have") +
+            mailItem.HTMLBody = "<p>" + count + " message" + (count == 1 ? " has" : "s have") +
                                 " been forwarded to the hive.</p>\n" + bodyAddMessage;
             mailItem.Save();
         }
