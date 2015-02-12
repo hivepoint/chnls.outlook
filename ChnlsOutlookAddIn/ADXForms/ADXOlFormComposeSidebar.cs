@@ -210,6 +210,7 @@ namespace chnls.ADXForms
             if (null == _monitor) return;
             _monitor.Stop();
             _monitor = null;
+            MailItem = null;
             PropertiesService.Instance.UserChanged -= Instance_UserChanged;
             PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
             PropertiesService.Instance.GroupListChanged -= Instance_GroupListChanged;
