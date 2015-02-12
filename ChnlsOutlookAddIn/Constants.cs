@@ -13,7 +13,7 @@ namespace chnls
         public const string UrlChnlsDev = "https://emailchannels.net";
         public const string UrlSuffix = "?client=outlook";
 
-        public const string SplashFragment = "?splash:did:OUTLOOK";
+        public const string SplashFragment = "#splash:did:OUTLOOK";
         public const string UrlIeVersionProblemString = "ie_version_problem.html";
 
     }

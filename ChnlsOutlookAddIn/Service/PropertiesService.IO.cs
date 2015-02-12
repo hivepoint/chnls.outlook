@@ -39,29 +39,29 @@ namespace chnls.Service
                     "EmailChannels");
                 Directory.CreateDirectory(folder);
                 _preferencesFile = Path.Combine(folder, "EmailChannelsAddIn.properties.v01.json");
+                LoggingService.Debug("PropertyFile: " + _preferencesFile);
+                
+                if (!File.Exists(_preferencesFile)) return;
+                
+                var reader = File.OpenText(_preferencesFile);
 
-                if (File.Exists(_preferencesFile))
+                var text = "";
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    var reader = File.OpenText(_preferencesFile);
-
-                    var text = "";
-                    string line = null;
-                    while ((line = reader.ReadLine()) != null)
+                    text += line;
+                }
+                reader.Close();
+                if (text.Trim().Length > 0)
+                {
+                    LoggingService.Debug("Properties file:\r\n" + text);
+                    try
                     {
-                        text += line;
+                        Properties = JsonConvert.DeserializeObject<ChnlsProperties>(text);
                     }
-                    reader.Close();
-                    if (text.Trim().Length > 0)
+                    catch (Exception ex)
                     {
-                        LoggingService.Debug("Properties file:\r\n" + text);
-                        try
-                        {
-                            Properties = JsonConvert.DeserializeObject<ChnlsProperties>(text);
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggingService.Error("Failed to load properties:" + _preferencesFile, ex);
-                        }
+                        LoggingService.Error("Failed to load properties:" + _preferencesFile, ex);
                     }
                 }
             }
@@ -107,7 +107,7 @@ namespace chnls.Service
             {
                 json = JsonConvert.SerializeObject(Properties,
                     Formatting.Indented,
-                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
 
             var writer = new StreamWriter(_preferencesFile, false, Encoding.UTF8);
