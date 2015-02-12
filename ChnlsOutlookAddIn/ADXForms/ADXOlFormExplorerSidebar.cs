@@ -73,6 +73,10 @@ namespace chnls.ADXForms
                 {
                     StartPosition = FormStartPosition.CenterParent
                 };
+                if (null != ppDisp)
+                {
+                    Marshal.ReleaseComObject(ppDisp);
+                }
                 ppDisp = pwf.WebBrowserAx;
 
                 Scheduler.Run(description, () =>
