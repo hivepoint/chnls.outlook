@@ -37,7 +37,7 @@ namespace chnls.Forms
             labelVersion.Text = @"Version: " + GetType().Assembly.GetName().Version;
         }
 
-        private void OptionsClick()
+        private static void OptionsClick()
         {
             new PropertiesForm().ShowDialog();
         }
