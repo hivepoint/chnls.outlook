@@ -73,7 +73,11 @@ namespace chnls.Utils
                         try
                         {
                             attachments = mailItem2Send.Attachments;
-                            attachments.Add(item);
+                            var attachment = attachments.Add(item);
+                            if (null != attachment)
+                            {
+                                Marshal.ReleaseComObject(attachment);
+                            }
                         }
                         finally
                         {
