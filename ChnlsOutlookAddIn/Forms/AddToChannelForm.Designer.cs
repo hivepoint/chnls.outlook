@@ -203,6 +203,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddToChannelForm";
             this.Text = "Add to Email Channels";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddToChannelForm_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

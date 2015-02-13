@@ -9,7 +9,7 @@ namespace chnls.Model
 {
     // ReSharper disable InconsistentNaming
     [Serializable]
-    internal class EmailAddress 
+    internal class EmailAddress
     {
         public string address;
         public string name;

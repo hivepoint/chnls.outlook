@@ -17,7 +17,7 @@ namespace chnls.Utils
             return (String.IsNullOrWhiteSpace(baseUrl)
                 ? Constants.UrlChnlsProduction
                 : baseUrl) + Constants.UrlSuffix + "&clientVersion=" +
-                   typeof(ChnlsUrlHelper).Assembly.GetName().Version;
+                   typeof (ChnlsUrlHelper).Assembly.GetName().Version;
         }
 
 
@@ -36,7 +36,7 @@ namespace chnls.Utils
 
                 var query = HttpUtility.ParseQueryString(queryString);
 
-                var type = (ChannelsRequestType)Enum.Parse(typeof(ChannelsRequestType), uri.Host, true);
+                var type = (ChannelsRequestType) Enum.Parse(typeof (ChannelsRequestType), uri.Host, true);
                 switch (type)
                 {
                     case ChannelsRequestType.ClientLoaded:
@@ -174,7 +174,7 @@ namespace chnls.Utils
             {
                 SuggestedHeight = int.Parse(suggestedHeight);
             }
-            // ReSharper disable once EmptyGeneralCatchClause
+                // ReSharper disable once EmptyGeneralCatchClause
             catch (Exception)
             {
                 SuggestedHeight = 0;
@@ -184,7 +184,7 @@ namespace chnls.Utils
             {
                 SuggestedWidth = int.Parse(suggestedWidth);
             }
-            // ReSharper disable once EmptyGeneralCatchClause
+                // ReSharper disable once EmptyGeneralCatchClause
             catch (Exception)
             {
                 SuggestedWidth = 0;
@@ -199,12 +199,8 @@ namespace chnls.Utils
 
         internal DialogTypeEnum DialogTypeEnum
         {
-            get
-            {
-                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
-            }
+            get { return (DialogTypeEnum) Enum.Parse(typeof (DialogTypeEnum), DialogType, true); }
         }
-
     }
 
     internal class ChannelRequestCloseDialog : ChannelsRequest
@@ -220,12 +216,10 @@ namespace chnls.Utils
         internal string DialogType { get; private set; }
         internal string Id { get; private set; }
         internal string Response { get; private set; }
+
         internal DialogTypeEnum DialogTypeEnum
         {
-            get
-            {
-                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
-            }
+            get { return (DialogTypeEnum) Enum.Parse(typeof (DialogTypeEnum), DialogType, true); }
         }
 
         internal T GetResponse<T>()
@@ -250,6 +244,7 @@ namespace chnls.Utils
         OpenDialog,
         CloseDialog
     }
+
     internal enum DialogTypeEnum
     {
         // ReSharper disable InconsistentNaming
@@ -257,5 +252,4 @@ namespace chnls.Utils
         CREATE_GROUP
         // ReSharper restore InconsistentNaming
     }
-
 }

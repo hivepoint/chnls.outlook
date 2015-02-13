@@ -18,7 +18,9 @@ namespace chnls.Forms
 {
     public partial class AddToChannelForm : Form
     {
-        public AddToChannelForm(List<MailItem> mailItems)
+        private bool _closed;
+
+        public AddToChannelForm(ICollection<MailItem> mailItems)
         {
             InitializeComponent();
             ResizeColumns();
@@ -30,23 +32,6 @@ namespace chnls.Forms
             UpdateMessageList(mailItems);
             UpdateAccounts();
             UpdateShareButton();
-        }
-
-        void Instance_ChannelListChanged(object sender, EventArgs e)
-        {
-            UpdateChannels(200);
-        }
-
-        private void UpdateChannels(int delay)
-        {
-            Scheduler.RunIfNotScheduled("AddToChannelForm:UpdateChannels", "UpdateChannels", delay, () =>
-            {
-                Channels = PropertiesService.Instance.Channels;
-                Groups = PropertiesService.Instance.Groups;
-                if (null != Channels && Channels.Any()) return;
-                MessageBox.Show(@"Error: No channels available. Please ensure you are signed in and you have channels.");
-                Close();
-            });
         }
 
         private List<ChannelGroupInfo> Groups { get; set; }
@@ -61,6 +46,25 @@ namespace chnls.Forms
             set { base.Text = value; }
         }
 
+        private void Instance_ChannelListChanged(object sender, EventArgs e)
+        {
+            UpdateChannels(200);
+        }
+
+        private void UpdateChannels(int delay)
+        {
+            Scheduler.RunIfNotScheduled("AddToChannelForm:UpdateChannels", "UpdateChannels", delay, () =>
+            {
+                if (_closed) return;
+
+                Channels = PropertiesService.Instance.Channels;
+                Groups = PropertiesService.Instance.Groups;
+                if (null != Channels && Channels.Any()) return;
+                MessageBox.Show(@"Error: No channels available. Please ensure you are signed in and you have channels.");
+                Close();
+            });
+        }
+
 
         private void UpdateMessageList(IEnumerable<MailItem> mailItems)
         {
@@ -71,7 +75,7 @@ namespace chnls.Forms
                 {
                     from = mailItem.SenderEmailAddress;
                 }
-                listBoxMessages.Items.Add(new ListViewItem(new[] { from, mailItem.Subject }));
+                listBoxMessages.Items.Add(new ListViewItem(new[] {from, mailItem.Subject}));
             }
         }
 
@@ -83,7 +87,7 @@ namespace chnls.Forms
             try
             {
                 application = AddinModule.CurrentInstance.OutlookApp.Application;
-                
+
                 session = application.Session;
                 accounts = session.Accounts;
                 for (var i = 1; i <= accounts.Count; i++) // COM 1 BASED
@@ -91,7 +95,7 @@ namespace chnls.Forms
                     var account = accounts[i];
                     if (String.IsNullOrWhiteSpace(account.SmtpAddress)) continue;
 
-                    var accountComboItem = new AccountComboItem { Account = account };
+                    var accountComboItem = new AccountComboItem {Account = account};
                     comboBoxFrom.Items.Add(accountComboItem);
                     if (comboBoxFrom.Items.Count == 1 ||
                         String.Equals(PropertiesService.Instance.LastForwardFromAddress, account.SmtpAddress))
@@ -147,7 +151,7 @@ namespace chnls.Forms
         private void ResizeColumns()
         {
             var width = listBoxMessages.ClientSize.Width;
-            var from = (int)(width * 0.25);
+            var from = (int) (width*0.25);
             var subject = width - from;
 
             listBoxMessages.Columns[0].Width = from;
@@ -158,13 +162,11 @@ namespace chnls.Forms
         {
             foreach (var cbitem in comboBoxFrom.Items)
             {
-                var item = (AccountComboItem)cbitem;
+                var item = (AccountComboItem) cbitem;
                 Marshal.ReleaseComObject(item.Account);
                 item.Account = null;
             }
             comboBoxFrom.Items.Clear();
-            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
-            PropertiesService.Instance.GroupListChanged -= Instance_ChannelListChanged;
 
             base.Close();
         }
@@ -175,13 +177,20 @@ namespace chnls.Forms
 
             if (!selectedChannels.Any()) return;
 
-            AddToChannels(((AccountComboItem)comboBoxFrom.SelectedItem).Account, selectedChannels);
+            AddToChannels(((AccountComboItem) comboBoxFrom.SelectedItem).Account, selectedChannels);
             Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void AddToChannelForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _closed = true;
+            PropertiesService.Instance.ChannelListChanged -= Instance_ChannelListChanged;
+            PropertiesService.Instance.GroupListChanged -= Instance_ChannelListChanged;
         }
 
         private class AccountComboItem

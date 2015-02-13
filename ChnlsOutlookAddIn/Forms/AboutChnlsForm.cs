@@ -77,7 +77,6 @@ namespace chnls.Forms
         private void buttonResetSettings_Click(object sender, EventArgs e)
         {
             PropertiesService.Instance.ResetToDefaults();
-            MessageBox.Show(@"Please restart Outlook to complete the reset");
             Close();
         }
     }

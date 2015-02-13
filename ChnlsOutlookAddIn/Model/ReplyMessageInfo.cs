@@ -12,7 +12,7 @@ namespace chnls.Model
         public string _id;
         public List<EmailAddress> bcc = new List<EmailAddress>();
         public List<EmailAddress> cc = new List<EmailAddress>();
-        public List<string> channelIds =new List<string>();
+        public List<string> channelIds = new List<string>();
         public EmailAddress from;
 
         public string inReplyToHeader;

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using System;
 using System.Windows.Forms;
+
+#endregion
 
 namespace chnls.Controls
 {
     public partial class StatusToast : UserControl
     {
-        private Timer timer = new Timer();
+        private readonly Timer timer = new Timer();
+
         public StatusToast()
         {
             InitializeComponent();
@@ -20,7 +19,12 @@ namespace chnls.Controls
             timer.Tick += timer_Tick;
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        public string Detail
+        {
+            set { lblDetail.Text = value; }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
         {
             if (timer.Enabled)
             {
@@ -39,7 +43,7 @@ namespace chnls.Controls
             lblDetail.Text = detail;
             if (timeout_seconds > 5)
             {
-                timer.Interval = timeout_seconds * 1000;
+                timer.Interval = timeout_seconds*1000;
                 timer.Enabled = false;
                 timer.Enabled = true;
             }
@@ -58,7 +62,5 @@ namespace chnls.Controls
         {
             AddinModule.CurrentInstance.ContactSupport();
         }
-
-        public string Detail { set { lblDetail.Text = value; } }
     }
 }
