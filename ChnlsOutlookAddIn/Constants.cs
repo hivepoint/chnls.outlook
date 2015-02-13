@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace chnls
+﻿namespace chnls
 {
-    class Constants
+    internal class Constants
     {
         public const string SupportEmailAddress = "support@emailchannels.com";
         public const string UrlChnlsProduction = "https://emailchannels.com";
@@ -15,6 +10,5 @@ namespace chnls
 
         public const string SplashFragment = "#splash:did:OUTLOOK";
         public const string UrlIeVersionProblemString = "ie_version_problem.html";
-
     }
 }

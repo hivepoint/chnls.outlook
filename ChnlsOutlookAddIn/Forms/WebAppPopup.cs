@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using chnls.Service;
 using chnls.Utils;
@@ -109,7 +108,7 @@ namespace chnls.Forms
                     GotoBlank();
                     break;
                 case ChannelsRequestType.CloseDialog:
-                    PropertiesService.Instance.NotifyDialogClosed((ChannelRequestCloseDialog)request);
+                    PropertiesService.Instance.NotifyDialogClosed((ChannelRequestCloseDialog) request);
                     Close();
                     GotoBlank();
                     break;

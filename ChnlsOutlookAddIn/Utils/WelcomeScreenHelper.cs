@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
+
 using System.Windows.Forms;
 using chnls.Forms;
 using chnls.Service;
 
+#endregion
+
 namespace chnls.Utils
 {
-    class WelcomeScreenHelper
+    internal class WelcomeScreenHelper
     {
         internal static void ShowSplash()
         {
             if (PropertiesService.Instance.SplashAlreadyShown) return;
 
-            var wap = new WebAppPopup()
+            var wap = new WebAppPopup
             {
                 StartPosition = FormStartPosition.CenterParent
             };

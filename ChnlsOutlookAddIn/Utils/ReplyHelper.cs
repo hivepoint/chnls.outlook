@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,9 +11,11 @@ using chnls.Service;
 using Microsoft.Office.Interop.Outlook;
 using Exception = System.Exception;
 
+#endregion
+
 namespace chnls.Utils
 {
-    class ReplyHelper
+    internal class ReplyHelper
     {
         /*
         * Create a new message that is a reply to a message in Email Channels. 
@@ -32,7 +36,7 @@ namespace chnls.Utils
                 application = AddinModule.CurrentInstance.OutlookApp.Application;
 
                 // Create a new mail item and set it's subject to be a reply to the message
-                mail = (MailItem)application.CreateItem(OlItemType.olMailItem);
+                mail = (MailItem) application.CreateItem(OlItemType.olMailItem);
                 mail.Subject = "Re: " + replyTo.normalizedSubject;
                 // the normalized subject doesn't have any RE or FWD
 
@@ -113,10 +117,11 @@ namespace chnls.Utils
             }
         }
 
-        private static void EnsureChannels(IEnumerable<EmailAddress> tos, ICollection<EmailAddress> ccs, ICollection<string> channelIds)
+        private static void EnsureChannels(IEnumerable<EmailAddress> tos, ICollection<EmailAddress> ccs,
+            ICollection<string> channelIds)
         {
             var recipients = new HashSet<String>();
-            foreach (var address in tos.Select(e=>e.address))
+            foreach (var address in tos.Select(e => e.address))
             {
                 recipients.Add(address.ToLowerInvariant());
             }
@@ -125,7 +130,8 @@ namespace chnls.Utils
                 recipients.Add(address.ToLowerInvariant());
             }
             var channels = PropertiesService.Instance.Channels.Where(e => channelIds.Contains(e._id));
-            var missingChannels = channels.Where(e => !recipients.Contains(e.channelEmailAddress.address.ToLowerInvariant()));
+            var missingChannels =
+                channels.Where(e => !recipients.Contains(e.channelEmailAddress.address.ToLowerInvariant()));
             foreach (var missingChannel in missingChannels)
             {
                 ccs.Add(missingChannel.channelEmailAddress);

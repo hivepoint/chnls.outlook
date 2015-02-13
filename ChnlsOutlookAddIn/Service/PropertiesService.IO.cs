@@ -40,9 +40,9 @@ namespace chnls.Service
                 Directory.CreateDirectory(folder);
                 _preferencesFile = Path.Combine(folder, "EmailChannelsAddIn.properties.v01.json");
                 LoggingService.Debug("PropertyFile: " + _preferencesFile);
-                
+
                 if (!File.Exists(_preferencesFile)) return;
-                
+
                 var reader = File.OpenText(_preferencesFile);
 
                 var text = "";
@@ -107,7 +107,7 @@ namespace chnls.Service
             {
                 json = JsonConvert.SerializeObject(Properties,
                     Formatting.Indented,
-                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
             }
 
             var writer = new StreamWriter(_preferencesFile, false, Encoding.UTF8);
