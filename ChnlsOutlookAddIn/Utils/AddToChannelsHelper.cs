@@ -1,18 +1,21 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using chnls.Forms;
 using chnls.Service;
 using Microsoft.Office.Interop.Outlook;
 using Exception = System.Exception;
 
+#endregion
+
 namespace chnls.Utils
 {
-    class AddToChannelsHelper
+    internal class AddToChannelsHelper
     {
         internal static void AddToChannels(List<MailItem> items)
         {
@@ -63,8 +66,7 @@ namespace chnls.Utils
                             mailItem2Send =
                                 AddinModule.CurrentInstance.OutlookApp.Application.CreateItem(OlItemType.olMailItem) as
                                     MailItem;
-                            Debug.Assert(mailItem2Send != null, "mailItem2Send != null");
-                            EmailHelper.SetHeader(mailItem2Send, "X-Channels-Populate", "" + mailItem2Send.Attachments.Count);
+                            Debug.Assert(mailItem2Send != null, "mailItem != null");
                             mailItem2Send.SendUsingAccount = account;
                             ComposeHelper.AddEmailChannels(mailItem2Send, channels);
                             size = 0;
@@ -73,7 +75,11 @@ namespace chnls.Utils
                         try
                         {
                             attachments = mailItem2Send.Attachments;
-                            attachments.Add(item);
+                            var attachment = attachments.Add(item);
+                            if (null != attachment)
+                            {
+                                Marshal.ReleaseComObject(attachment);
+                            }
                         }
                         finally
                         {
@@ -87,24 +93,14 @@ namespace chnls.Utils
                         size += item.Size;
                         if (size > 10000000)
                         {
-                            mailItem2Send.Subject = "Forwarded " + mailItem2Send.Attachments.Count + " message" +
-                                                    (items.Count == 1 ? "" : "s") + " to the hive";
-                            mailItem2Send.HTMLBody = "<p>" + mailItem2Send.Attachments.Count + " message" +
-                                                     (items.Count == 1 ? " has" : "s have") +
-                                                     " been forwarded to the hive.</p>\n" + bodyAddMessage;
-                            mailItem2Send.Save();
+                            UpdateToSend(mailItem2Send, bodyAddMessage);
                             items2Send.Add(mailItem2Send);
                             mailItem2Send = null;
                         }
                     }
                     if (mailItem2Send != null)
                     {
-                        mailItem2Send.Subject = "Forwarded " + mailItem2Send.Attachments.Count + " message" +
-                                                (items.Count == 1 ? "" : "s") + " to the hive";
-                        mailItem2Send.HTMLBody = "<p>" + mailItem2Send.Attachments.Count + " message" +
-                                                 (items.Count == 1 ? " has" : "s have") +
-                                                 " been forwarded to the hive.</p>\n" + bodyAddMessage;
-                        mailItem2Send.Save();
+                        UpdateToSend(mailItem2Send, bodyAddMessage);
                         items2Send.Add(mailItem2Send);
                     }
                     LoggingService.Debug("Sending " + items2Send.Count + " messages");
@@ -176,6 +172,20 @@ namespace chnls.Utils
             shareForm.StartPosition = FormStartPosition.CenterParent;
 
             shareForm.ShowDialog();
+        }
+
+        private static void UpdateToSend(MailItem mailItem, string bodyAddMessage)
+        {
+            var attachments = mailItem.Attachments;
+            var count = attachments.Count;
+            Marshal.ReleaseComObject(attachments);
+
+            EmailHelper.SetHeader(mailItem, "X-Channels-Populate", "" + count);
+
+            mailItem.Subject = "Forwarded " + count + " message" + (count == 1 ? "" : "s") + " to the hive";
+            mailItem.HTMLBody = "<p>" + count + " message" + (count == 1 ? " has" : "s have") +
+                                " been forwarded to the hive.</p>\n" + bodyAddMessage;
+            mailItem.Save();
         }
     }
 }

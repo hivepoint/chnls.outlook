@@ -104,6 +104,8 @@ namespace chnls.ADXForms
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "ADXOlFormExplorerSidebar";
             this.Text = "Email Channels";
+            this.ADXAfterFormShow += new AddinExpress.OL.ADXOlForm.AfterFormShow_EventHandler(this.ADXOlFormExplorerSidebar_ADXAfterFormShow);
+            this.ADXAfterFormHide += new AddinExpress.OL.ADXOlForm.ADXAfterFormHideEventHandler(this.ADXOlFormExplorerSidebar_ADXAfterFormHide);
             this.Load += new System.EventHandler(this.ADXOlFormExplorerSidebar_Load);
             this.panelBrowsers.ResumeLayout(false);
             this.ResumeLayout(false);

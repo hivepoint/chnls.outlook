@@ -43,11 +43,9 @@ namespace chnls.Forms
             {
                 Channels = PropertiesService.Instance.Channels;
                 Groups = PropertiesService.Instance.Groups;
-                if (null == Channels || !Channels.Any())
-                {
-                    MessageBox.Show(@"Error: No channels available. Please ensure you are signed in and you have channels.");
-                    Close();
-                }
+                if (null != Channels && Channels.Any()) return;
+                MessageBox.Show(@"Error: No channels available. Please ensure you are signed in and you have channels.");
+                Close();
             });
         }
 
@@ -85,6 +83,7 @@ namespace chnls.Forms
             try
             {
                 application = AddinModule.CurrentInstance.OutlookApp.Application;
+                
                 session = application.Session;
                 accounts = session.Accounts;
                 for (var i = 1; i <= accounts.Count; i++) // COM 1 BASED
@@ -106,16 +105,19 @@ namespace chnls.Forms
                 if (null != accounts)
                 {
                     Marshal.ReleaseComObject(accounts);
+                    // ReSharper disable once RedundantAssignment
                     accounts = null;
                 }
                 if (null != session)
                 {
                     Marshal.ReleaseComObject(session);
+                    // ReSharper disable once RedundantAssignment
                     session = null;
                 }
                 if (null != application)
                 {
                     Marshal.ReleaseComObject(application);
+                    // ReSharper disable once RedundantAssignment
                     application = null;
                 }
             }
