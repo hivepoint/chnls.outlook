@@ -120,6 +120,8 @@ The add-in keeps a local cache of all it's state, to help with compose, this is 
   * Visual Studio will need to always be stared as *administrator*, done by right clicking on the icon and selecting `run as administrator`.
   * select the appropriate Outlook Exec as the debug target
   * Everything should be for .Net 4.0
+* Resharper
+  * https://www.jetbrains.com/resharper/buy/v3.jsp 
 
   
 To register and unregister the add-in with outlook, right click on the project and select the appropriate menu items
