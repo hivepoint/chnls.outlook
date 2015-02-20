@@ -58,7 +58,7 @@ This will result in the files being published into the Publish directory of the 
 	8. if this release is going to be used internally, i.e. it has an "odd" dot version number, select "this is a pre-release"
 	9. Click Publish Release
 7. Upload to S3
-    1. Open firefix and use S3 fox
+    1. Open Firefix and use S3 fox
 	2. Select the directory you created above `C:\Users\sevogle\Documents\git\chnls.outlook\ChnlsOutlookAddIn\Publish\chnls.outlook-1.0.1.21`
 	3. select the target directory in S3
 	    1. Production: `downloads.emailchannels.com/outlook`
@@ -106,13 +106,22 @@ The add-in keeps a local cache of all it's state, to help with compose, this is 
 
 ### Development Environment
 
+* License information can be found here:
+ *  https://docs.google.com/a/hivepoint.com/document/d/1CFuvsVw3Q38PkSRCIaqde0vU6LGbOAsHNZIHBGUuaeQ/edit
 * Windows 8 or 10
-* Add-In Express plugin
+* Add-in Express for Office and .NET, Professional
+ * https://www.add-in-express.com/downloads/adxnet.php
 * SourceTree + Git installed
 * Outlook 2010 or 2013
+ * 2013 is Office 365 install
+ * 2010 is physical media install
+ * We don't support 2007
 * Visual Studio 2013
   * Visual Studio will need to always be stared as *administrator*, done by right clicking on the icon and selecting `run as administrator`.
   * select the appropriate Outlook Exec as the debug target
+  * Everything should be for .Net 4.0
+* Resharper
+  * https://www.jetbrains.com/resharper/buy/v3.jsp 
 
   
 To register and unregister the add-in with outlook, right click on the project and select the appropriate menu items

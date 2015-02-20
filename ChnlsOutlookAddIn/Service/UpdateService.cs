@@ -114,7 +114,7 @@ namespace chnls.Service
         {
             if (!IsUpdateAvailable)
             {
-                var delayMs = delaySec * 1000;
+                var delayMs = delaySec*1000;
                 if (delayMs <= 0)
                 {
                     delayMs = 100;
@@ -159,7 +159,7 @@ namespace chnls.Service
                     {
                         if (!IsUpdateAvailable)
                         {
-                            SilentCheck(60 * 60);
+                            SilentCheck(60*60);
                         }
                     }
                 }, delayMs);

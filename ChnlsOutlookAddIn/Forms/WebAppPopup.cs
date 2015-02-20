@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using chnls.Service;
 using chnls.Utils;
@@ -25,6 +24,8 @@ namespace chnls.Forms
             Action<HtmlDocument> closeCallback = null)
         {
             InitializeComponent();
+            textboxUrl.Visible = PropertiesService.Instance.DebugPanelVisible;
+
             _closeCallback = closeCallback;
             _requestHandler = requestHandler;
             Closed += WebAppPopup_Closed;
@@ -69,6 +70,7 @@ namespace chnls.Forms
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             UpdateUrl(e.Url);
+            LoggingService.Debug("Popup Navigating: " + e.Url);
             if (!ChnlsUrlHelper.IsEmailChannelsUrl(e.Url))
             {
                 return;
@@ -81,7 +83,7 @@ namespace chnls.Forms
         private void UpdateUrl(Uri url)
         {
             if (Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase) ||
-                Uri.UriSchemeHttp.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase))
+                Uri.UriSchemeHttps.Equals(url.Scheme, StringComparison.InvariantCultureIgnoreCase))
             {
                 textboxUrl.Text = url.ToString();
             }

@@ -261,6 +261,7 @@ namespace chnls.Service
         {
             BrowserObjectDelegate.NotifyChannelRefresh();
         }
+
         internal void NotifyChannelCreated(ChannelInfo channel, ChannelGroupInfo group)
         {
             BrowserObjectDelegate.NotifyChannelRefresh();
@@ -329,6 +330,5 @@ namespace chnls.Service
         }
 
         #endregion
-
     }
 }

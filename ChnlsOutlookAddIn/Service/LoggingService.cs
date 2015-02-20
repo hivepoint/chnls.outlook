@@ -8,10 +8,8 @@ using System.Diagnostics;
 
 namespace chnls.Service
 {
-
     internal class LoggingService
     {
-
         private static EventLog _eventLog;
         private static bool _loggingEnabled = true;
 
@@ -21,14 +19,14 @@ namespace chnls.Service
             {
                 return;
             }
-            _eventLog = new EventLog { Source = "Outlook" };
-            ((ISupportInitialize)(_eventLog)).BeginInit();
+            _eventLog = new EventLog {Source = "Outlook"};
+            ((ISupportInitialize) (_eventLog)).BeginInit();
             if (!EventLog.SourceExists(_eventLog.Source))
             {
                 _loggingEnabled = false;
                 Error("Unable to start logging, the source 'Outlook' does not exist");
             }
-            ((ISupportInitialize)(_eventLog)).EndInit();
+            ((ISupportInitialize) (_eventLog)).EndInit();
         }
 
         public static void Debug(string message)

@@ -2,7 +2,6 @@
 
 using System;
 using chnls.Model;
-using chnls.Utils;
 
 #endregion
 
@@ -33,7 +32,6 @@ namespace chnls.Service
         }
 
         public bool Connected { get; set; }
-
     }
 
     partial class PropertiesService

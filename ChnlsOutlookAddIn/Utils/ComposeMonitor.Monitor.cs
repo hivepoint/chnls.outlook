@@ -45,7 +45,7 @@ namespace chnls.Utils
                     _mailItem = null;
                 }
                 _mailItem = value;
-                
+
                 if (_mailItem == null) return;
 
                 _currentChannels.Clear();
@@ -129,7 +129,8 @@ namespace chnls.Utils
                             }
                         }
                     }
-                    var channelsChanged = _currentChannels.Keys.Except(channels.Keys).Any() || channels.Keys.Except(_currentChannels.Keys).Any();
+                    var channelsChanged = _currentChannels.Keys.Except(channels.Keys).Any()
+                                          || channels.Keys.Except(_currentChannels.Keys).Any();
                     var participantsChanged = !_participants.SequenceEqual(participants);
                     if (channelsChanged)
                     {

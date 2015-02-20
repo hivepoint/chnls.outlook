@@ -1,10 +1,13 @@
-﻿using System.Windows.Forms;
+﻿#region
+
+using System.Windows.Forms;
+
+#endregion
 
 namespace chnls.Controls
 {
-    class ClosingWebBrowser : WebBrowser
+    internal class ClosingWebBrowser : WebBrowser
     {
-
         // Define constants from winuser.h
         // ReSharper disable InconsistentNaming
         private const int WM_PARENTNOTIFY = 0x210;
@@ -23,7 +26,7 @@ namespace chnls.Controls
                         {
                             // new Message { Msg = WM_DESTROY };
                             // Tell whoever cares we are closing
-                            var parent = this.Parent as Form;
+                            var parent = Parent as Form;
                             if (parent != null)
                                 parent.Close();
                         }
@@ -35,6 +38,5 @@ namespace chnls.Controls
                     break;
             }
         }
-
     }
 }
