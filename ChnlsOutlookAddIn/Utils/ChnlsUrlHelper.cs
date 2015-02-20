@@ -201,10 +201,16 @@ namespace chnls.Utils
         {
             get
             {
-                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+                try
+                {
+                    return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+                }
+                catch (Exception)
+                {
+                    return DialogTypeEnum.None;
+                }
             }
         }
-
     }
 
     internal class ChannelRequestCloseDialog : ChannelsRequest
@@ -220,11 +226,19 @@ namespace chnls.Utils
         internal string DialogType { get; private set; }
         internal string Id { get; private set; }
         internal string Response { get; private set; }
+
         internal DialogTypeEnum DialogTypeEnum
         {
             get
             {
-                return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+                try
+                {
+                    return (DialogTypeEnum)Enum.Parse(typeof(DialogTypeEnum), DialogType, true);
+                }
+                catch (Exception)
+                {
+                    return DialogTypeEnum.None;
+                }
             }
         }
 
@@ -236,6 +250,7 @@ namespace chnls.Utils
 
     internal enum ChannelsRequestType
     {
+        None,
         ClientLoaded,
         OpenWindow,
         ContentLoaded,
@@ -250,12 +265,13 @@ namespace chnls.Utils
         OpenDialog,
         CloseDialog
     }
+
     internal enum DialogTypeEnum
     {
         // ReSharper disable InconsistentNaming
+        None,
         CREATE_CHANNEL,
         CREATE_GROUP
         // ReSharper restore InconsistentNaming
     }
-
 }
