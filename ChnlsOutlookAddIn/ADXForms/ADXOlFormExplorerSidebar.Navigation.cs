@@ -108,7 +108,7 @@ namespace chnls.ADXForms
             LoggingService.Debug("Authorize1: " + url);
             if (url.ToString().ToLower().StartsWith(PropertiesService.Instance.BaseUrl.ToLower()))
             {
-                // if it is a url that is a email channels url, get it authorized
+                // if it is a url that is a channels.cc url, get it authorized
                 if (
                     !ChnlsBrowserHelper.PerformAction(Document, ExtensionActionType.AUTHORIZE_URL,
                         "{'url':'" + url + "'}"))

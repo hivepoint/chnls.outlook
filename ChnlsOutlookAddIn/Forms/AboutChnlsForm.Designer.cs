@@ -60,7 +60,7 @@
             this.labelHeading.Name = "labelHeading";
             this.labelHeading.Size = new System.Drawing.Size(177, 18);
             this.labelHeading.TabIndex = 2;
-            this.labelHeading.Text = "Email Channels Add-In";
+            this.labelHeading.Text = "Channels.cc Add-In";
             this.labelHeading.Click += new System.EventHandler(this.labelHeading_Click);
             // 
             // label3
@@ -80,7 +80,7 @@
             this.labelSupport.Name = "labelSupport";
             this.labelSupport.Size = new System.Drawing.Size(176, 13);
             this.labelSupport.TabIndex = 5;
-            this.labelSupport.Text = "Feedback: support@emailchannels.com";
+            this.labelSupport.Text = "Feedback: support@channels.cc";
             this.labelSupport.Click += new System.EventHandler(this.labelSupport_Click);
             // 
             // labelServer
@@ -153,7 +153,7 @@
             this.Name = "AboutChnlsForm";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "About Email Channels";
+            this.Text = "About Channels.cc";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

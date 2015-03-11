@@ -26,7 +26,7 @@ namespace chnls.ADXForms
             InitializeComponent();
 
             webBrowserMain.Url = new Uri("about:blank");
-            Text = "Email Channels";
+            Text = "Channels.cc";
             Icon = Resources.favIcon;
 
             debugBar.Browser = this;
@@ -45,15 +45,18 @@ namespace chnls.ADXForms
 
         private void ADXOlFormExplorerSidebar_ADXAfterFormShow()
         {
-            _wbComMain = (WebBrowserCom) webBrowserMain.ActiveXInstance;
-            _wbComMain.NewWindow3 += WbComMainNewWindow3;
+            if (null != _wbComMain)
+            {
+                _wbComMain = (WebBrowserCom)webBrowserMain.ActiveXInstance;
+                _wbComMain.NewWindow3 += WbComMainNewWindow3;
+            }
         }
 
         private void ADXOlFormExplorerSidebar_ADXAfterFormHide(object sender, ADXAfterFormHideEventArgs e)
         {
-            if (null == _wbComMain) return;
-            Marshal.ReleaseComObject(_wbComMain);
-            _wbComMain = null;
+//            if (null == _wbComMain) return;
+//            Marshal.ReleaseComObject(_wbComMain);
+//            _wbComMain = null;
         }
 
         private void WbComMainNewWindow3(ref object ppDisp, ref bool cancel, uint dwFlags, string bstrUrlContext,
@@ -75,7 +78,7 @@ namespace chnls.ADXForms
                 };
                 if (null != ppDisp)
                 {
-                    Marshal.ReleaseComObject(ppDisp);
+                   // Marshal.ReleaseComObject(ppDisp);
                 }
                 ppDisp = pwf.WebBrowserAx;
 

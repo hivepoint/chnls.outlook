@@ -2,8 +2,8 @@
 {
     internal class Constants
     {
-        public const string SupportEmailAddress = "support@emailchannels.com";
-        public const string UrlChnlsProduction = "https://emailchannels.com";
+        public const string SupportEmailAddress = "support@channels.cc";
+        public const string UrlChnlsProduction = "https://channels.cc";
         public const string UrlChnlsBeta = "https://emailchannels.us";
         public const string UrlChnlsDev = "https://emailchannels.net";
         public const string UrlSuffix = "?client=outlook";

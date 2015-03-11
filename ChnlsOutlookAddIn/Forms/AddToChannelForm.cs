@@ -24,7 +24,7 @@ namespace chnls.Forms
         {
             InitializeComponent();
             ResizeColumns();
-            Text = @"Send " + mailItems.Count + @" message" + (mailItems.Count == 1 ? "" : "s") + @" to Email Channels";
+            Text = @"Send " + mailItems.Count + @" message" + (mailItems.Count == 1 ? "" : "s") + @" to Channels.cc";
             PropertiesService.Instance.ChannelListChanged += Instance_ChannelListChanged;
             PropertiesService.Instance.GroupListChanged += Instance_ChannelListChanged;
             UpdateChannels(50);
