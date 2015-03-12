@@ -71,7 +71,7 @@ namespace chnls.Forms
             this.Name = "WebPopupWindowForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Email Channels";
+            this.Text = "Channels.cc";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebPopupWindowForm_FormClosing);
             this.Load += new System.EventHandler(this.WebPopupWindowForm_Load);
             this.ResumeLayout(false);

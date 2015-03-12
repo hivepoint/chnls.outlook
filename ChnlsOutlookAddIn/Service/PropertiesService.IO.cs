@@ -36,9 +36,9 @@ namespace chnls.Service
             try
             {
                 var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "EmailChannels");
+                    "Channels.cc");
                 Directory.CreateDirectory(folder);
-                _preferencesFile = Path.Combine(folder, "EmailChannelsAddIn.properties.v01.json");
+                _preferencesFile = Path.Combine(folder, "ChannelsCxAddIn.properties.v01.json");
                 LoggingService.Debug("PropertyFile: " + _preferencesFile);
 
                 if (!File.Exists(_preferencesFile)) return;

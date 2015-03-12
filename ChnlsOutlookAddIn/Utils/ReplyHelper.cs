@@ -18,7 +18,7 @@ namespace chnls.Utils
     internal class ReplyHelper
     {
         /*
-        * Create a new message that is a reply to a message in Email Channels. 
+        * Create a new message that is a reply to a message in Channels.cc. 
         * 
         * The message contents to reply to are provided by the parameter
         *     ReplyMessageInfo replyTo

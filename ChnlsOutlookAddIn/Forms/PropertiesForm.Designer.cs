@@ -44,7 +44,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(158, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Email Channels Server";
+            this.label1.Text = "Channels.cc Server";
             // 
             // radioButtonChnlsIO
             // 
@@ -54,7 +54,7 @@
             this.radioButtonChnlsIO.Size = new System.Drawing.Size(121, 17);
             this.radioButtonChnlsIO.TabIndex = 1;
             this.radioButtonChnlsIO.TabStop = true;
-            this.radioButtonChnlsIO.Text = "Production (EmailChannels.com)";
+            this.radioButtonChnlsIO.Text = "Production (Channels.cc)";
             this.radioButtonChnlsIO.UseVisualStyleBackColor = true;
             this.radioButtonChnlsIO.CheckedChanged += new System.EventHandler(this.radioButtonChnlsIO_CheckedChanged);
             // 
@@ -106,7 +106,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PropertiesForm";
-            this.Text = "Email Channels Properties";
+            this.Text = "Channels.cc Properties";
             this.ResumeLayout(false);
             this.PerformLayout();
 

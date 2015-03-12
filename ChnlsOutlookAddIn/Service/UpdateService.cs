@@ -104,7 +104,7 @@ namespace chnls.Service
             {
                 if (String.IsNullOrWhiteSpace(UpdateLocation))
                 {
-                    UpdateLocation = "https://downloads.emailchannels.com/outlook/";
+                    UpdateLocation = "https://downloads.channels.cc/outlook/";
                     LoggingService.Error("Update location unset, setting to default: '" + UpdateLocation + "'");
                 }
             }

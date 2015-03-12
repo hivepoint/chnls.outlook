@@ -74,7 +74,7 @@ namespace chnls
             // 
             // adxRibbonGroupChnlsExplorer
             // 
-            this.adxRibbonGroupChnlsExplorer.Caption = "Email Channels";
+            this.adxRibbonGroupChnlsExplorer.Caption = "Channels.cc";
             this.adxRibbonGroupChnlsExplorer.Controls.Add(this.adxRibbonButtonAddToChannel);
             this.adxRibbonGroupChnlsExplorer.Controls.Add(this.adxRibbonButtonFeedback);
             this.adxRibbonGroupChnlsExplorer.Controls.Add(this.adxRibbonButtonAbout);
